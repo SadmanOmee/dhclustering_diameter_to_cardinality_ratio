@@ -1,0 +1,428 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+#define pi 3.1416
+#define k 2
+#define vp vector<point>
+
+struct point
+{
+    double x, y;
+};
+
+struct diameter
+{
+    double diam;
+    point a, b;
+    ll it_a, it_b;
+};
+
+struct cluster
+{
+    vp cl1, cl2;
+};
+
+/** distance measure functions implementation*/
+double euclideanDistance(point a, point b)
+{
+    return sqrt(((a.x - b.x) * (a.x - b.x)) + ((a.y - b.y) * (a.y - b.y)));
+}
+
+double manhattanDistance(point a, point b)
+{
+    return (abs(a.x - b.x) + abs(a.y - b.y));
+}
+
+double minkowskiDistance(point a, point b)
+{
+    double sum = 0, r = 3.0;
+    sum += pow(a.x - b.x, r);
+    sum += pow(a.y - b.y, r);
+    return pow(sum, 1.0 / r);
+}
+
+double mahalonobisDistance(point a, point b)
+{
+    string distribution = "normal";
+    double x_bar, y_bar;
+    if(distribution == "normal")
+    {
+        x_bar = (a.x + b.x) / 2;
+        y_bar = (a.y + b.y) / 2;
+    }
+    return x_bar;
+}
+
+double pointDistance(point a, point b)
+{
+    return euclideanDistance(a, b);
+}
+/** distance measure functions implementation end*/
+
+point centroid(vp points)
+{
+    point centre;
+    centre.x = 0;
+    centre.y = 0;
+    for(auto i=points.begin(); i<points.end(); ++i)
+    {
+        point Point = *i;
+        centre.x += Point.x;
+        centre.y += Point.y;
+    }
+    centre.x /= points.size();
+    centre.y /= points.size();
+    //cout << centre.x << " " << centre.y << "\n";
+    return centre;
+}
+
+double radius(vp points)
+{
+    point centre = centroid(points);
+    double rad = 0.0, pointDist;
+    for(auto i=points.begin(); i<points.end(); ++i)
+    {
+        point Point = *i;
+        pointDist = pointDistance(centre, Point);
+        if(pointDist > rad)
+        {
+            rad = pointDist;
+        }
+    }
+    return rad;
+}
+
+/*double diameter(vector<point> points)
+{
+    double diam = 0.0, pointDist;
+    for(auto i=points.begin(); i<points.end(); ++i)
+    {
+        point PointA = *i;
+        for(auto j=points.begin(); j<points.end(); ++j)
+        {
+            point PointB = *j;
+            pointDist = pointDistance(PointA, PointB);
+            if(pointDist > diam)
+            {
+                diam = pointDist;
+            }
+        }
+    }
+    return diam;
+}*/
+
+diameter findDiameter(vp points)
+{
+    double diam = 0.0, pointDist;
+    ll itA = -1;
+    diameter diameterDetails;
+    for(auto i=points.begin(); i<points.end(); ++i)
+    {
+        point PointA = *i;
+        itA++;
+        ll itB = -1;
+        for(auto j=points.begin(); j<points.end(); ++j)
+        {
+            point PointB = *j;
+            itB++;
+            pointDist = pointDistance(PointA, PointB);
+            //cout << PointA.x << " " << PointA.y << " | " << PointB.x << " " << PointB.y << "\n";
+            if(pointDist > diam)
+            {
+                diam = pointDist;
+                diameterDetails.diam = diam;
+                diameterDetails.a = PointA;
+                diameterDetails.b = PointB;
+                diameterDetails.it_a = itA;
+                diameterDetails.it_b = itB;
+            }
+        }
+    }
+    return diameterDetails;
+}
+
+/*void removeVec(vector<point> &points, ll pos)
+{
+    vector<point>::iterator it1 = points.begin();
+    it1 += pos;
+    points.erase(it1);
+}*/
+
+double calculateRatio(vp &clust)
+{
+    diameter d = findDiameter(clust);
+    double ratio_d_nd = d.diam / clust.size();
+    clust.clear();
+    return ratio_d_nd;
+}
+
+cluster clustering(vp &points)
+{
+    cluster clust;
+    vp cluster1, cluster2, tempCluster;
+    point centroidPointSet, centroidCluster1, centroidCluster2;
+
+    centroidPointSet = centroid(points);
+    cout << "Centroid of whole point set: " << centroidPointSet.x << " " << centroidPointSet.y << "\n";
+    diameter d = findDiameter(points);
+    cluster1.push_back(d.a);
+    cluster2.push_back(d.b);
+    if(d.it_a < d.it_b)
+    {
+        points.erase(points.begin() + d.it_a);
+        points.erase(points.begin() + d.it_b - 1);
+    }
+    else
+    {
+        points.erase(points.begin() + d.it_b);
+        points.erase(points.begin() + d.it_a - 1);
+    }
+
+    while(!points.empty())
+    {
+        d = findDiameter(points);
+        if(pointDistance(d.a, cluster1.back()) <= pointDistance(d.b, cluster1.back()))
+        {
+            cluster1.push_back(d.a);
+            cluster2.push_back(d.b);
+        }
+        else
+        {
+            cluster1.push_back(d.b);
+            cluster2.push_back(d.a);
+        }
+        if(d.it_a < d.it_b)
+        {
+            points.erase(points.begin() + d.it_a);
+            points.erase(points.begin() + d.it_b - 1);
+        }
+        else
+        {
+            points.erase(points.begin() + d.it_b);
+            points.erase(points.begin() + d.it_a - 1);
+        }
+
+    }
+
+    cout << "Initial points of cluster 1:\n-----------------------------\n";
+    for(auto i=cluster1.begin(); i<cluster1.end(); ++i)
+    {
+        point Point = *i;
+        cout << "(" << Point.x << ", " << Point.y << ") ";
+    }
+    cout << "\n\n";
+
+    cout << "Initial points of cluster 2:\n-----------------------------\n";
+    for(auto i=cluster2.begin(); i<cluster2.end(); ++i)
+    {
+        point Point = *i;
+        cout << "(" << Point.x << ", " << Point.y << ") ";
+    }
+    cout << "\n\n";
+
+    centroidCluster1 = centroid(cluster1);
+    centroidCluster2 = centroid(cluster2);
+
+    cout << "Centroid of cluster 1: " << centroidCluster1.x << " " << centroidCluster1.y << "\n";
+    cout << "Centroid of cluster 2: " << centroidCluster2.x << " " << centroidCluster2.y << "\n";
+
+    for(auto i=cluster1.begin(); i<cluster1.end(); ++i)
+    {
+        point Point = *i;
+        if(pointDistance(Point, centroidPointSet) < pointDistance(Point, centroidCluster1))
+        {
+            tempCluster.push_back(Point);
+            cluster1.erase(i);
+            i--;
+        }
+    }
+
+    for(auto i=cluster2.begin(); i<cluster2.end(); ++i)
+    {
+        point Point = *i;
+        if(pointDistance(Point, centroidPointSet) < pointDistance(Point, centroidCluster2))
+        {
+            tempCluster.push_back(Point);
+            cluster2.erase(i);
+            i--;
+        }
+    }
+
+    double ratio_d1_nd1, ratio_d2_nd2;
+    vp copyCluster1, copyCluster2;
+    copyCluster1.insert(copyCluster1.end(), cluster1.begin(), cluster1.end());
+    copyCluster1.insert(copyCluster1.end(), tempCluster.begin(), tempCluster.end());
+    copyCluster2.insert(copyCluster2.end(), cluster2.begin(), cluster2.end());
+    copyCluster2.insert(copyCluster2.end(), tempCluster.begin(), tempCluster.end());
+
+    ratio_d1_nd1 = calculateRatio(copyCluster1);
+    ratio_d2_nd2 = calculateRatio(copyCluster2);
+
+    if(ratio_d1_nd1 <= ratio_d2_nd2)
+    {
+        cluster1.insert(cluster1.end(), tempCluster.begin(), tempCluster.end());
+    }
+    else
+    {
+        cluster2.insert(cluster2.end(), tempCluster.begin(), tempCluster.end());
+    }
+    tempCluster.clear();
+
+    clust.cl1 = cluster1;
+    clust.cl2 = cluster2;
+
+    return clust;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    ifstream input;
+    ofstream output, cluster1Points, cluster2Points;
+    input.open("input1.txt");
+    output.open("output.txt");
+    cluster1Points.open("cluster1Points.txt");
+    cluster2Points.open("cluster2Points.txt");
+
+    ll n;
+    //cin >> n;
+    input >> n;
+    vp pointSet, copyPointSet;
+    for(ll i=0; i<n; i++)
+    {
+        point Point;
+        //cin >> Point.x >> Point.y;
+        input >> Point.x >> Point.y;
+        pointSet.push_back(Point);
+        copyPointSet.push_back(Point);
+    }
+
+    //cout << "The point set: (" << pointSet.size() << " points)\n-----------------\n";
+    output << "The point set: (" << pointSet.size() << " points)\n-----------------\n";
+    for(auto i=pointSet.begin(); i<pointSet.end(); ++i)
+    {
+        point Point = *i;
+        //cout << "(" << Point.x << ", " << Point.y << ") ";
+        output << "(" << Point.x << ", " << Point.y << ") ";
+    }
+    //cout << "\n\n";
+    output << "\n\n";
+
+    cluster clusters = clustering(pointSet);
+
+    //cout << "Final points of cluster 1: (" << clusters.cl1.size() << " points)\n-------------------------------------\n";
+    output << "Final points of cluster 1: (" << clusters.cl1.size() << " points)\n-------------------------------------\n";
+    cluster1Points << clusters.cl1.size() << "\n";
+    for(auto i=clusters.cl1.begin(); i<clusters.cl1.end(); ++i)
+    {
+        point Point = *i;
+        //cout << "(" << Point.x << ", " << Point.y << ") ";
+        output << "(" << Point.x << ", " << Point.y << ") ";
+        cluster1Points << Point.x << " " << Point.y << "\n";
+    }
+    //cout << "\n\n";
+    output << "\n\n";
+
+    //cout << "Final points of cluster 2: (" << clusters.cl2.size() << " points)\n-------------------------------------\n";
+    output << "Final points of cluster 2: (" << clusters.cl2.size() << " points)\n-------------------------------------\n";
+    cluster2Points << clusters.cl2.size() << "\n";
+    for(auto i=clusters.cl2.begin(); i<clusters.cl2.end(); ++i)
+    {
+        point Point = *i;
+        //cout << "(" << Point.x << ", " << Point.y << ") ";
+        output << "(" << Point.x << ", " << Point.y << ") ";
+        cluster2Points << Point.x << " " << Point.y << "\n";
+    }
+    //cout << "\n\n";
+    output << "\n\n";
+
+    //cout << "Remaining points of point set:\n--------------------------------\n";
+    output << "Remaining points of point set:\n--------------------------------\n";
+    for(auto i=pointSet.begin(); i<pointSet.end(); ++i)
+    {
+        point Point = *i;
+        //cout << "(" << Point.x << ", " << Point.y << ") ";
+        output << "(" << Point.x << ", " << Point.y << ") ";
+    }
+    //cout << "\n\n";
+    output << "\n\n";
+
+    input.close();
+    output.close();
+    cluster1Points.close();
+    cluster1Points.close();
+
+    return 0;
+}
+
+
+
+
+
+
+/*
+22
+2 14
+3 17
+5 21
+7 13
+9 16
+
+10 20
+2 4
+3 6
+4 4
+5 6
+
+6 8
+7 7
+8 9
+9 3
+20 16
+
+18 18
+19 20
+22 17
+24 22
+26 23
+
+27 21
+30 15
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+14
+2 14
+3 17
+5 21
+7 13
+9 16
+
+10 20
+2 4
+3 6
+4 4
+5 6
+
+6 8
+7 7
+8 9
+9 3
+*/
