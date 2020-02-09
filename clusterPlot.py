@@ -47,5 +47,7 @@ plt.scatter(clust2x, clust2y, color="red")
 #plt.scatter(0.927386, -0.305095, color="green")
 #plt.scatter(3.66395, 1.46738, color="orange")
 #plt.scatter(-1.80918, -2.07757, color="black")
+#plt.scatter(26, 23, color="orange")
+#plt.scatter(30, 15, color="black")
 
-#plt.show()
+plt.show()

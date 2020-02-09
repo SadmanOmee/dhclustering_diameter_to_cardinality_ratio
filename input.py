@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.datasets.samples_generator import make_blobs
 
 xCoordinates = []
 yCoordinates = []
@@ -14,7 +15,8 @@ yCoordinates = []
 #points = np.random.poisson(5, size=[50, 2])
 #points = np.random.lognormal(3, 1, size=[100, 2])
 #points = np.random.geometric(p=0.35, size=[100, 2])
-points = np.random.rayleigh(3, size=[100, 2])
+#points = np.random.rayleigh(3, size=[100, 2])
+points, y = make_blobs(n_samples=200, centers=2, cluster_std=0.60, random_state=7)
 
 inp = str(len(points)) + "\n"
 
