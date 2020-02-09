@@ -36,7 +36,7 @@ double manhattanDistance(point a, point b)
 
 double minkowskiDistance(point a, point b)
 {
-    double sum = 0, r = 3.0;
+    double sum = 0, r = 10.0;
     sum += pow(a.x - b.x, r);
     sum += pow(a.y - b.y, r);
     return pow(sum, 1.0 / r);
