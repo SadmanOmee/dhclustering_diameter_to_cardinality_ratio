@@ -182,7 +182,7 @@ cluster clustering(vp &points)
     while(!points.empty())
     {
         d = findDiameter(points);
-        if(pointDistance(d.a, cluster1.back()) <= pointDistance(d.b, cluster1.back()))
+        if(pointDistance(d.a, centroid(cluster1)) <= pointDistance(d.b, centroid(cluster1)))
         {
             cluster1.push_back(d.a);
             cluster2.push_back(d.b);

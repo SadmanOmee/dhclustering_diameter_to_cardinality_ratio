@@ -6,7 +6,6 @@ clust1y = []
 clust2x = []
 clust2y = []
 
-inp = ""
 
 cluster1file = open("cluster1Points.txt","r")
 cluster2file = open("cluster2Points.txt","r")
@@ -45,8 +44,8 @@ cluster2file.close()
 #plt.scatter(points2[:, 0], points2[:, 1], color="blue")
 plt.scatter(clust1x, clust1y, color="blue")
 plt.scatter(clust2x, clust2y, color="red")
-plt.scatter(0.927386, -0.305095, color="green")
-plt.scatter(3.66395, 1.46738, color="orange")
-plt.scatter(-1.80918, -2.07757, color="black")
+#plt.scatter(0.927386, -0.305095, color="green")
+#plt.scatter(3.66395, 1.46738, color="orange")
+#plt.scatter(-1.80918, -2.07757, color="black")
 
 #plt.show()

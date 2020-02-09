@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 xCoordinates = []
 yCoordinates = []
-points = np.random.exponential(size=[200, 2])
+points = np.random.weibull(8.0, size=[200, 2])
 points2 = np.random.normal(0.0, 1.0, size=[100, 2])
 
 inp = str(len(points)) + "\n"
