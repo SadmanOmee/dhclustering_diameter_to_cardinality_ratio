@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets.samples_generator import make_blobs
+from sklearn.cluster import KMeans
 
 xCoordinates = []
 yCoordinates = []
@@ -43,4 +44,27 @@ file.close()
 plt.scatter(points[:, 0], points[:, 1], color="red")
 #plt.scatter(points2[:, 0], points2[:, 1], color="blue")
 plt.scatter(xCoordinates, yCoordinates, color="blue")
+
+plt.show()
+
+
+
+
+
+
+
+
+
+
+kmeans = KMeans(n_clusters=2)
+# Fitting with inputs
+kmeans = kmeans.fit(points)
+# Predicting the clusters
+labels = kmeans.predict(points)
+# Getting the cluster centers
+C = kmeans.cluster_centers_
+
+plt.scatter(points[:, 0], points[:, 1])
+plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
+
 plt.show()
