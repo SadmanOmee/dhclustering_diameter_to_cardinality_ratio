@@ -16,7 +16,7 @@ yCoordinates = []
 #points = np.random.lognormal(3, 1, size=[100, 2])
 #points = np.random.geometric(p=0.35, size=[100, 2])
 #points = np.random.rayleigh(3, size=[100, 2])
-points, y = make_blobs(n_samples=200, centers=2, cluster_std=0.60, random_state=7)
+points, y = make_blobs(n_samples=200, centers=3, cluster_std=0.80, random_state=0)
 
 inp = str(len(points)) + "\n"
 

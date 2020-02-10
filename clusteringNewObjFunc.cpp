@@ -149,6 +149,24 @@ diameter findDiameter(vp points)
     points.erase(it1);
 }*/
 
+double intraClusterDistance(vp clust)
+{
+    point clusterCenter = centroid(clust);
+    double intraClustDist = 0.0;
+    for(auto i=clust.begin(); i<clust.end(); ++i)
+    {
+        point Point = *i;
+        intraClustDist += pointDistance(clusterCenter, Point);
+    }
+    return intraClustDist;
+}
+
+double avgIntraClusterDistance(vp clust)
+{
+    double avgIntraClustDist = intraClusterDistance(clust) / clust.size();
+    return avgIntraClustDist;
+}
+
 double calculateRatio(vp &clust)
 {
     diameter d = findDiameter(clust);
@@ -227,6 +245,7 @@ cluster clustering(vp &points)
     cout << "Centroid of cluster 1: " << centroidCluster1.x << " " << centroidCluster1.y << "\n";
     cout << "Centroid of cluster 2: " << centroidCluster2.x << " " << centroidCluster2.y << "\n";
 
+    cout << "Points of temp cluster:\n-----------------------\n";
     for(auto i=cluster1.begin(); i<cluster1.end(); ++i)
     {
         point Point = *i;
@@ -235,6 +254,7 @@ cluster clustering(vp &points)
             tempCluster.push_back(Point);
             cluster1.erase(i);
             i--;
+            cout << "(" << Point.x << ", " << Point.y << ") ";
         }
     }
 
@@ -246,8 +266,10 @@ cluster clustering(vp &points)
             tempCluster.push_back(Point);
             cluster2.erase(i);
             i--;
+            cout << "(" << Point.x << ", " << Point.y << ") ";
         }
     }
+    cout << "\n\n";
 
     double ratio_d1_nd1, ratio_d2_nd2;
     vp copyCluster1, copyCluster2;
@@ -258,6 +280,8 @@ cluster clustering(vp &points)
 
     ratio_d1_nd1 = calculateRatio(copyCluster1);
     ratio_d2_nd2 = calculateRatio(copyCluster2);
+    //ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1);
+    //ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2);
 
     if(ratio_d1_nd1 <= ratio_d2_nd2)
     {
