@@ -54,9 +54,14 @@ double mahalonobisDistance(point a, point b)
     return x_bar;
 }
 
+double chebychevDistance(point a, point b)
+{
+    return max(abs(a.x - b.x), abs(a.y - b.y));
+}
+
 double pointDistance(point a, point b)
 {
-    return euclideanDistance(a, b);
+    return minkowskiDistance(a, b);
 }
 /** distance measure functions implementation end*/
 
@@ -278,10 +283,10 @@ cluster clustering(vp &points)
     copyCluster2.insert(copyCluster2.end(), cluster2.begin(), cluster2.end());
     copyCluster2.insert(copyCluster2.end(), tempCluster.begin(), tempCluster.end());
 
-    ratio_d1_nd1 = calculateRatio(copyCluster1);
-    ratio_d2_nd2 = calculateRatio(copyCluster2);
-    //ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1);
-    //ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2);
+    //ratio_d1_nd1 = calculateRatio(copyCluster1);
+    //ratio_d2_nd2 = calculateRatio(copyCluster2);
+    ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1);
+    ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2);
 
     if(ratio_d1_nd1 <= ratio_d2_nd2)
     {

@@ -6,7 +6,7 @@ from sklearn.cluster import KMeans
 xCoordinates = []
 yCoordinates = []
 #points = np.random.weibull(8.0, size=[200, 2])
-#points2 = np.random.normal(0.0, 1.0, size=[100, 2]) #gaussian distribution
+#points = np.random.normal(100.0, 10000.0, size=[1000, 2]) #gaussian distribution
 #points = np.random.exponential(1.0, size=[100, 2])
 #points = np.random.beta(1.0, 1.0, size=[200, 2])
 #points = np.random.binomial(size=[100, 2], n=5, p= 0.5)
@@ -32,7 +32,7 @@ for i in range (0, len(points)):
     file.write(inp)
     #None
 print(points)
-print(points[0][1])
+#print(points[0][1])
 
 
 
@@ -56,7 +56,7 @@ plt.show()
 
 
 
-kmeans = KMeans(n_clusters=2)
+'''kmeans = KMeans(n_clusters=2)
 # Fitting with inputs
 kmeans = kmeans.fit(points)
 # Predicting the clusters
@@ -64,7 +64,18 @@ labels = kmeans.predict(points)
 # Getting the cluster centers
 C = kmeans.cluster_centers_
 
-plt.scatter(points[:, 0], points[:, 1])
+#dist = np.linalg.norm(points[0]-C[0])
+#print(dist)
+
+for i in range (0, len(points)):
+    dist1 = np.linalg.norm(points[i]-C[0])
+    dist2 = np.linalg.norm(points[i]-C[1])
+    if dist1 < dist2:
+        plt.scatter(points[i][0], points[i][1], c = "green")
+    else:
+        plt.scatter(points[i][0], points[i][1], c = "orange")
+
+#plt.scatter(points[:, 0], points[:, 1], c = y)
 plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
 
-plt.show()
+plt.show()'''
