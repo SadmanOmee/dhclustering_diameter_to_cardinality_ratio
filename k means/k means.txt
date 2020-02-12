@@ -1,3 +1,0 @@
-https://stats.stackexchange.com/questions/51805/how-do-i-mathematically-prove-that-k-means-clustering-converges-to-minimum-squar
-https://stats.stackexchange.com/questions/358729/difference-between-hartigan-wong-algo-to-lloyds-algorithm-in-k-means-clusteri
-http://user.ceng.metu.edu.tr/~akifakkus/courses/ceng574/k-means/
