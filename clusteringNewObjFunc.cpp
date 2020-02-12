@@ -61,7 +61,7 @@ double chebychevDistance(point a, point b)
 
 double pointDistance(point a, point b)
 {
-    return minkowskiDistance(a, b);
+    return euclideanDistance(a, b);
 }
 /** distance measure functions implementation end*/
 
@@ -166,9 +166,10 @@ double intraClusterDistance(vp clust)
     return intraClustDist;
 }
 
-double avgIntraClusterDistance(vp clust)
+double avgIntraClusterDistance(vp &clust)
 {
     double avgIntraClustDist = intraClusterDistance(clust) / clust.size();
+    clust.clear();
     return avgIntraClustDist;
 }
 
@@ -187,7 +188,7 @@ cluster clustering(vp &points)
     point centroidPointSet, centroidCluster1, centroidCluster2;
 
     centroidPointSet = centroid(points);
-    cout << "Centroid of whole point set: " << centroidPointSet.x << " " << centroidPointSet.y << "\n";
+    //cout << "Centroid of whole point set: " << centroidPointSet.x << " " << centroidPointSet.y << "\n";
     diameter d = findDiameter(points);
     cluster1.push_back(d.a);
     cluster2.push_back(d.b);
@@ -250,6 +251,22 @@ cluster clustering(vp &points)
     cout << "Centroid of cluster 1: " << centroidCluster1.x << " " << centroidCluster1.y << "\n";
     cout << "Centroid of cluster 2: " << centroidCluster2.x << " " << centroidCluster2.y << "\n";
 
+    /*double avgClust1Dist = avgIntraClusterDistance(cluster1);
+    double avgClust2Dist = avgIntraClusterDistance(cluster2);
+    double avgDistRatio;
+    if(avgClust1Dist < avgClust2Dist)
+    {
+        avgDistRatio = avgClust2Dist / avgClust1Dist;
+    }
+    else
+    {
+        avgDistRatio = avgClust1Dist / avgClust2Dist;
+    }
+    centroidPointSet.x *= avgDistRatio;
+    centroidPointSet.y *= avgDistRatio;*/
+
+    cout << "Centroid of whole point set: " << centroidPointSet.x << " " << centroidPointSet.y << "\n";
+
     cout << "Points of temp cluster:\n-----------------------\n";
     for(auto i=cluster1.begin(); i<cluster1.end(); ++i)
     {
@@ -296,6 +313,39 @@ cluster clustering(vp &points)
     {
         cluster2.insert(cluster2.end(), tempCluster.begin(), tempCluster.end());
     }
+    tempCluster.clear();
+
+    centroidCluster1 = centroid(cluster1);
+    centroidCluster2 = centroid(cluster2);
+    cout << "New centroid of cluster 1: " << centroidCluster1.x << " " << centroidCluster1.y << "\n";
+    cout << "New centroid of cluster 2: " << centroidCluster2.x << " " << centroidCluster2.y << "\n";
+
+    for(auto i=cluster1.begin(); i<cluster1.end(); ++i)
+    {
+        point Point = *i;
+        if(pointDistance(Point, centroidCluster1) > pointDistance(Point, centroidCluster2))
+        {
+            tempCluster.push_back(Point);
+            cluster1.erase(i);
+            i--;
+            cout << "a";
+        }
+    }
+    cluster2.insert(cluster2.end(), tempCluster.begin(), tempCluster.end());
+    tempCluster.clear();
+
+    for(auto i=cluster2.begin(); i<cluster2.end(); ++i)
+    {
+        point Point = *i;
+        if(pointDistance(Point, centroidCluster2) > pointDistance(Point, centroidCluster1))
+        {
+            tempCluster.push_back(Point);
+            cluster2.erase(i);
+            i--;
+            cout << "b";
+        }
+    }
+    cluster1.insert(cluster1.end(), tempCluster.begin(), tempCluster.end());
     tempCluster.clear();
 
     clust.cl1 = cluster1;
