@@ -372,7 +372,7 @@ cluster clustering(vp &points)
         distFromCentroid *= distFromCentroid;
         sse += distFromCentroid;
     }
-    cout << "Sum squared error: " << sse << "\n\n";
+    cout << "Sum squared error: " << setprecision(20) << sse << "\n\n";
     /**calculation of sum squared error end*/
 
     return clust;

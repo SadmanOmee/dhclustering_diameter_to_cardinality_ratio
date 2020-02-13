@@ -6,9 +6,9 @@ from sklearn.cluster import KMeans
 xCoordinates = []
 yCoordinates = []
 #points = np.random.weibull(8.0, size=[100, 2])
-#points = np.random.normal(60000.0, 1000000.0, size=[1000, 2]) #gaussian distribution
+points = np.random.normal(6000000000000000000000000000.0, 100000000000000.0, size=[10000, 2]) #gaussian distribution
 #points = np.random.exponential(1.0, size=[500, 2])
-points = np.random.beta(1.0, 1.0, size=[200, 2])
+#points = np.random.beta(1.0, 1.0, size=[200, 2])
 #points = np.random.binomial(size=[100, 2], n=5, p= 0.5)
 #points = np.random.binomial(size=[100, 2], n=1, p= 0.5) #bernoulli distribution
 #points = np.random.gamma(2.0, 2.0, size=[100, 2])
