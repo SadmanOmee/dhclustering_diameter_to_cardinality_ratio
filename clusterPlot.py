@@ -85,3 +85,4 @@ for i in range (0, len(points)):
 plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
 
 plt.show()
+print(kmeans.inertia_)

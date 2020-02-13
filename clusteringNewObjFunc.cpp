@@ -347,9 +347,33 @@ cluster clustering(vp &points)
     }
     cluster1.insert(cluster1.end(), tempCluster.begin(), tempCluster.end());
     tempCluster.clear();
+    cout << "\n\n";
 
     clust.cl1 = cluster1;
     clust.cl2 = cluster2;
+
+    /**calculation of sum squared error*/
+    double sse = 0.0;
+    centroidCluster1 = centroid(cluster1);
+    centroidCluster2 = centroid(cluster2);
+
+    for(auto i=cluster1.begin(); i<cluster1.end(); ++i)
+    {
+        point Point = *i;
+        double distFromCentroid = pointDistance(Point, centroidCluster1);
+        distFromCentroid *= distFromCentroid;
+        sse += distFromCentroid;
+    }
+
+    for(auto i=cluster2.begin(); i<cluster2.end(); ++i)
+    {
+        point Point = *i;
+        double distFromCentroid = pointDistance(Point, centroidCluster2);
+        distFromCentroid *= distFromCentroid;
+        sse += distFromCentroid;
+    }
+    cout << "Sum squared error: " << sse << "\n\n";
+    /**calculation of sum squared error end*/
 
     return clust;
 }
