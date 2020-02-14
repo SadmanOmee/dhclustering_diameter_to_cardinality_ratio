@@ -385,9 +385,10 @@ cluster clustering(vp &points)
     cout << "radii: " << rc1 << " " << rc2 << "\n";
     cout << "sum of radii: " << rc1 + rc2 << "\n";
     cout << "average radius: " << (rc1 + rc2) / 2 << "\n";
-    cout << "inta-cluster distances: " << intraClusterDistance(cluster1) << " " << intraClusterDistance(cluster2) << "\n"; //kmeans
-    cout << "average inta-cluster distances: " << avgICD1 << " " << avgICD2 << "\n"; //kmeans
-    cout << "sum of average inta-cluster distances: " << avgICD1 + avgICD2 << "\n"; //kmeans
+    cout << "intra-cluster distances: " << intraClusterDistance(cluster1) << " " << intraClusterDistance(cluster2) << "\n"; //kmeans
+    cout << "average intra-cluster distances: " << avgICD1 << " " << avgICD2 << "\n"; //kmeans
+    cout << "sum of average intra-cluster distances: " << avgICD1 + avgICD2 << "\n"; //kmeans
+    cout << "d by nd ratio: " << dc1 / cluster1.size() << " " << dc2 / cluster2.size() << "\n";
 
     return clust;
 }
