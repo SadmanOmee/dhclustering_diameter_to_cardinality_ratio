@@ -375,6 +375,8 @@ cluster clustering(vp &points)
     cout << "Sum squared error: " << setprecision(20) << sse << "\n\n";
     /**calculation of sum squared error end*/
 
+    cout << "diameters: " << findDiameter(cluster1).diam << " " << findDiameter(cluster2).diam << "\n";
+
     return clust;
 }
 
@@ -402,6 +404,7 @@ int main()
         pointSet.push_back(Point);
         copyPointSet.push_back(Point);
     }
+    cout << "Data reading finished...\n\n";
 
     //cout << "The point set: (" << pointSet.size() << " points)\n-----------------\n";
     output << "The point set: (" << pointSet.size() << " points)\n-----------------\n";

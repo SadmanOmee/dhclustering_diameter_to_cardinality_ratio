@@ -54,6 +54,8 @@ plt.scatter(clust2x, clust2y, color="red")
 plt.show()
 
 points = []
+cluster1 = []
+cluster2 = []
 for i in range (0, len(clust1x)):
     singlePoint = []
     singlePoint.append(clust1x[i])
@@ -78,11 +80,33 @@ for i in range (0, len(points)):
     dist2 = np.linalg.norm(points[i]-C[1])
     if dist1 < dist2:
         plt.scatter(points[i][0], points[i][1], c = "green")
+        #singlePoint = []
+        #singlePoint.append(points[i][0])
+        #singlePoint.append(points[i][1])
+        cluster1.append(points[i])
     else:
         plt.scatter(points[i][0], points[i][1], c = "orange")
+        cluster2.append(points[i])
 
 #plt.scatter(points[:, 0], points[:, 1], c = y)
 plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
 
 plt.show()
 print(kmeans.inertia_)
+
+diameter1 = 0.0
+diameter2 = 0.0
+
+for i in range(0, len(cluster1)):
+    for j in range(0, len(cluster1)):
+        dist1 = ((cluster1[i][0] - cluster1[j][0]) * (cluster1[i][0] - cluster1[j][0]) + (cluster1[i][1] - cluster1[j][1]) * (cluster1[i][1] - cluster1[j][1])) ** 0.5
+        if dist1 > diameter1:
+            diameter1 = dist1
+
+for i in range(0, len(cluster2)):
+    for j in range(0, len(cluster2)):
+        dist2 = ((cluster2[i][0] - cluster2[j][0]) * (cluster2[i][0] - cluster2[j][0]) + (cluster2[i][1] - cluster2[j][1]) * (cluster2[i][1] - cluster2[j][1])) ** 0.5
+        if dist2 > diameter2:
+            diameter2 = dist2
+            
+print(diameter1, diameter2)
