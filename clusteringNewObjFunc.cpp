@@ -169,7 +169,7 @@ double intraClusterDistance(vp clust)
 double avgIntraClusterDistance(vp &clust)
 {
     double avgIntraClustDist = intraClusterDistance(clust) / clust.size();
-    clust.clear();
+    //clust.clear();
     return avgIntraClustDist;
 }
 
@@ -372,13 +372,22 @@ cluster clustering(vp &points)
         distFromCentroid *= distFromCentroid;
         sse += distFromCentroid;
     }
-    cout << "Sum squared error: " << setprecision(20) << sse << "\n\n";
+    cout << "Sum squared error: " << setprecision(20) << sse << "\n"; //kmeans
     /**calculation of sum squared error end*/
 
-    cout << "diameters: " << findDiameter(cluster1).diam << " " << findDiameter(cluster2).diam << "\n";
-    cout << "radii: " << radius(cluster1) << " " << radius(cluster2) << "\n";
-    cout << "inta-cluster distances: " << intraClusterDistance(cluster1) << " " << intraClusterDistance(cluster2) << "\n";
-    cout << "average inta-cluster distances: " << avgIntraClusterDistance(cluster1) << " " << avgIntraClusterDistance(cluster2) << "\n";
+    double dc1 = findDiameter(cluster1).diam, dc2 = findDiameter(cluster2).diam;
+    double rc1 = radius(cluster1), rc2 = radius(cluster2);
+    double avgICD1 = avgIntraClusterDistance(cluster1), avgICD2 = avgIntraClusterDistance(cluster2);
+
+    cout << "diameters: " << dc1 << " " << dc2 << "\n";
+    cout << "sum of diameters: " << dc1 + dc2 << "\n";
+    cout << "average diameter: " << (dc1 + dc2) / 2 << "\n";
+    cout << "radii: " << rc1 << " " << rc2 << "\n";
+    cout << "sum of radii: " << rc1 + rc2 << "\n";
+    cout << "average radius: " << (rc1 + rc2) / 2 << "\n";
+    cout << "inta-cluster distances: " << intraClusterDistance(cluster1) << " " << intraClusterDistance(cluster2) << "\n"; //kmeans
+    cout << "average inta-cluster distances: " << avgICD1 << " " << avgICD2 << "\n"; //kmeans
+    cout << "sum of average inta-cluster distances: " << avgICD1 + avgICD2 << "\n"; //kmeans
 
     return clust;
 }

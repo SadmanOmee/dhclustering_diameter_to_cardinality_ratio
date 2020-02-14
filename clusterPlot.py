@@ -94,7 +94,7 @@ for i in range (0, len(points)):
 plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
 
 plt.show()
-print(kmeans.inertia_)
+print("sse: ", kmeans.inertia_)
 
 diameter1 = 0.0
 diameter2 = 0.0
@@ -111,8 +111,12 @@ for i in range(0, len(cluster2)):
         if dist2 > diameter2:
             diameter2 = dist2
             
-print(diameter1, diameter2)
-print(rad1, rad2)
+print("diameters:", diameter1, diameter2)
+print("sum of diameters:", diameter1 + diameter2)
+print("average diameter:", (diameter1 + diameter2) / 2)
+print("radii:", rad1, rad2)
+print("sum of radii:", rad1 + rad2)
+print("average radii:", (rad1 + rad2) / 2)
 
 intraClustDist1 = 0.0
 intraClustDist2 = 0.0
@@ -122,8 +126,9 @@ for i in range (0, len(cluster1)):
 for i in range (0, len(cluster2)):
     intraClustDist2 += np.linalg.norm(cluster2[i]-C[1])
     
-print(intraClustDist1, intraClustDist2)
+print("intra-cluster distances:", intraClustDist1, intraClustDist2)
 
 avgIntraClustDist1 = intraClustDist1 / len(cluster1)
 avgIntraClustDist2 = intraClustDist2 / len(cluster2)
-print(avgIntraClustDist1, avgIntraClustDist2)
+print("average intra-cluster distances:", avgIntraClustDist1, avgIntraClustDist2)
+print("sum of average intra-cluster distances:", avgIntraClustDist1 + avgIntraClustDist2)
