@@ -378,6 +378,7 @@ cluster clustering(vp &points)
     cout << "diameters: " << findDiameter(cluster1).diam << " " << findDiameter(cluster2).diam << "\n";
     cout << "radii: " << radius(cluster1) << " " << radius(cluster2) << "\n";
     cout << "inta-cluster distances: " << intraClusterDistance(cluster1) << " " << intraClusterDistance(cluster2) << "\n";
+    cout << "average inta-cluster distances: " << avgIntraClusterDistance(cluster1) << " " << avgIntraClusterDistance(cluster2) << "\n";
 
     return clust;
 }

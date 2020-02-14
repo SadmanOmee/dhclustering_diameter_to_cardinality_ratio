@@ -123,3 +123,7 @@ for i in range (0, len(cluster2)):
     intraClustDist2 += np.linalg.norm(cluster2[i]-C[1])
     
 print(intraClustDist1, intraClustDist2)
+
+avgIntraClustDist1 = intraClustDist1 / len(cluster1)
+avgIntraClustDist2 = intraClustDist2 / len(cluster2)
+print(avgIntraClustDist1, avgIntraClustDist2)
