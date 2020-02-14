@@ -300,10 +300,10 @@ cluster clustering(vp &points)
     copyCluster2.insert(copyCluster2.end(), cluster2.begin(), cluster2.end());
     copyCluster2.insert(copyCluster2.end(), tempCluster.begin(), tempCluster.end());
 
-    //ratio_d1_nd1 = calculateRatio(copyCluster1);
-    //ratio_d2_nd2 = calculateRatio(copyCluster2);
-    ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1);
-    ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2);
+    ratio_d1_nd1 = calculateRatio(copyCluster1);
+    ratio_d2_nd2 = calculateRatio(copyCluster2);
+    //ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1);
+    //ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2);
 
     if(ratio_d1_nd1 <= ratio_d2_nd2)
     {
@@ -376,6 +376,8 @@ cluster clustering(vp &points)
     /**calculation of sum squared error end*/
 
     cout << "diameters: " << findDiameter(cluster1).diam << " " << findDiameter(cluster2).diam << "\n";
+    cout << "radii: " << radius(cluster1) << " " << radius(cluster2) << "\n";
+    cout << "inta-cluster distances: " << intraClusterDistance(cluster1) << " " << intraClusterDistance(cluster2) << "\n";
 
     return clust;
 }
