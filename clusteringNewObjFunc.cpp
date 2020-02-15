@@ -378,6 +378,7 @@ cluster clustering(vp &points)
     double dc1 = findDiameter(cluster1).diam, dc2 = findDiameter(cluster2).diam;
     double rc1 = radius(cluster1), rc2 = radius(cluster2);
     double avgICD1 = avgIntraClusterDistance(cluster1), avgICD2 = avgIntraClusterDistance(cluster2);
+    double DbyNdRatio1 = dc1 / cluster1.size(), DbyNdRatio2 = dc2 / cluster2.size();
 
     cout << "diameters: " << dc1 << " " << dc2 << "\n";
     cout << "sum of diameters: " << dc1 + dc2 << "\n";
@@ -388,7 +389,12 @@ cluster clustering(vp &points)
     cout << "intra-cluster distances: " << intraClusterDistance(cluster1) << " " << intraClusterDistance(cluster2) << "\n"; //kmeans
     cout << "average intra-cluster distances: " << avgICD1 << " " << avgICD2 << "\n"; //kmeans
     cout << "sum of average intra-cluster distances: " << avgICD1 + avgICD2 << "\n"; //kmeans
-    cout << "d by nd ratio: " << dc1 / cluster1.size() << " " << dc2 / cluster2.size() << "\n";
+
+    /**new measures*/
+    cout << "d by nd ratio: " << DbyNdRatio1 << " " << DbyNdRatio2 << "\n";
+    cout << "sum of d by nd ratios: " << DbyNdRatio1 + DbyNdRatio2 << "\n";
+    cout << "centroid distances: " << pointDistance(centroidCluster1, centroidCluster2) << "\n";
+    /**new measures end*/
 
     return clust;
 }

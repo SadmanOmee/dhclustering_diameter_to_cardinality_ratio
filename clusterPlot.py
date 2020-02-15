@@ -67,7 +67,7 @@ for i in range (0, len(clust2x)):
     singlePoint.append(clust2y[i])
     points.append(singlePoint)
     
-kmeans = KMeans(n_clusters=2, init='k-means++', n_init=10, max_iter=300)
+kmeans = KMeans(n_clusters=2, init='k-means++', n_init=20, max_iter=300)
 # Fitting with inputs
 kmeans = kmeans.fit(points)
 # Predicting the clusters
@@ -94,7 +94,7 @@ for i in range (0, len(points)):
 plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
 
 plt.show()
-print("sse: ", kmeans.inertia_)
+print("sse:", kmeans.inertia_)
 
 diameter1 = 0.0
 diameter2 = 0.0
@@ -130,6 +130,20 @@ print("intra-cluster distances:", intraClustDist1, intraClustDist2)
 
 avgIntraClustDist1 = intraClustDist1 / len(cluster1)
 avgIntraClustDist2 = intraClustDist2 / len(cluster2)
+DbyNdRatio1 = diameter1 / len(cluster1)
+DbyNdRatio2 = diameter2 / len(cluster2)
+centDist = np.linalg.norm(C[0]-C[1])
+maxDbyNdRatio = max(DbyNdRatio1, DbyNdRatio2)
 print("average intra-cluster distances:", avgIntraClustDist1, avgIntraClustDist2)
 print("sum of average intra-cluster distances:", avgIntraClustDist1 + avgIntraClustDist2)
-print("d by nd ratio: ", diameter1 / len(cluster1), diameter2 / len(cluster2))
+print("d by nd ratio: ", DbyNdRatio1, DbyNdRatio2)
+print("sum of d by nd ratios: ", DbyNdRatio1 + DbyNdRatio2)
+print("centroid distances:", centDist)
+diffDbyNd = 0.00389 - maxDbyNdRatio
+print("diffDbyNd:", '{:.20f}'.format(diffDbyNd))
+diffCentDist = centDist - 0.2428
+print("diffCentDist", '{:.20f}'.format(diffCentDist))
+#print(diffDbyNd + diffCentDist)
+#print('{:.20f}'.format(2 * maxDbyNdRatio * centDist))
+#print('{:.20f}'.format(2 * 0.00389 * 0.2428))
+#print(maxDbyNdRatio * centDist)
