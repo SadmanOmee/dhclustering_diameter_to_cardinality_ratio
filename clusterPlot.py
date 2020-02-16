@@ -43,8 +43,8 @@ cluster2file.close()
 
 #plt.scatter(points[:, 0], points[:, 1], color="red")
 #plt.scatter(points2[:, 0], points2[:, 1], color="blue")
-plt.scatter(clust1x, clust1y, color="blue")
-plt.scatter(clust2x, clust2y, color="red")
+plt.scatter(clust1x, clust1y, color="blue", marker='^')
+plt.scatter(clust2x, clust2y, color="red", marker='x')
 #plt.scatter(0.927386, -0.305095, color="green")
 #plt.scatter(3.66395, 1.46738, color="orange")
 #plt.scatter(-1.80918, -2.07757, color="black")
@@ -82,11 +82,11 @@ for i in range (0, len(points)):
     dist1 = np.linalg.norm(points[i]-C[0])
     dist2 = np.linalg.norm(points[i]-C[1])
     if dist1 < dist2:
-        plt.scatter(points[i][0], points[i][1], c = "green")
+        plt.scatter(points[i][0], points[i][1], c = "green", marker='^')
         cluster1.append(points[i])
         rad1 = max(rad1, dist1)
     else:
-        plt.scatter(points[i][0], points[i][1], c = "orange")
+        plt.scatter(points[i][0], points[i][1], c = "orange", marker='x')
         cluster2.append(points[i])
         rad2 = max(rad2, dist2)
 
