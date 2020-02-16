@@ -181,6 +181,13 @@ double calculateRatio(vp &clust)
     return ratio_d_nd;
 }
 
+double calculateRatioRadius(vp &clust)
+{
+    double ratio_d_nd = radius(clust) / clust.size();
+    //clust.clear();
+    return ratio_d_nd;
+}
+
 cluster clustering(vp &points)
 {
     cluster clust;
@@ -304,12 +311,19 @@ cluster clustering(vp &points)
 
     //ratio_d1_nd1 = calculateRatio(copyCluster1);
     //ratio_d2_nd2 = calculateRatio(copyCluster2);
+
+    //ratio_d1_nd1 = calculateRatioRadius(copyCluster1);
+    //ratio_d2_nd2 = calculateRatioRadius(copyCluster2);
+
     ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1);
     ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2);
+
     //ratio_d1_nd1 = calculateRatio(copyCluster1) + findDiameter(copyCluster1).diam;
     //ratio_d2_nd2 = calculateRatio(copyCluster2) + findDiameter(copyCluster2).diam;
+
     //ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1) + calculateRatio(copyCluster1);
     //ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2) + calculateRatio(copyCluster2);
+
     //ratio_d1_nd1 = max(avgIntraClusterDistance(copyCluster1), calculateRatio(copyCluster1));
     //ratio_d2_nd2 = max(avgIntraClusterDistance(copyCluster2), calculateRatio(copyCluster2));
 
@@ -387,6 +401,7 @@ cluster clustering(vp &points)
     double rc1 = radius(cluster1), rc2 = radius(cluster2);
     double avgICD1 = avgIntraClusterDistance(cluster1), avgICD2 = avgIntraClusterDistance(cluster2);
     double DbyNdRatio1 = dc1 / cluster1.size(), DbyNdRatio2 = dc2 / cluster2.size();
+    double RbyNrRatio1 = rc1 / cluster1.size(), RbyNrRatio2 = rc2 / cluster2.size();
 
     cout << "diameters: " << dc1 << " " << dc2 << "\n";
     cout << "sum of diameters: " << dc1 + dc2 << "\n";
@@ -401,6 +416,8 @@ cluster clustering(vp &points)
     /**new measures*/
     cout << "d by nd ratio: " << DbyNdRatio1 << " " << DbyNdRatio2 << "\n";
     cout << "sum of d by nd ratios: " << DbyNdRatio1 + DbyNdRatio2 << "\n";
+    cout << "r by nr ratio: " << RbyNrRatio1 << " " << RbyNrRatio2 << "\n";
+    cout << "sum of r by nr ratios: " << RbyNrRatio1 + RbyNrRatio2 << "\n";
     cout << "centroid distances: " << pointDistance(centroidCluster1, centroidCluster2) << "\n";
     /**new measures end*/
 
