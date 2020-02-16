@@ -177,7 +177,7 @@ double calculateRatio(vp &clust)
 {
     diameter d = findDiameter(clust);
     double ratio_d_nd = d.diam / clust.size();
-    clust.clear();
+    //clust.clear();
     return ratio_d_nd;
 }
 
@@ -251,10 +251,12 @@ cluster clustering(vp &points)
     cout << "Centroid of cluster 1: " << centroidCluster1.x << " " << centroidCluster1.y << "\n";
     cout << "Centroid of cluster 2: " << centroidCluster2.x << " " << centroidCluster2.y << "\n";
 
-    /*double avgClust1Dist = avgIntraClusterDistance(cluster1);
-    double avgClust2Dist = avgIntraClusterDistance(cluster2);
+    /*//double avgClust1Dist = avgIntraClusterDistance(cluster1);
+    //double avgClust2Dist = avgIntraClusterDistance(cluster2);
+    double avgClust1Dist = findDiameter(cluster1).diam;
+    double avgClust2Dist = findDiameter(cluster2).diam;
     double avgDistRatio;
-    if(avgClust1Dist < avgClust2Dist)
+    if(avgClust1Dist > avgClust2Dist)
     {
         avgDistRatio = avgClust2Dist / avgClust1Dist;
     }
@@ -300,10 +302,16 @@ cluster clustering(vp &points)
     copyCluster2.insert(copyCluster2.end(), cluster2.begin(), cluster2.end());
     copyCluster2.insert(copyCluster2.end(), tempCluster.begin(), tempCluster.end());
 
-    ratio_d1_nd1 = calculateRatio(copyCluster1);
-    ratio_d2_nd2 = calculateRatio(copyCluster2);
-    //ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1);
-    //ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2);
+    //ratio_d1_nd1 = calculateRatio(copyCluster1);
+    //ratio_d2_nd2 = calculateRatio(copyCluster2);
+    ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1);
+    ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2);
+    //ratio_d1_nd1 = calculateRatio(copyCluster1) + findDiameter(copyCluster1).diam;
+    //ratio_d2_nd2 = calculateRatio(copyCluster2) + findDiameter(copyCluster2).diam;
+    //ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1) + calculateRatio(copyCluster1);
+    //ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2) + calculateRatio(copyCluster2);
+    //ratio_d1_nd1 = max(avgIntraClusterDistance(copyCluster1), calculateRatio(copyCluster1));
+    //ratio_d2_nd2 = max(avgIntraClusterDistance(copyCluster2), calculateRatio(copyCluster2));
 
     if(ratio_d1_nd1 <= ratio_d2_nd2)
     {
