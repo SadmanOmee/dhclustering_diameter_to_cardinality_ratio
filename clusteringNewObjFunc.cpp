@@ -315,19 +315,37 @@ cluster clustering(vp &points)
     //ratio_d1_nd1 = calculateRatioRadius(copyCluster1);
     //ratio_d2_nd2 = calculateRatioRadius(copyCluster2);
 
-    ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1);
-    ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2);
+    //ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1);
+    //ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2);
 
     //ratio_d1_nd1 = calculateRatio(copyCluster1) + findDiameter(copyCluster1).diam;
     //ratio_d2_nd2 = calculateRatio(copyCluster2) + findDiameter(copyCluster2).diam;
 
-    //ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1) + calculateRatio(copyCluster1);
-    //ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2) + calculateRatio(copyCluster2);
+    ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1) + calculateRatio(copyCluster1);
+    ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2) + calculateRatio(copyCluster2);
 
-    //ratio_d1_nd1 = max(avgIntraClusterDistance(copyCluster1), calculateRatio(copyCluster1));
-    //ratio_d2_nd2 = max(avgIntraClusterDistance(copyCluster2), calculateRatio(copyCluster2));
+    //ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1) + calculateRatioRadius(copyCluster1);
+    //ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2) + calculateRatioRadius(copyCluster2);
 
-    if(ratio_d1_nd1 <= ratio_d2_nd2)
+    /*ratio_d1_nd1 = min(avgIntraClusterDistance(copyCluster1), calculateRatio(copyCluster1));
+    ratio_d2_nd2 = min(avgIntraClusterDistance(copyCluster2), calculateRatio(copyCluster2));*/
+    cout << "---------********------------------\n";
+    cout << avgIntraClusterDistance(copyCluster1) << " " << calculateRatioRadius(copyCluster1) << " " << calculateRatio(copyCluster1) << "\n";
+    cout << avgIntraClusterDistance(copyCluster2) << " " << calculateRatioRadius(copyCluster2) << " " << calculateRatio(copyCluster2)  << "\n";
+
+    cout << avgIntraClusterDistance(copyCluster1) - avgIntraClusterDistance(copyCluster2) << "\n";
+    cout << calculateRatioRadius(copyCluster1) - calculateRatioRadius(copyCluster2) << "\n";
+    cout << calculateRatio(copyCluster1) - calculateRatio(copyCluster2) << "\n";
+    cout << "---------********------------------\n";
+
+    //ratio_d1_nd1 *= (double)((double)copyCluster1.size() / (double)(copyCluster1.size() + copyCluster2.size()));
+    //ratio_d2_nd2 *= (double)((double)copyCluster2.size() / (double)(copyCluster1.size() + copyCluster2.size()));
+    //ratio_d1_nd1 += calculateRatioRadius(copyCluster1);
+    //ratio_d2_nd2 += calculateRatioRadius(copyCluster2);
+
+    cout << "ratios: " << ratio_d1_nd1 << " " << ratio_d2_nd2 << "\n\n";
+
+    if(ratio_d1_nd1 > ratio_d2_nd2)
     {
         cluster1.insert(cluster1.end(), tempCluster.begin(), tempCluster.end());
     }
