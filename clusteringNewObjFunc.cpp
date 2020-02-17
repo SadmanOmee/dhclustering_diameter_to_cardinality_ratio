@@ -260,10 +260,10 @@ cluster clustering(vp &points)
 
     /*//double avgClust1Dist = avgIntraClusterDistance(cluster1);
     //double avgClust2Dist = avgIntraClusterDistance(cluster2);
-    double avgClust1Dist = findDiameter(cluster1).diam;
-    double avgClust2Dist = findDiameter(cluster2).diam;
+    //double avgClust1Dist = findDiameter(cluster1).diam;
+    //double avgClust2Dist = findDiameter(cluster2).diam;
     double avgDistRatio;
-    if(avgClust1Dist > avgClust2Dist)
+    if(avgClust1Dist < avgClust2Dist)
     {
         avgDistRatio = avgClust2Dist / avgClust1Dist;
     }
@@ -324,6 +324,9 @@ cluster clustering(vp &points)
     ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1) + calculateRatio(copyCluster1);
     ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2) + calculateRatio(copyCluster2);
 
+    //ratio_d1_nd1 = (2 * avgIntraClusterDistance(copyCluster1) / copyCluster1.size()) + calculateRatio(copyCluster1);
+    //ratio_d2_nd2 = (2 * avgIntraClusterDistance(copyCluster2) / copyCluster2.size()) + calculateRatio(copyCluster2);
+
     //ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1) + calculateRatioRadius(copyCluster1);
     //ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2) + calculateRatioRadius(copyCluster2);
 
@@ -345,7 +348,7 @@ cluster clustering(vp &points)
 
     cout << "ratios: " << ratio_d1_nd1 << " " << ratio_d2_nd2 << "\n\n";
 
-    if(ratio_d1_nd1 > ratio_d2_nd2)
+    if(ratio_d1_nd1 <= ratio_d2_nd2)
     {
         cluster1.insert(cluster1.end(), tempCluster.begin(), tempCluster.end());
     }
