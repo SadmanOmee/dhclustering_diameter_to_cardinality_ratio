@@ -321,17 +321,24 @@ cluster clustering(vp &points)
     //ratio_d1_nd1 = calculateRatio(copyCluster1) + findDiameter(copyCluster1).diam;
     //ratio_d2_nd2 = calculateRatio(copyCluster2) + findDiameter(copyCluster2).diam;
 
-    ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1) + calculateRatio(copyCluster1);
-    ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2) + calculateRatio(copyCluster2);
+    //ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1) + calculateRatio(copyCluster1);
+    //ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2) + calculateRatio(copyCluster2);
 
-    //ratio_d1_nd1 = (2 * avgIntraClusterDistance(copyCluster1) / copyCluster1.size()) + calculateRatio(copyCluster1);
-    //ratio_d2_nd2 = (2 * avgIntraClusterDistance(copyCluster2) / copyCluster2.size()) + calculateRatio(copyCluster2);
+    //ratio_d1_nd1 = (2 * avgIntraClusterDistance(copyCluster1) / copyCluster1.size()) + calculateRatioRadius(copyCluster1);
+    //ratio_d2_nd2 = (2 * avgIntraClusterDistance(copyCluster2) / copyCluster2.size()) + calculateRatioRadius(copyCluster2);
 
     //ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1) + calculateRatioRadius(copyCluster1);
     //ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2) + calculateRatioRadius(copyCluster2);
 
-    /*ratio_d1_nd1 = min(avgIntraClusterDistance(copyCluster1), calculateRatio(copyCluster1));
-    ratio_d2_nd2 = min(avgIntraClusterDistance(copyCluster2), calculateRatio(copyCluster2));*/
+    //ratio_d1_nd1 = min(avgIntraClusterDistance(copyCluster1), calculateRatio(copyCluster1));
+    //ratio_d2_nd2 = min(avgIntraClusterDistance(copyCluster2), calculateRatio(copyCluster2));
+
+    ratio_d1_nd1 = calculateRatio(copyCluster1) + calculateRatio(cluster2);
+    ratio_d2_nd2 = calculateRatio(copyCluster2) + calculateRatio(cluster1);
+
+    //ratio_d1_nd1 = calculateRatioRadius(copyCluster1) + calculateRatioRadius(cluster2);
+    //ratio_d2_nd2 = calculateRatioRadius(copyCluster2) + calculateRatioRadius(cluster1);
+
     cout << "---------********------------------\n";
     cout << avgIntraClusterDistance(copyCluster1) << " " << calculateRatioRadius(copyCluster1) << " " << calculateRatio(copyCluster1) << "\n";
     cout << avgIntraClusterDistance(copyCluster2) << " " << calculateRatioRadius(copyCluster2) << " " << calculateRatio(copyCluster2)  << "\n";
@@ -360,6 +367,12 @@ cluster clustering(vp &points)
 
     centroidCluster1 = centroid(cluster1);
     centroidCluster2 = centroid(cluster2);
+    /*point _centroidCluster1 = centroid(cluster1);
+    point _centroidCluster2 = centroid(cluster2);
+    centroidCluster1.x = (centroidCluster1.x + _centroidCluster1.x) / 2;
+    centroidCluster1.y = (centroidCluster1.y + _centroidCluster1.y) / 2;
+    centroidCluster2.x = (centroidCluster2.x + _centroidCluster2.x) / 2;
+    centroidCluster2.y = (centroidCluster2.y + _centroidCluster2.y) / 2;*/
     cout << "New centroid of cluster 1: " << centroidCluster1.x << " " << centroidCluster1.y << "\n";
     cout << "New centroid of cluster 2: " << centroidCluster2.x << " " << centroidCluster2.y << "\n";
 

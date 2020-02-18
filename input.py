@@ -6,12 +6,12 @@ from sklearn.cluster import KMeans
 xCoordinates = []
 yCoordinates = []
 #points = np.random.weibull(2.0, size=[400, 2])
-#points = np.random.normal(0.0, 2.0, size=[300, 2]) #gaussian distribution
+#points2 = np.random.normal(0.0, 2.0, size=[100, 2]) #gaussian distribution
 #points = np.random.exponential(1.0, size=[500, 2])
 #points = np.random.beta(1.0, 1.0, size=[400, 2])
 #points = np.random.binomial(size=[100, 2], n=5, p= 0.5)
 #points = np.random.binomial(size=[100, 2], n=1, p= 0.5) #bernoulli distribution
-#points = np.random.gamma(2.0, 2.0, size=[400, 2])
+#points = np.random.gamma(2.0, 2.0, size=[100, 2])
 points = np.random.pareto(5.0, size=[100, 2])
 #points = np.random.poisson(5, size=[50, 2])
 #points = np.random.lognormal(3, 1, size=[700, 2])
@@ -32,11 +32,11 @@ for i in range (0, len(points)):
     file.write(inp)
     
     #None
-'''   
+'''
 for i in range (0, len(points2)):
-    xCoordinates.append(points2[i][0] + 10)
-    yCoordinates.append(points2[i][1] + 10)
-    inp = str(points2[i][0] + 10) + " " + str(points2[i][1] + 10) + "\n"
+    xCoordinates.append(points2[i][0] + 15)
+    yCoordinates.append(points2[i][1] + 15)
+    inp = str(points2[i][0] + 15) + " " + str(points2[i][1] + 15) + "\n"
     file.write(inp)
     
     #None
