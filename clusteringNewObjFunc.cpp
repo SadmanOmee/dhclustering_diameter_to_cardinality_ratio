@@ -339,6 +339,12 @@ cluster clustering(vp &points)
     //ratio_d1_nd1 = calculateRatioRadius(copyCluster1) + calculateRatioRadius(cluster2);
     //ratio_d2_nd2 = calculateRatioRadius(copyCluster2) + calculateRatioRadius(cluster1);
 
+    //ratio_d1_nd1 = avgIntraClusterDistance(copyCluster1) + avgIntraClusterDistance(cluster2);
+    //ratio_d2_nd2 = avgIntraClusterDistance(copyCluster2) + avgIntraClusterDistance(cluster1);
+
+    //ratio_d1_nd1 = 2 * avgIntraClusterDistance(copyCluster1) / copyCluster1.size() + 2 * avgIntraClusterDistance(cluster2) / cluster2.size();
+    //ratio_d2_nd2 = 2 * avgIntraClusterDistance(copyCluster2) / copyCluster2.size() + 2 * avgIntraClusterDistance(cluster1) / cluster1.size();
+
     cout << "---------********------------------\n";
     cout << avgIntraClusterDistance(copyCluster1) << " " << calculateRatioRadius(copyCluster1) << " " << calculateRatio(copyCluster1) << "\n";
     cout << avgIntraClusterDistance(copyCluster2) << " " << calculateRatioRadius(copyCluster2) << " " << calculateRatio(copyCluster2)  << "\n";

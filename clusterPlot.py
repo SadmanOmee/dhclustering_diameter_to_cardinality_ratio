@@ -41,6 +41,11 @@ for i in range(0, n2):
 cluster1file.close()
 cluster2file.close() 
 
+
+plt.scatter(clust1x, clust1y, color="black")
+plt.scatter(clust2x, clust2y, color="black")
+plt.show()
+
 #plt.scatter(points[:, 0], points[:, 1], color="red")
 #plt.scatter(points2[:, 0], points2[:, 1], color="blue")
 plt.scatter(clust1x, clust1y, color="blue", marker='^')
@@ -50,7 +55,6 @@ plt.scatter(clust2x, clust2y, color="red", marker='x')
 #plt.scatter(-1.80918, -2.07757, color="black")
 #plt.scatter(26, 23, color="orange")
 #plt.scatter(30, 15, color="black")
-
 plt.show()
 
 points = []
