@@ -8,7 +8,7 @@ yCoordinates = []
 #points = np.random.weibull(2.0, size=[300, 2])
 #points2 = np.random.normal(0.0, 2.0, size=[100, 2]) #gaussian distribution
 #points = np.random.exponential(1.0, size=[500, 2])
-#points = np.random.beta(1.0, 1.0, size=[400, 2])
+points = np.random.beta(1.0, 1.0, size=[400, 2])
 #points = np.random.binomial(size=[100, 2], n=5, p= 0.5)
 #points = np.random.binomial(size=[100, 2], n=1, p= 0.5) #bernoulli distribution
 #points = np.random.gamma(2.0, 2.0, size=[200, 2])
@@ -17,7 +17,7 @@ yCoordinates = []
 #points = np.random.lognormal(3, 1, size=[700, 2])
 #points = np.random.geometric(p=0.35, size=[100, 2])
 #points = np.random.rayleigh(3, size=[200, 2])
-points, y = make_blobs(n_samples=200, centers=12, cluster_std=0.60, random_state=8)
+#points, y = make_blobs(n_samples=200, centers=12, cluster_std=0.60, random_state=8)
 
 inp = str(len(points)) + "\n"
 #inp = str(len(points) + len(points2)) + "\n"

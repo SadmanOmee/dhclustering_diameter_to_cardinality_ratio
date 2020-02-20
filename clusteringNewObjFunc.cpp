@@ -42,18 +42,6 @@ double minkowskiDistance(point a, point b)
     return pow(sum, 1.0 / r);
 }
 
-double mahalonobisDistance(point a, point b)
-{
-    string distribution = "normal";
-    double x_bar, y_bar;
-    if(distribution == "normal")
-    {
-        x_bar = (a.x + b.x) / 2;
-        y_bar = (a.y + b.y) / 2;
-    }
-    return x_bar;
-}
-
 double chebychevDistance(point a, point b)
 {
     return max(abs(a.x - b.x), abs(a.y - b.y));
@@ -63,6 +51,35 @@ double cosineDistance(point a, point b)
 {
     double cosineSimilarity = ((a.x * b.x) + (a.y * b.y)) / (sqrt((a.x * a.x) + (a.y * a.y)) * sqrt((b.x * b.x) + (b.y * b.y)));
     return (1 - cosineSimilarity);
+}
+
+double mahalanobisDistance(point a, point b)
+{
+    string distribution = "normal";
+    double x_bar, y_bar, var_x, var_y, covar_xy, dist;
+    if(distribution == "normal")
+    {
+        x_bar = (a.x + b.x) / 2;
+        y_bar = (a.y + b.y) / 2;
+        var_x = (a.x - x_bar) * (a.x - x_bar) + (a.y - y_bar) * (a.y - y_bar);
+        var_y = (b.x - x_bar) * (b.x - x_bar) + (b.y - y_bar) * (b.y - y_bar);
+        covar_xy = ((a.x - x_bar) * (a.y - y_bar) + (b.x - x_bar) * (b.y - y_bar)) / 2;
+
+        double ad_bc = var_x * var_y - covar_xy * covar_xy;
+        double d = var_y / ad_bc;
+        double p = var_x / ad_bc;
+        double q = (-1) * covar_xy / ad_bc;
+        double c = q;   /** [ d -q
+                             -c  p]*/
+        point meanPoint;
+        meanPoint.x = x_bar;
+        meanPoint.y = y_bar;
+        double row1 = manhattanDistance(a, meanPoint) * d + manhattanDistance(b, meanPoint) * c;
+        double row2 = manhattanDistance(a, meanPoint) * q + manhattanDistance(b, meanPoint) * p;
+
+        dist = sqrt((row1 * row1) + (row2 * row2));
+    }
+    return dist;
 }
 
 double pointDistance(point a, point b)
