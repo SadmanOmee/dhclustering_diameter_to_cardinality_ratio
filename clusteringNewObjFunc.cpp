@@ -59,9 +59,15 @@ double chebychevDistance(point a, point b)
     return max(abs(a.x - b.x), abs(a.y - b.y));
 }
 
+double cosineDistance(point a, point b)
+{
+    double cosineSimilarity = ((a.x * b.x) + (a.y * b.y)) / (sqrt((a.x * a.x) + (a.y * a.y)) * sqrt((b.x * b.x) + (b.y * b.y)));
+    return (1 - cosineSimilarity);
+}
+
 double pointDistance(point a, point b)
 {
-    return chebychevDistance(a, b);
+    return euclideanDistance(a, b);
 }
 /** distance measure functions implementation end*/
 
