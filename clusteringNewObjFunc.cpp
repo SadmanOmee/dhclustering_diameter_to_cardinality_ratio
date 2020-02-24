@@ -5,6 +5,7 @@ typedef long long ll;
 #define pi 3.1416
 #define k 2
 #define vp vector<point>
+#define mode 1
 
 struct point
 {
@@ -235,28 +236,48 @@ cluster clustering(vp &points)
 
     while(!points.empty())
     {
-        d = findDiameter(points);
-        if(pointDistance(d.a, centroid(cluster1)) <= pointDistance(d.b, centroid(cluster1)))
+        if(mode == 1)
         {
-            cluster1.push_back(d.a);
-            cluster2.push_back(d.b);
+            /***----n * nlogn solution-----*/
+            d = findDiameter(points);
+            if(pointDistance(d.a, centroid(cluster1)) <= pointDistance(d.b, centroid(cluster1)))
+            {
+                cluster1.push_back(d.a);
+                cluster2.push_back(d.b);
+            }
+            else
+            {
+                cluster1.push_back(d.b);
+                cluster2.push_back(d.a);
+            }
+            if(d.it_a < d.it_b)
+            {
+                points.erase(points.begin() + d.it_a);
+                points.erase(points.begin() + d.it_b - 1);
+            }
+            else
+            {
+                points.erase(points.begin() + d.it_b);
+                points.erase(points.begin() + d.it_a - 1);
+            }
+            /***----n * nlogn solution end-----*/
         }
         else
         {
-            cluster1.push_back(d.b);
-            cluster2.push_back(d.a);
+            /***----nlogn solution-----*/
+            auto head = points.begin();
+            point pnt = *head;
+            if(pointDistance(pnt, centroid(cluster1)) <= pointDistance(pnt, centroid(cluster1)))
+            {
+                cluster1.push_back(pnt);
+            }
+            else
+            {
+                cluster2.push_back(pnt);
+            }
+            points.erase(points.begin());
+            /***----nlogn solution end-----*/
         }
-        if(d.it_a < d.it_b)
-        {
-            points.erase(points.begin() + d.it_a);
-            points.erase(points.begin() + d.it_b - 1);
-        }
-        else
-        {
-            points.erase(points.begin() + d.it_b);
-            points.erase(points.begin() + d.it_a - 1);
-        }
-
     }
 
     cout << "Initial points of cluster 1:\n-----------------------------\n";
@@ -358,6 +379,9 @@ cluster clustering(vp &points)
 
     ratio_d1_nd1 = calculateRatio(copyCluster1) + calculateRatio(cluster2);
     ratio_d2_nd2 = calculateRatio(copyCluster2) + calculateRatio(cluster1);
+
+    //ratio_d1_nd1 = calculateRatio(copyCluster1) + calculateRatio(cluster2) + pointDistance(centroid(copyCluster1), centroid(cluster2)) / (copyCluster1.size() + cluster2.size());
+    //ratio_d2_nd2 = calculateRatio(copyCluster2) + calculateRatio(cluster1) + pointDistance(centroid(copyCluster2), centroid(cluster1)) / (copyCluster2.size() + cluster1.size());
 
     //ratio_d1_nd1 = calculateRatioRadius(copyCluster1) + calculateRatioRadius(cluster2);
     //ratio_d2_nd2 = calculateRatioRadius(copyCluster2) + calculateRatioRadius(cluster1);
@@ -583,25 +607,21 @@ int main()
 5 21
 7 13
 9 16
-
 10 20
 2 4
 3 6
 4 4
 5 6
-
 6 8
 7 7
 8 9
 9 3
 20 16
-
 18 18
 19 20
 22 17
 24 22
 26 23
-
 27 21
 30 15
 
@@ -627,13 +647,11 @@ int main()
 5 21
 7 13
 9 16
-
 10 20
 2 4
 3 6
 4 4
 5 6
-
 6 8
 7 7
 8 9
