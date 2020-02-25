@@ -171,6 +171,23 @@ diameter findDiameter(vp points)
     return diameterDetails;
 }
 
+ll nearestNeighbour(vp points, point pnt)
+{
+    ll ind = -1;
+    ll minDist = 9999999999999, minIndex;
+    for(auto i=points.begin(); i<points.end(); ++i)
+    {
+        ind++;
+        point Point = *i;
+        if(pointDistance(Point, pnt) < minDist)
+        {
+            minDist = pointDistance(Point, pnt);
+            minIndex = ind;
+        }
+    }
+    return minIndex;
+}
+
 /*void removeVec(vector<point> &points, ll pos)
 {
     vector<point>::iterator it1 = points.begin();
@@ -262,7 +279,7 @@ cluster clustering(vp &points)
             }
             /***----n * nlogn solution end-----*/
         }
-        else
+        else if(mode == 2)
         {
             /***----nlogn solution-----*/
             auto head = points.begin();
@@ -277,6 +294,22 @@ cluster clustering(vp &points)
             }
             points.erase(points.begin());
             /***----nlogn solution end-----*/
+        }
+        else
+        {
+            //centroidCluster1 = cluster1.back();
+            //centroidCluster2 = cluster2.back();
+            centroidCluster1 = centroid(cluster1);
+            centroidCluster2 = centroid(cluster2);
+
+            ll nn;
+            nn = nearestNeighbour(points, centroidCluster1);
+            cluster1.push_back(points[nn]);
+            points.erase(points.begin() + nn);
+
+            nn = nearestNeighbour(points, centroidCluster2);
+            cluster2.push_back(points[nn]);
+            points.erase(points.begin() + nn);
         }
     }
 
@@ -420,12 +453,6 @@ cluster clustering(vp &points)
 
     centroidCluster1 = centroid(cluster1);
     centroidCluster2 = centroid(cluster2);
-    /*point _centroidCluster1 = centroid(cluster1);
-    point _centroidCluster2 = centroid(cluster2);
-    centroidCluster1.x = (centroidCluster1.x + _centroidCluster1.x) / 2;
-    centroidCluster1.y = (centroidCluster1.y + _centroidCluster1.y) / 2;
-    centroidCluster2.x = (centroidCluster2.x + _centroidCluster2.x) / 2;
-    centroidCluster2.y = (centroidCluster2.y + _centroidCluster2.y) / 2;*/
     cout << "New centroid of cluster 1: " << centroidCluster1.x << " " << centroidCluster1.y << "\n";
     cout << "New centroid of cluster 2: " << centroidCluster2.x << " " << centroidCluster2.y << "\n";
 
