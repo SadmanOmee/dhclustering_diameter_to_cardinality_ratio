@@ -7,6 +7,8 @@ typedef long long ll;
 #define vp vector<point>
 #define mode 1
 
+double horizontalVariance = 0.0, verticalVariance = 0.0;
+
 struct point
 {
     double x, y;
@@ -551,6 +553,7 @@ int main()
     cluster2Points.open("cluster2Points.txt");
 
     ll n;
+    double horr_bar = 0.0, ver_bar = 0.0;
     //cin >> n;
     input >> n;
     vp pointSet, copyPointSet;
@@ -561,8 +564,23 @@ int main()
         input >> Point.x >> Point.y;
         pointSet.push_back(Point);
         copyPointSet.push_back(Point);
+        horr_bar += Point.x;
+        ver_bar += Point.y;
     }
     cout << "Data reading finished...\n\n";
+
+    horr_bar /= n;
+    ver_bar /= n;
+
+    for(ll i=0; i<n; i++)
+    {
+        point Point;
+        horizontalVariance += (abs(Point.x - horr_bar) * abs(Point.x - horr_bar));
+        verticalVariance += (abs(Point.y - ver_bar) * abs(Point.y - ver_bar));
+    }
+
+    horizontalVariance /= n;
+    verticalVariance /= n;
 
     //cout << "The point set: (" << pointSet.size() << " points)\n-----------------\n";
     output << "The point set: (" << pointSet.size() << " points)\n-----------------\n";
@@ -576,6 +594,9 @@ int main()
     output << "\n\n";
 
     cluster clusters = clustering(pointSet);
+
+    horizontalVariance = 0.0;
+    verticalVariance = 0.0;
 
     //cout << "Final points of cluster 1: (" << clusters.cl1.size() << " points)\n-------------------------------------\n";
     output << "Final points of cluster 1: (" << clusters.cl1.size() << " points)\n-------------------------------------\n";
