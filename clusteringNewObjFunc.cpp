@@ -72,8 +72,8 @@ double mahalanobisDistance(point a, point b)
         double d = var_y / ad_bc;
         double p = var_x / ad_bc;
         double q = (-1) * covar_xy / ad_bc;
-        double c = q;   /** [ d -q
-                             -c  p]*/
+        double c = q;   /// [ d -q
+                        ///  -c  p]
         point meanPoint;
         meanPoint.x = x_bar;
         meanPoint.y = y_bar;
@@ -81,6 +81,8 @@ double mahalanobisDistance(point a, point b)
         double row2 = manhattanDistance(a, meanPoint) * q + manhattanDistance(b, meanPoint) * p;
 
         dist = sqrt((row1 * row1) + (row2 * row2));
+        //cout << verticalVariance << "  " << horizontalVariance << "\n";
+        //dist = ((abs(a.x - a.y) * abs(a.x - a.y)) / horizontalVariance) + ((abs(b.x - b.y) * abs(b.x - b.y)) / verticalVariance);
     }
     return dist;
 }
