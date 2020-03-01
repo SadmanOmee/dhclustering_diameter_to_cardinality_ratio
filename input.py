@@ -11,13 +11,13 @@ yCoordinates = []
 #points = np.random.beta(1.0, 1.0, size=[400, 2])
 #points = np.random.binomial(size=[100, 2], n=5, p= 0.5)
 #points = np.random.binomial(size=[100, 2], n=1, p= 0.5) #bernoulli distribution
-#points = np.random.gamma(2.0, 2.0, size=[200, 2])
+#points = np.random.gamma(2.0, 2.0, size=[400, 2])
 #points = np.random.pareto(5.0, size=[100, 2])
 #points = np.random.poisson(5, size=[50, 2])
 #points = np.random.lognormal(3, 1, size=[100, 2])
 #points = np.random.geometric(p=0.35, size=[100, 2])
-points = np.random.rayleigh(3, size=[400, 2])
-#points, y = make_blobs(n_samples=200, centers=12, cluster_std=0.60, random_state=8)
+#points = np.random.rayleigh(3, size=[400, 2])
+points, y = make_blobs(n_samples=200, centers=12, cluster_std=0.60, random_state=8)
 
 inp = str(len(points)) + "\n"
 #inp = str(len(points) + len(points2)) + "\n"

@@ -5,7 +5,7 @@ typedef long long ll;
 #define pi 3.1416
 #define k 2
 #define vp vector<point>
-#define mode 1
+#define mode 3
 
 double horizontalVariance = 0.0, verticalVariance = 0.0;
 
@@ -301,10 +301,10 @@ cluster clustering(vp &points)
         }
         else
         {
-            //centroidCluster1 = cluster1.back();
-            //centroidCluster2 = cluster2.back();
-            centroidCluster1 = centroid(cluster1);
-            centroidCluster2 = centroid(cluster2);
+            centroidCluster1 = cluster1.back();
+            centroidCluster2 = cluster2.back();
+            //centroidCluster1 = centroid(cluster1);
+            //centroidCluster2 = centroid(cluster2);
 
             ll nn;
             nn = nearestNeighbour(points, centroidCluster1);
