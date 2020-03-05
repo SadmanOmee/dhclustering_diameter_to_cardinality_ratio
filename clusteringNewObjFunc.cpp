@@ -562,8 +562,10 @@ int main()
     for(ll i=0; i<n; i++)
     {
         point Point;
+        double extraUselessInput1;
         //cin >> Point.x >> Point.y;
         input >> Point.x >> Point.y;
+        //input >> extraUselessInput1;
         pointSet.push_back(Point);
         copyPointSet.push_back(Point);
         horr_bar += Point.x;
