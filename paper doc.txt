@@ -1,0 +1,26 @@
+Berkhin
+--------
+1. Berkhin stated in his survey that "The k-means algorithm is by far the most popular clustering tool used in scientific and industrial applications"[]
+
+Data Clustering: 50 Years Beyond K-Means
+-----------------------------------------
+1. "The goal of data clustering, also known as cluster analysis, is to discover the natural grouping(s) of a set of patterns, points, or objects".
+2. Numerous clustering algorithms have been proposed since the early 1950s.
+3. However, because a data point is always assigned to the nearest center, these approaches are not able to detect nonspherical clusters.
+4.  However, in reality it can be difficult for a user to guess the number of clusters k in a data set
+5. "Clustering is a more difficult and challenging problem than classification".
+6. Clustering algorithms can be broadly divided into two groups: hierarchical and partitional. Hierarchical clustering algorithms recursively find nested clusters either in agglomerative mode (starting with each data point in its own cluster, merge the mostsimilar pair of clusters successively to form a cluster hierarchy) or in divisive (top-down) mode (starting with all the data points in one cluster, recursively divide the cluster into smaller clusters). Partitional clustering algorithms find all the clusters simultaneously as a partition of the data and do not impose a hierarchical structure.
+7. Thus K-means, which is a greedy algorithm, can only be expected to converge to a local minimum
+8. While no mathematical criterion exists, a number of heuristics are available for choosing K.
+9. In spite of the prevalence of such a large number of clustering algorithms, and its success in a number of different application domains, clustering remains a difficult problem.
+10. Clustering algorithms tend to find clusters in the data irrespective of whether or not any clusters are present.
+11. Cluster validity refers to formal procedures that evaluate the results of cluster analysis in a quantitative and objective fashion [Jain & Dubes, 1988].
+12.  there is no best clustering algorithm
+13. Organizing data into sensible groupings arises naturally in many scientific fields.
+
+Least squares quantization in pcm
+-------------------------------------
+1. Many k-means variants, lloyd's most popular.
+2. Lloyd [] proposed alocal search solution to this problem that is still very widely used today.
+3. The k-means algorithm...
+
