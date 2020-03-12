@@ -1,26 +1,75 @@
-Berkhin
+Berkhin 
 --------
 1. Berkhin stated in his survey that "The k-means algorithm is by far the most popular clustering tool used in scientific and industrial applications"[]
 
-Data Clustering: 50 Years Beyond K-Means
+Data Clustering: 50 Years Beyond K-Means 
 -----------------------------------------
-1. "The goal of data clustering, also known as cluster analysis, is to discover the natural grouping(s) of a set of patterns, points, or objects".
+1. "The goal of data clustering, also known as cluster analysis, is to discover the natural grouping(s) of a set of patterns, points, or objects". 
 2. Numerous clustering algorithms have been proposed since the early 1950s.
 3. However, because a data point is always assigned to the nearest center, these approaches are not able to detect nonspherical clusters.
-4.  However, in reality it can be difficult for a user to guess the number of clusters k in a data set
+4.  However, in reality it can be difficult for a user to guess the number of clusters k in a data set.
 5. "Clustering is a more difficult and challenging problem than classification".
-6. Clustering algorithms can be broadly divided into two groups: hierarchical and partitional. Hierarchical clustering algorithms recursively find nested clusters either in agglomerative mode (starting with each data point in its own cluster, merge the mostsimilar pair of clusters successively to form a cluster hierarchy) or in divisive (top-down) mode (starting with all the data points in one cluster, recursively divide the cluster into smaller clusters). Partitional clustering algorithms find all the clusters simultaneously as a partition of the data and do not impose a hierarchical structure.
-7. Thus K-means, which is a greedy algorithm, can only be expected to converge to a local minimum
+6. Clustering algorithms can be broadly divided into two groups: hierarchical and partitional. Hierarchical clustering algorithms recursively find nested clusters either in agglomerative mode (starting with each data point in its own cluster, merge the mostsimilar pair of clusters successively to form a cluster hierarchy) or in divisive (top-down) mode (starting with all the data points in one cluster, recursively divide the cluster into smaller clusters). Partitional clustering algorithms find all the clusters simultaneously as a partition of the data and do not impose a hierarchical structure. -
+7. Thus K-means, which is a greedy algorithm, can only be expected to converge to a local minimum.
 8. While no mathematical criterion exists, a number of heuristics are available for choosing K.
 9. In spite of the prevalence of such a large number of clustering algorithms, and its success in a number of different application domains, clustering remains a difficult problem.
 10. Clustering algorithms tend to find clusters in the data irrespective of whether or not any clusters are present.
 11. Cluster validity refers to formal procedures that evaluate the results of cluster analysis in a quantitative and objective fashion [Jain & Dubes, 1988].
-12.  there is no best clustering algorithm
+12. There is no best clustering algorithm.
 13. Organizing data into sensible groupings arises naturally in many scientific fields.
 
-Least squares quantization in pcm
--------------------------------------
+Least squares quantization in pcm 
+----------------------------------
 1. Many k-means variants, lloyd's most popular.
-2. Lloyd [] proposed alocal search solution to this problem that is still very widely used today.
+2. Lloyd [] proposed a local search solution to this problem that is still very widely used today.
 3. The k-means algorithm...
+4. However, the local search heuristic proposed by Lloyd [] performs reasonably well both in theory and in practice.
+5. The standard algorithm was first proposed by Stuart Lloyd of Bell Labs in 1957 as a technique for pulse-code modulation, though it wasn't published as a journal article until 1982.
 
+How fast is the k-means method?
+-------------------------------
+1. Convergence (or lack of it) of the k−means algorithm is again well-studied []
+2. There has been renewed interest in quantifying the running time of the k-means algorithm []
+
+How slow is the k-means method?
+-------------------------------
+1. Arthur and Vassilvitskii [] examine the question of how quickly this algorithm and its variants converge to a local optimum.
+2. There has been renewed interest in quantifying the running time of the k-means algorithm [] and in particular, [] shows that Lloyd’s method can require a superpolynomial number of iterations to converge.
+3. There are no guarantees that the value of i is small (in fact, the number of iterations is super-polynomial in n
+in the worst-case []).
+4. From a theoretical standpoint, k-means is not a good clustering algorithm in terms of efficiency or quality: the running time can be exponential in the worst case [] and even though the final solution is locally optimal, it can be very far away from the global optimum.
+5. On the other hand, the worstcase number of iterations has been proved to be exp(√n) for d ∈ Ω(√n).
+6. On data that does have a clustering structure, the number of iterations until convergence is often small, and results only improve slightly after the first dozen iterations. Lloyd's algorithm is therefore often considered to be of "linear" complexity in practice, although it is in the worst case superpolynomial when performed until convergence.[] In the worst-case, Lloyd's algorithm needs i=2^Ω(√n) iterations, so that the worst-case complexity of Lloyd's algorithm is superpolynomial.[]
+
+K-means has polynomial smoothed complexity
+-------------------------------------------
+1. Arthur et al. [] settled the smoothed running time of k-means, showing that if an arbitrary input data set is randomly perturbed, then k-means will run in expected polynomial time.
+2. Standard k-means algorithm which is estimated O(N34p34 log4(N)/σ6) in case of independently perturbed data vectors by a normal distribution with variance σ2.
+3. Arthur and Vassilvitskii who showed that the smoothed running time of the k-means method is polynomially bounded in nk and 1/σ, where σ is the standard deviation of the Gaussian perturbations []
+4. Lloyd's k-means algorithm has polynomial smoothed running time. It is shown that[14] for arbitrary set of n points in [0,1]^d, if each point is independently perturbed by a normal distribution with mean 0 and variance σ2, then the expected running time of k-means algorithm is bounded by O(N34p34 log4(N)/σ6), which is a polynomial in n, k, d and 1/σ.[]
+
+Algorithm AS 136: A k-means clustering algorithm 
+-------------------------------------------------
+1. The running time of Lloyd's algorithm (and most variants) is O(nkdi).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"The goal of data clustering, also known as cluster analysis, is to discover the natural grouping(s) of a set of patterns, points, or objects". Organizing data into sensible groupings arises naturally in many scientific fields. "Clustering is a more difficult and challenging problem than classification". Numerous clustering algorithms have been proposed since the early 1950s. In spite of the prevalence of such a large number of clustering algorithms, and its success in a number of different application domains, clustering remains a difficult problem.
+
+Berkhin stated in his survey that "The k-means algorithm is by far the most popular clustering tool used in scientific and industrial applications".[] Lloyd [] proposed a local search solution to this problem that is still very widely used today. Thus K-means, which is a greedy algorithm, can only be expected to converge to a local minimum. However, the local search heuristic proposed by Lloyd [] performs reasonably well both in theory and in practice.
+
+There is no best clustering algorithm. From a theoretical standpoint, k-means is not a good clustering algorithm in terms of efficiency or quality: the running time can be exponential in the worst case [] and even though the final solution is locally optimal, it can be very far away from the global optimum. The running time of Lloyd's algorithm (and most variants) is O(nkdi). Convergence (or lack of it) of the k−means algorithm is again well-studied []. There has been renewed interest in quantifying the running time of the k-means algorithm [] and in particular, [] shows that Lloyd’s method can require a superpolynomial number of iterations to converge. Arthur and Vassilvitskii [] examine the question of how quickly this algorithm and its variants converge to a local optimum. There are no guarantees that the value of i is small (in fact, the number of iterations is super-polynomial in n in the worst-case []). On the other hand, the worstcase number of iterations has been proved to be exp(√n) for d ∈ Ω(√n). On data that does have a clustering structure, the number of iterations until convergence is often small, and results only improve slightly after the first dozen iterations. Lloyd's algorithm is therefore often considered to be of "linear" complexity in practice, although it is in the worst case superpolynomial when performed until convergence.[] In the worst-case, Lloyd's algorithm needs i=2^Ω(√n) iterations, so that the worst-case complexity of Lloyd's algorithm is superpolynomial.[] Arthur et al. [] settled the smoothed running time of k-means. Arthur and Vassilvitskii who showed that the smoothed running time of the k-means method is polynomially bounded in nk and 1/σ, where σ is the standard deviation of the Gaussian perturbations [] It is shown that[14] for arbitrary set of n points in [0,1]^d, if each point is independently perturbed by a normal distribution with mean 0 and variance σ2, then the expected running time of k-means algorithm is bounded by O(N34p34 log4(N)/σ6), which is a polynomial in n, k, d and 1/σ.[]
+
+Clustering algorithms tend to find clusters in the data irrespective of whether or not any clusters are present. Cluster validity refers to formal procedures that evaluate the results of cluster analysis in a quantitative and objective fashion [Jain & Dubes, 1988]. However, because a data point is always assigned to the nearest center, these approaches are not able to detect nonspherical clusters.
