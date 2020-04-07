@@ -7,8 +7,8 @@ xCoordinates = []
 yCoordinates = []
 #points = np.random.weibull(2.0, size=[300, 2])
 #points = np.random.normal(0.0, 2.0, size=[400, 2]) #gaussian distribution
-#points = np.random.exponential(1.0, size=[500, 2])
-#points = np.random.beta(1.0, 1.0, size=[400, 2])
+#points = np.random.exponential(1.0, size=[20, 2])
+#points = np.random.beta(1.0, 1.0, size=[20, 2])
 #points = np.random.binomial(size=[100, 2], n=5, p= 0.5)
 #points = np.random.binomial(size=[100, 2], n=1, p= 0.5) #bernoulli distribution
 #points = np.random.gamma(2.0, 2.0, size=[400, 2])
@@ -17,7 +17,8 @@ yCoordinates = []
 #points = np.random.lognormal(3, 1, size=[100, 2])
 #points = np.random.geometric(p=0.35, size=[100, 2])
 #points = np.random.rayleigh(3, size=[400, 2])
-points, y = make_blobs(n_samples=200, centers=12, cluster_std=0.60, random_state=8)
+#points, y = make_blobs(n_samples=200, centers=12, cluster_std=0.60, random_state=8)
+points, y = make_blobs(n_samples=20, centers=2, cluster_std=0.90, random_state=6)
 
 inp = str(len(points)) + "\n"
 #inp = str(len(points) + len(points2)) + "\n"
@@ -44,12 +45,39 @@ for i in range (0, len(points2)):
 print(points)
 #print(points[0][1])
 
-
-
-
-
-
 file.close() 
+
+pointsX = []
+pointsY = []
+inputFile = open("input1.txt","r")
+
+totalPoints = int(inputFile.readline())
+for i in range(0, totalPoints):
+    line = inputFile.readline()
+    x,y = line.split(" ")
+    x = float(x)
+    y = float(y)
+    pointsX.append(x)
+    pointsY.append(y)
+
+inputFile.close()
+'''diameter = 0.0
+for i in range(0, len(points)):
+    for j in range(0, len(points)):
+        dist = ((points[i][0] - points[j][0]) * (points[i][0] - points[j][0]) + (points[i][1] - points[j][1]) * (points[i][1] - points[j][1])) ** 0.5
+        if dist > diameter:
+            diameter = dist
+
+print(diameter / len(points))'''
+
+diameter = 0.0
+for i in range(0, len(pointsX)):
+    for j in range(0, len(pointsX)):
+        dist = ((pointsX[i] - pointsX[j]) * (pointsX[i] - pointsX[j]) + (pointsY[i] - pointsY[j]) * (pointsY[i] - pointsY[j])) ** 0.5
+        if dist > diameter:
+            diameter = dist
+
+print(diameter / len(points))
 
 plt.scatter(points[:, 0], points[:, 1], color="red")
 #plt.scatter(points2[:, 0], points2[:, 1], color="blue")

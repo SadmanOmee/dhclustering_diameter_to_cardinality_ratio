@@ -89,7 +89,7 @@ double mahalanobisDistance(point a, point b)
 
 double pointDistance(point a, point b)
 {
-    return manhattanDistance(a, b);
+    return euclideanDistance(a, b);
 }
 /** distance measure functions implementation end*/
 
