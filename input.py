@@ -6,7 +6,7 @@ from sklearn.cluster import KMeans
 xCoordinates = []
 yCoordinates = []
 #points = np.random.weibull(2.0, size=[300, 2])
-#points = np.random.normal(0.0, 2.0, size=[400, 2]) #gaussian distribution
+#points = np.random.normal(0.0, 2.0, size=[40, 2]) #gaussian distribution
 #points = np.random.exponential(1.0, size=[20, 2])
 #points = np.random.beta(1.0, 1.0, size=[20, 2])
 #points = np.random.binomial(size=[100, 2], n=5, p= 0.5)
@@ -18,7 +18,9 @@ yCoordinates = []
 #points = np.random.geometric(p=0.35, size=[100, 2])
 #points = np.random.rayleigh(3, size=[400, 2])
 #points, y = make_blobs(n_samples=200, centers=12, cluster_std=0.60, random_state=8)
-points, y = make_blobs(n_samples=20, centers=2, cluster_std=0.90, random_state=6)
+#points, y = make_blobs(n_samples=50, centers=2, cluster_std=1.25, random_state=3)
+#points, y = make_blobs(n_samples=30, centers=4, cluster_std=1.20, random_state=1)
+points, y = make_blobs(n_samples=30, centers=3, cluster_std=1.28, random_state=17)
 
 inp = str(len(points)) + "\n"
 #inp = str(len(points) + len(points2)) + "\n"

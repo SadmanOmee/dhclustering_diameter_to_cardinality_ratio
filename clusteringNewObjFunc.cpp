@@ -530,10 +530,14 @@ cluster clustering(vp &points)
     cout << "intra-cluster distances: " << intraClusterDistance(cluster1) << " " << intraClusterDistance(cluster2) << "\n"; //kmeans
     cout << "average intra-cluster distances: " << avgICD1 << " " << avgICD2 << "\n"; //kmeans
     cout << "sum of average intra-cluster distances: " << avgICD1 + avgICD2 << "\n"; //kmeans
+    cout << "\n\n\n";
 
     /**new measures*/
     cout << "d by nd ratio: " << DbyNdRatio1 << " " << DbyNdRatio2 << "\n";
+    //cout << "distribution of average d by nd ratio: " <<
     cout << "sum of d by nd ratios: " << DbyNdRatio1 + DbyNdRatio2 << "\n";
+    cout << "average of d by nd ratios: " << (DbyNdRatio1 + DbyNdRatio2) / 2;
+    cout << "\n\n\n";
     cout << "r by nr ratio: " << RbyNrRatio1 << " " << RbyNrRatio2 << "\n";
     cout << "sum of r by nr ratios: " << RbyNrRatio1 + RbyNrRatio2 << "\n";
     cout << "centroid distances: " << pointDistance(centroidCluster1, centroidCluster2) << "\n";
@@ -572,6 +576,9 @@ int main()
         ver_bar += Point.y;
     }
     cout << "Data reading finished...\n\n";
+
+    double wholeDbyNd = findDiameter(pointSet).diam;
+    cout << "d by nd of whole point set: " << wholeDbyNd / n << "\n\n";
 
     horr_bar /= n;
     ver_bar /= n;

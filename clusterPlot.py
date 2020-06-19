@@ -2,6 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
+#import tensorflow as tf
+#print(tf.version.VERSION)
+
+
 clust1x = []
 clust1y = []
 clust2x = []
