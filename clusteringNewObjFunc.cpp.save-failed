@@ -455,7 +455,7 @@ cluster clustering(vp &points)
     }
     tempCluster.clear();
 
-    centroidCluster1 = centroid(cluster1);
+    /*centroidCluster1 = centroid(cluster1);
     centroidCluster2 = centroid(cluster2);
     cout << "New centroid of cluster 1: " << centroidCluster1.x << " " << centroidCluster1.y << "\n";
     cout << "New centroid of cluster 2: " << centroidCluster2.x << " " << centroidCluster2.y << "\n";
@@ -487,7 +487,7 @@ cluster clustering(vp &points)
     }
     cluster1.insert(cluster1.end(), tempCluster.begin(), tempCluster.end());
     tempCluster.clear();
-    cout << "\n\n";
+    cout << "\n\n";*/
 
     clust.cl1 = cluster1;
     clust.cl2 = cluster2;

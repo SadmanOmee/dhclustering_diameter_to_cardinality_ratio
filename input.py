@@ -17,10 +17,11 @@ yCoordinates = []
 #points = np.random.lognormal(3, 1, size=[100, 2])
 #points = np.random.geometric(p=0.35, size=[100, 2])
 #points = np.random.rayleigh(3, size=[400, 2])
-#points, y = make_blobs(n_samples=200, centers=12, cluster_std=0.60, random_state=8)
+points, y = make_blobs(n_samples=40, centers=3, cluster_std=1.80, random_state=31)
 #points, y = make_blobs(n_samples=50, centers=2, cluster_std=1.25, random_state=3)
 #points, y = make_blobs(n_samples=30, centers=4, cluster_std=1.20, random_state=1)
-points, y = make_blobs(n_samples=30, centers=3, cluster_std=1.28, random_state=17)
+#points, y = make_blobs(n_samples=30, centers=3, cluster_std=1.28, random_state=17)
+#points, y = make_blobs(n_samples=30, centers=2, cluster_std=0.1, random_state=5)
 
 inp = str(len(points)) + "\n"
 #inp = str(len(points) + len(points2)) + "\n"
