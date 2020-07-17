@@ -311,9 +311,12 @@ cluster clustering(vp &points)
             cluster1.push_back(points[nn]);
             points.erase(points.begin() + nn);
 
-            nn = nearestNeighbour(points, centroidCluster2);
-            cluster2.push_back(points[nn]);
-            points.erase(points.begin() + nn);
+            if(points.empty() == false)
+            {
+                nn = nearestNeighbour(points, centroidCluster2);
+                cluster2.push_back(points[nn]);
+                points.erase(points.begin() + nn);
+            }
         }
     }
 

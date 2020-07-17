@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.datasets.samples_generator import make_blobs
+from sklearn.datasets.samples_generator import make_blobs, make_moons, make_circles
 from sklearn.cluster import KMeans
 
 xCoordinates = []
@@ -17,12 +17,15 @@ yCoordinates = []
 #points = np.random.lognormal(3, 1, size=[100, 2])
 #points = np.random.geometric(p=0.35, size=[100, 2])
 #points = np.random.rayleigh(3, size=[400, 2])
-points, y = make_blobs(n_samples=40, centers=3, cluster_std=1.80, random_state=31)
-#points, y = make_blobs(n_samples=50, centers=2, cluster_std=1.25, random_state=3)
-#points, y = make_blobs(n_samples=30, centers=4, cluster_std=1.20, random_state=1)
-#points, y = make_blobs(n_samples=30, centers=3, cluster_std=1.28, random_state=17)
+#points, y = make_blobs(n_samples=40, centers=3, cluster_std=1.80, random_state=31)
+#points, y = make_blobs(n_samples=50, centers=2, cluster_std=1.10, random_state=1)
+#points, y = make_blobs(n_samples=500, centers=4, cluster_std=1.40, random_state=11)
+points, y = make_blobs(n_samples=7000, centers=100, cluster_std=0.1, random_state=17)
 #points, y = make_blobs(n_samples=30, centers=2, cluster_std=0.1, random_state=5)
-
+#points, y = make_moons(n_samples=1000, noise=0.1, random_state = 1)
+#points, y = make_moons(n_samples=50)
+#points, y = make_circles(n_samples=1000, noise=0.01)
+#points, y = make_circles(n_samples=50)
 inp = str(len(points)) + "\n"
 #inp = str(len(points) + len(points2)) + "\n"
 
@@ -77,10 +80,12 @@ diameter = 0.0
 for i in range(0, len(pointsX)):
     for j in range(0, len(pointsX)):
         dist = ((pointsX[i] - pointsX[j]) * (pointsX[i] - pointsX[j]) + (pointsY[i] - pointsY[j]) * (pointsY[i] - pointsY[j])) ** 0.5
+        #dist = abs(pointsX[i] - pointsX[j]) + abs(pointsY[i] - pointsY[j])
+        #dist = max(pointsX[i] - pointsX[j], pointsY[i] - pointsY[j])
         if dist > diameter:
             diameter = dist
 
-print(diameter / len(points))
+print(diameter / len(pointsX))
 
 plt.scatter(points[:, 0], points[:, 1], color="red")
 #plt.scatter(points2[:, 0], points2[:, 1], color="blue")
