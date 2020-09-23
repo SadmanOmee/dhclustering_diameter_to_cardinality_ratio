@@ -97,7 +97,7 @@ for i in range (0, len(clust2x)):
     singlePoint.append(clust2y[i])
     points.append(singlePoint)
     
-kmeans = KMeans(n_clusters=35, init='k-means++', n_init=30, max_iter=300)
+kmeans = KMeans(n_clusters=2, init='k-means++', n_init=30, max_iter=300)
 # Fitting with inputs
 kmeans = kmeans.fit(points)
 # Predicting the clusters

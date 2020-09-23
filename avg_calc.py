@@ -26,3 +26,6 @@ perDh = ((total - dhMislabeled) / total) * 100
 print(perDh)
 
 print(total - (82 * total / 100))
+
+ari = (226 - (406 * 306) / 630) / ((712 / 2) - (406 * 306) / 630)
+print('ari: ', ari)

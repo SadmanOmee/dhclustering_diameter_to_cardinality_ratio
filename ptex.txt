@@ -9,6 +9,7 @@
 \usepackage{multirow}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{diagbox}
 \usepackage{mathtools}
 \usepackage{amsmath, amssymb}
 \usepackage{mathabx}
@@ -26,11 +27,15 @@
 \let\oldnl\nl% Store \nl in \oldnl
 \newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}% Remove line number for one line
 
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+
 \renewcommand{\thesubfigure}{\roman{subfigure}}
+\renewcommand{\baselinestretch}{2}
 
 \begin{document}
 %
-\title{A Divisive Hierarchical Clustering Algorithm To Reduce Dissection Effect Using Greedy Heuristics}
+\title{A Divisive Hierarchical Clustering Algorithm to Minimize the Maximum Diameter to Cardinality Ratio using Greedy Heuristics}
 %
 %\titlerunning{A Divisive Hierarchical Clustering Algorithm To Reduce Dissection Effect Using Greedy Heuristics}
 % If the paper title is too long for the running head, you can set
@@ -43,7 +48,7 @@
 % First names are abbreviated in the running head.
 % If there are more than two authors, 'et al.' is used.
 %
-\institute{Department of Computer Science and Engineering,\\
+\institute{Graph Drawing and Visualization Laboratory, \\Department of Computer Science and Engineering,\\
 Bangladesh University of Engineering and Technology,\\
 Dhaka, Bangladesh \\
 \email{omee.sadman@gmail.com}\\
@@ -54,149 +59,261 @@ Dhaka, Bangladesh \\
 %
 \begin{abstract}
 %The abstract should briefly summarize the contents of the paper in 15--250 words.
-We consider the problem of \textit{dissection effect} here. The problem is caused when objects naturally belonging to the same cluster are assigned to separate clusters. As we want data clusters to be compact, it sometimes results in unnecessary splitting of a natural cluster. For $n$ data points and at most $k$ clusters allowed, we present an $O(nk\log n)$ algorithm for reducing this problem and produce good clusters on average. Our algorithm is a divisive hierarchical clustering algorithm and it follows a greedy heuristic. We test our algorithm with different benchmark data sets. We compare our results to the very well known $k$-means clustering. We discuss the drawbacks of $k$-means clustering by finding cases where it works poorly. We try to overcome these cases in our algorithm. We present and analyze the results graphically.
+%Huge amount of data are being produced every second nowadays and so the importance of efficient data clustering algorithms has increased rapidly for the purpose of mining these data. 
 
-\keywords{Dissection Effect \and $k$-means \and Centroid \and Diameter \and Unsupervised Learning \and Divisive Hierarchical Clustering \and Greedy heuristic.}
+Given a point set $S$ of $n$ points on a $2$-dimensional space and a positive integer $k$, we are asked to split $S$ into $k$ clusters such that the maximum diameter to cardinality ratio among all clusters is minimized. In this paper we give a $O(nk \log n)$ time divisive hierarchical clustering algorithm for finding such clusters which uses two different greedy heuristics at each iteration. 
+%For measuring efficiency of our algorithm, we use the Adjusted Rand Index(ARI) measure which is a very effective external evaluation criterion for evaluating clustering results. 
+We compare the performance of our algorithm with that of the well known and widely used $k$-means clustering using two similarity metrics and find some cases where our algorithm performs better than $k$-means algorithm. We also test our algorithm on different benchmark datasets where the ``ground truth" labels are known and show that our algorithm outperforms $k$-means clustering in almost every case. We also perform experiments with increasing value of $k$ on another benchmark dataset and show that our algorithm performs better than the $k$-means clustering.
+
+%Given a point set $S$ of $n$ points on a $2$-dimensional space and a positive integer $k$, we present and evaluate a new $O(nk \log n)$ divisive hierarchical clustering algorithm using greedy heuristics for efficiently partitioning $S$ into at most $k$ clusters. Our algorithm uses two different greedy heuristics at each iteration. For measuring efficiency and accuracy of our algorithm, we use the Adjusted Rand Index(ARI) measure which is a very effective external evaluation criterion for evaluating clustering results. We find cases where $k$-means performs poorly but our algorithm excels. We then compare our algorithm's performance(with two different similarity metrics) with that of the well known and widely used $k$-means clustering on different benchmark datasets where the ``ground truth" labels are known. We show that our algorithm outperforms $k$-means clustering in almost every case. We then test how our algorithm and $k$-means clustering performs for increasing number of allowed clusters on another benchmark dataset and show that our algorithm performs better than the $k$-means clustering.
+
+%We consider the problem of \textit{dissection effect} here. The problem is caused when objects naturally belonging to the same cluster are assigned to separate clusters. As we want data clusters to be compact, it sometimes results in unnecessary splitting of a natural cluster. For $n$ data points and at most $k$ clusters allowed, we present an $O(nk\log n)$ algorithm for reducing this problem and produce good clusters on average. Our algorithm is a divisive hierarchical clustering algorithm and it follows a greedy heuristic. We test our algorithm with different benchmark data sets. We compare our results to the very well known $k$-means clustering. We discuss the drawbacks of $k$-means clustering by finding cases where it works poorly. We try to overcome these cases in our algorithm. We present and analyze the results graphically.
+
+\keywords{Unsupervised Learning \and Divisive Hierarchical Clustering \and Centroid \and Diameter \and $k$-means \and Adjusted Rand Index \and Greedy Heuristic.}
 \end{abstract}
 %
 %
 %
 \section{Introduction}
-Clustering is arguably the most important section of Unsupervised Learning where data are partitioned into sensible groups. The goal of clustering is to divide an unlabelled data set into separate groups according to their similarity, to find underlying structure in data and to organize and summarize it through cluster prototypes~\cite{jain2010data} Clustering algorithms are developed to find clusters among data by following some objective function.
+Clustering is arguably the most important section of unsupervised learning where data are partitioned into sensible groups. The goals of clustering are to divide an unlabelled data set into separate groups according to their similarity, to find underlying structure in data and to organize and summarize it through cluster prototypes~\cite{jain2010data}. 
+%Clustering algorithms are developed to find clusters among data by following some objective function.
+Clustering algorithms are used heavily in various sectors including pattern recognition and information retrieval, image segmentation, business and marketing, genetics, medical imaging etc.
 
-Finding proper and appropriate clusters is considered a very complex problem. In fact, clustering is regarded as a harder and challenging problem than classifications~\cite{jain2010data}. In spite of its being a difficult problem, clustering algorithms are used heavily in various sectors on a regular basis including pattern recognition and information retrieval, image segmentation, business and marketing, genetics, medical imaging etc.
+Finding proper and appropriate clusters is considered a very complex problem. In fact, clustering is regarded as a harder and more challenging problem than classification~\cite{jain2010data}.
 
-Various clustering algorithms have been developed over the years because of its significance. They are of different types and their objective function varies. They can also vary on what heuristic they follow. As huge amount of data are being produced every second nowadays, the importance of efficient data clustering algorithm has increased rapidly for the purpose of mining these huge amount of data. Moreover, the data itself can be of several types and dimensions. Each and every clustering algorithm are designed to fulfill specific objective and handle data of specific type and dimensions and the success of these algorithm on how effectively they can handle the data.
+%Various clustering algorithms have been developed over the years because of its significance. 
+%They are of different types and their objective function varies. They can also vary on what heuristic they follow. 
+%As huge amount of data are being produced every second nowadays, the importance of efficient data clustering algorithm has increased rapidly for the purpose of mining these huge amount of data.
+%Moreover, the data itself can be of several types and dimensions. Each and every clustering algorithm are designed to fulfill specific objective and handle data of specific type and dimensions and the success of these algorithm on how effectively they can handle the data.
 
-\subsection{Dissection Effect}
-We emphasize on the problem of \textit{dissection effect} here. This problem has been mentioned in several researches before (see~\cite{hansen1997cluster,cormack1971review,monma1989partitioning,delattre1980bicriterion}). The problem arises when objects very similar to one another are assigned to separate clusters instead of assigning them to the same cluster. When we desire clustering algorithms to find compact clusters, so that diameter or radius of one cluster does not become much larger than others, they usually tend to find clusters of almost the same size. This sometimes results in finding clusters where the intra-cluster distance is big or splitting of a natural cluster which should not have been split. Fig.~\ref{f:de1} shows an examples of dissection effect where all the points belonged to the same cluster but split and assigned to two separate clusters and fig.~\ref{f:de2} shows an example of dissection effect where it occur from a point naturally belonged to one cluster but assigned to a different one by the clustering algorithm.
+\subsection{Problem Definition} \label{sub:pd}
+Given a point set $S$ consisting of $n$ points lying in a $2$-dimensional space and a positive integer $k$, i.e., $S = \{p_1, p_2, p_3, \ldots, p_n\}$, where $p_i \in \R^2$ for $i = 1, 2, \ldots, n$ and $k \in \Z$, we consider the problem of partitioning the points of $S$ into $k$ clusters $C_1, C_2, \ldots, C_k$, where $\bigcup_{c=1}^{k} C_{c} = S$ and $C_i \cap C_j = \phi$ for $i,j = 1, 2, \ldots, k$ and $i \neq j$, so as to minimize the maximum diameter to cardinality ratio among all clusters. Our algorithm starts by putting all points in a single cluster and then recursively picks the cluster with the largest diameter to cardinality ratio and divides it into two clusters so that this optimization criterion is satisfied.
 
-% \begin{figure}
-% \includegraphics[width=0.5\textwidth]{dissection_effect_2a.png}
-% \caption{A figure caption is always placed below the illustration.
-% Please note that short captions are centered, while long ones are
-% justified by the macro package automatically.} \label{fig1}
+%In addition, we also consider the problem of keeping track of the best clustering state as our objective is to not divide the point set into exactly $k$ clusters but at most $k$ clusters. For each value of $k$, a clustering state is the currently existing $k$ clusters created by our algorithm. We output the final clustering result the state that has the minimum average diameter to cardinality ratio of all clusters.
+
+%Although an objective function is not necessary to be minimized globally in hierarchical clustering algorithms, but there can be an objective that is optimized in each iteration when two clusters are merged(agglomerative hierarchical clustering) or a single cluster is divided into two(divisive hierarchical clustering).
+% \begin{align*}
+%     &S = \{p_1, p_2, p_3, \ldots, p_n\}\\
+%     &\forall_{i \in n}~p_i \in \R^2 \\
+%     &k \in \Z
+% \end{align*}
+% There are several criteria for measuring efficiency of a clustering algorithm. We have chosen the Adjusted Rand Index(ARI) measure for evaluating the performance of our algorithm and comparing it with that of $k$-means clustering.
+
+% \subsection{Dissection Effect}
+% We emphasize on the problem of \textit{dissection effect} here. This problem has been mentioned in several researches before (see~\cite{hansen1997cluster,cormack1971review,monma1989partitioning,delattre1980bicriterion}). The problem arises when objects very similar to one another are assigned to separate clusters instead of assigning them to the same cluster. When we desire clustering algorithms to find compact clusters, so that diameter or radius of one cluster does not become much larger than others, they usually tend to find clusters of almost the same size. This sometimes results in finding clusters where the intra-cluster distance is big or splitting of a natural cluster which should not have been split. Fig.~\ref{f:de1} shows an examples of dissection effect where all the points belonged to the same cluster but split and assigned to two separate clusters and Fig.~\ref{f:de2} shows an example of dissection effect where it occur from a point naturally belonged to one cluster but assigned to a different one by the clustering algorithm.
+
+% \begin{figure}[!htb]
+% \centering
+% \begin{subfigure}{.5\textwidth}
+%   \centering
+%   \includegraphics[width=.9\linewidth]{dissection_effect_1a.png}
+%   \caption{A point set}
+%   \label{f:sde11}
+% \end{subfigure}%
+% \begin{subfigure}{.5\textwidth}
+%   \centering
+%   \includegraphics[width=.9\linewidth]{dissection_effect_1b.png}
+%   \caption{A clustering of the point set}
+%   \label{f:sde12}
+% \end{subfigure}
+% \caption{An example of dissection effect where it arises from oversplitting the data.}
+% \label{f:de1}
 % \end{figure}
 
-\begin{figure}[!htb]
-\centering
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.9\linewidth]{dissection_effect_1a.png}
-  \caption{A point set}
-  \label{f:sde11}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.9\linewidth]{dissection_effect_1b.png}
-  \caption{A clustering of the point set}
-  \label{f:sde12}
-\end{subfigure}
-\caption{An example of dissection effect where it arises from oversplitting the data.}
-\label{f:de1}
-\end{figure}
+% \begin{figure}[!htb]
+% \centering
+% \begin{subfigure}{.5\textwidth}
+%   \centering
+%   \includegraphics[width=.9\linewidth]{dissection_effect_2a.png}
+%   \caption{A point set}
+%   \label{f:sde21}
+% \end{subfigure}%
+% \begin{subfigure}{.5\textwidth}
+%   \centering
+%   \includegraphics[width=.9\linewidth]{dissection_effect_2b.png}
+%   \caption{A clustering of the point set}
+%   \label{f:sde22}
+% \end{subfigure}
+% \caption{An example of dissection effect where it arises from assigning a point to the wrong cluster.}
+% \label{f:de2}
+% \end{figure}
 
-\begin{figure}[!htb]
-\centering
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.9\linewidth]{dissection_effect_2a.png}
-  \caption{A point set}
-  \label{f:sde21}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=.9\linewidth]{dissection_effect_2b.png}
-  \caption{A clustering of the point set}
-  \label{f:sde22}
-\end{subfigure}
-\caption{An example of dissection effect where it arises from assigning a point to the wrong cluster.}
-\label{f:de2}
-\end{figure}
-
-Dissection Effect depends on the objective function selected to perform the clustering. Every objective function produces different results and the dissection effect varies with them. In the next subsection, we describe objective functions used before to reduce dissection effect.
+% Dissection Effect depends on the objective function selected to perform the clustering. Every objective function produces different results and the dissection effect varies with them. In the next subsection, we describe objective functions used before to reduce dissection effect.
 
 \subsection{Related Works}
-The dissection effect generally occurs when the objective function is to minimize the maximum radii or diameters of the clusters. To reduce this problem, this objective function was modified and a new objective function was proposed. Minimizing the sum of radii or minimizing the sum of diameters of all the clusters  proved to be a more effective objective function than minimizing the maximum radius/diameter for reducing dissection effect~\cite{hansen1997cluster,monma1989partitioning}.
+Divisive hierarchical clustering algorithm starts with a single cluster composed of all data points initially. As it is a top-down approach, it recursively splits the cluster into smaller clusters. A bipartition is needed to perform at each step of a divisive hierarchical clustering algorithm of one of the currently available clusters. So naturally one of the possible approaches is to check all the possible bipartitions and choose one of them according to some criterion. Partitioning a set of $n$ objects into two non-empty subsets can be done in $2^{n - 1} - 1$ ways and Edwards and Cavalli-Sforza~\cite{edwards1965method} adopted this approach and they chose the one having the smallest intra-cluster sum of squares among all the possible bipartitions. But checking all possible bipartitions is computationally very expensive.
 
-Given $n$ objects $p_1, p_2, p_3, \ldots, p_n$ and an integer $k$, clustering algorithms with minimizing the sum of radii/diameters as objective function, divide the objects of into at most $k$ clusters so that the sum of radii/diameters of these clusters is minimized. These are known as the \textit{Minimum Sum of Radii} and \textit{Minimum Sum of Diameters} problem, respectively. 
-Minimum Sum of Diameters and Minimum Sum of Radii problem has been well researched where the motivation was to reduce dissection effect(see~\cite{doddi2000approximation,charikar2004clustering,bilo2005geometric,behsaz2015minimum}). For $k$ clusters, Doddi \textit{et al.}~\cite{doddi2000approximation} devised an approximation algorithm that comes up with a solution which finds at most $10k$ clusters such that the solution is a logarithmic factor of the optimal solution. For $k$ fixed clusters, they also presented a $2-$approximation algorithm. For any $\epsilon > 0$, they showed that it is NP-Hard to calculate any approximation factor $2-\epsilon$ for minimizing the sum of diameters.
+Macnaughton-Smith \textit{et al.}~\cite{macnaughton1964dissimilarity} and Kaufman and Rousseeuw~\cite{kaufman2009finding} both constructed iterative divisive clustering procedures with restricted number of bipartitions. Although these algorithms perform well, they are often sensitive to outliers.
 
-Chaikar and Panigrahy~\cite{charikar2004clustering} improved these results and devised a primal-dual based algorithm which achieves a constant factor approximation using at most $k$ clusters. They obtained a $(3.504 + \epsilon)-$approximation for Minimum Sum of Radii problem.
+Gu{\'e}noche \textit{et al.}~\cite{guenoche1991efficient} studied two divisive hierarchical clustering algorithms with the diameter criterion - an implementation of Hubert's method~\cite{hubert1973monotone} and a refinement of Rao's method~\cite{rao1971cluster}. Divisive hierarchical clustering algorithms with diameter criterion recursively pick the cluster with the maximum diameter among the currently existing clusters at that moment and split that cluster into two clusters. The problem with this criterion is that sometimes it results in a dissection effect~\cite{cormack1971review,hansen1997cluster,monma1989partitioning}. The problem is caused when objects very similar to one another are assigned to separate clusters instead of assigning them to the same cluster.
 
-Gibson \textit{et al.}~\cite{gibson2010metric} presented an exact algorithm in time that had $n^{O(\log _{n} \log \Delta)}$ complexity for Minimum Sum of Radii problem, where $\Delta$ is the ratio of the
-maximum to minimum inter-point distance. It is a Quasi-Polynomial Time Approximation Scheme (QPTAS) for Minimum Sum of Radii problem.
+Some monothetic divisive algorithms have also been proposed. Monothetic divisive algorithms divides clusters using one feature or variable at a time. Williams and Lambert~\cite{williams1959multivariate} first proposed a monothetic divisive clustering methods. Lance and Williams~\cite{lance1968note} later proposed another monothetic method. But both these methods are designed particularly for binary data. Some other monothetic divisive hierarchical methods are described in \cite{chavent1998monothetic} and \cite{chavent2007divclus}. However, monothetic divisive clustering methods are not feasible for all types of data. Using one feature to partition entities is not always a good idea when there are data with a lot of diverse features.
 
-Behsaz and Salavatipour~\cite{behsaz2015minimum} they gave an exact algorithm for the Minimum Sum of Radii problem when singleton clusters (clusters with a single point) are not allowed. They devised a Polynomial Time Approximation Scheme (PTAS) for the Minimum Sum of Diameters problem on the plane with Euclidean distances. For Minimum Sum of Diameters problem with constant k, they present a polynomial time exact algorithm.
+%Har-even and Brailovsky proposed a probabilistic validation approach\cite{har1995probabilistic}
+Xiong \textit{et al.}~\cite{xiong2012dhcc} presented a divisive hierarchical clustering algorithm based on multiple correspondence analysis (MCA). But it is designed focusing only for categorical data.
 
-Although minimizing the sum of radii/diameters is a good objective function for reducing dissection effect, it can not reduce it in every case. Fig.~\ref{f:msd} shows a case where this objective function does not produce output with minimum dissection effect for $k = 2$. Again, the running time complexity of the algorithms developed for this purpose is very high which is another problem. So we need to find a faster way for reducing this problem effectively in most cases.
+% \subsection{Related Works}
+% The dissection effect generally occurs when the objective function is to minimize the maximum radii or diameters of the clusters. To reduce this problem, this objective function was modified and a new objective function was proposed. Minimizing the sum of radii or minimizing the sum of diameters of all the clusters  proved to be a more effective objective function than minimizing the maximum radius/diameter for reducing dissection effect~\cite{hansen1997cluster,monma1989partitioning}.
 
-\begin{figure}[H]
-\centering
-\begin{subfigure}{0.32\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{sum_of_diameters_problem_1a.png}
-  \caption{A point set \\ ~ \\ ~}
-  \label{f:msdp}
-\end{subfigure}%
-\begin{subfigure}{.32\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{sum_of_diameters_problem_1b.png}
-  \caption{Minimum sum of dia-\\meters clustering of the\\ point set}
-  \label{f:msdc}
-\end{subfigure}%
-\begin{subfigure}{.32\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{sum_of_diameters_problem_1c.png}
-  \caption{Clustering of the point set with minimum dissection effect}
-  \label{f:opc}
-\end{subfigure}
-\caption{A case where minimum sum of diameters objective does not produce output with minimum dissection effect for $k = 2$.}
-\label{f:msd}
-\end{figure}
+% Given $n$ objects $p_1, p_2, p_3, \ldots, p_n$ and an integer $k$, clustering algorithms with minimizing the sum of radii/diameters as objective function, divide the objects of into at most $k$ clusters so that the sum of radii/diameters of these clusters is minimized. These are known as the \textit{Minimum Sum of Radii} and \textit{Minimum Sum of Diameters} problem, respectively. 
+% Minimum Sum of Diameters and Minimum Sum of Radii problem has been well researched where the motivation was to reduce dissection effect(see~\cite{doddi2000approximation,charikar2004clustering,bilo2005geometric,behsaz2015minimum}). For $k$ clusters, Doddi \textit{et al.}~\cite{doddi2000approximation} devised an approximation algorithm that comes up with a solution which finds at most $10k$ clusters such that the solution is a logarithmic factor of the optimal solution. For $k$ fixed clusters, they also presented a $2-$approximation algorithm. For any $\epsilon > 0$, they showed that it is NP-Hard to calculate any approximation factor $2-\epsilon$ for minimizing the sum of diameters.
+
+% Chaikar and Panigrahy~\cite{charikar2004clustering} improved these results and devised a primal-dual based algorithm which achieves a constant factor approximation using at most $k$ clusters. They obtained a $(3.504 + \epsilon)-$approximation for Minimum Sum of Radii problem.
+
+% Gibson \textit{et al.}~\cite{gibson2010metric} presented an exact algorithm in time that had $n^{O(\log _{n} \log \Delta)}$ complexity for Minimum Sum of Radii problem, where $\Delta$ is the ratio of the
+% maximum to minimum inter-point distance. It is a Quasi-Polynomial Time Approximation Scheme (QPTAS) for Minimum Sum of Radii problem.
+
+% Behsaz and Salavatipour~\cite{behsaz2015minimum} they gave an exact algorithm for the Minimum Sum of Radii problem when singleton clusters (clusters with a single point) are not allowed. They devised a Polynomial Time Approximation Scheme (PTAS) for the Minimum Sum of Diameters problem on the plane with Euclidean distances. For Minimum Sum of Diameters problem with constant k, they present a polynomial time exact algorithm.
+
+% Although minimizing the sum of radii/diameters is a good objective function for reducing dissection effect, it can not reduce it in every case. Fig.~\ref{f:msd} shows a case where this objective function does not produce output with minimum dissection effect for $k = 2$. Again, the running time complexity of the algorithms developed for this purpose is very high which is another problem. So we need to find a faster way for reducing this problem effectively in most cases.
+
+% \begin{figure}[H]
+% \centering
+% \begin{subfigure}{0.32\textwidth}
+%   \centering
+%   \includegraphics[width=\linewidth]{sum_of_diameters_problem_1a.png}
+%   \caption{A point set \\ ~ \\ ~}
+%   \label{f:msdp}
+% \end{subfigure}%
+% \begin{subfigure}{.32\textwidth}
+%   \centering
+%   \includegraphics[width=\linewidth]{sum_of_diameters_problem_1b.png}
+%   \caption{Minimum sum of dia-\\meters clustering of the\\ point set}
+%   \label{f:msdc}
+% \end{subfigure}%
+% \begin{subfigure}{.32\textwidth}
+%   \centering
+%   \includegraphics[width=\linewidth]{sum_of_diameters_problem_1c.png}
+%   \caption{Clustering of the point set with minimum dissection effect}
+%   \label{f:opc}
+% \end{subfigure}
+% \caption{A case where minimum sum of diameters objective does not produce output with minimum dissection effect for $k = 2$.}
+% \label{f:msd}
+% \end{figure}
 
 \subsection{Our Contributions}
-In this paper, we study the problem on point sets. Our algorithm can be extended for higher dimensions but in this paper we focus on $2$-dimensional points. We present a $O(nk\log n)$ algorithm for reducing dissection effect, where $n$ is the number of point in the data set and $k$ is the maximum number of clusters allowed. The algorithm uses a greedy heuristic to find clusters. It is a hierarchical clustering algorithm that follows top-down approach i.e., a divisive hierarchical clustering algorithm. Our algorithm works better than the previous algorithms in many cases. We test our algorithm on various data sets. We also test these data sets using different distance metrics, mostly Euclidean, Manhattan and Chebyshev Distance.
+In this paper, we focus on the following topics $-$
+\begin{enumerate}
+    \item Given a point set $S$ consisting of $n$ points in a $2$-dimensional space and an integer $k$, we devise an efficient divisive hierarchical clustering algorithm for partitioning $S$ into $k$ clusters such that the maximum diameter to cardinality ratio among all clusters is minimized.
+    \item We prove that our algorithm has a running time of $O(nk \log n)$.
+    \item We compare the performance of our algorithm with that of the widely used $k$-means clustering. We find out the cases where $k$-means clustering performs poorly but our algorithm excels.
+    \item We then experiment our algorithm's performance with two different distance metrics against that of $k$-means clustering on some benchmark datasets and compare the results using the ARI measure that validates our algorithm's efficiency.
+    \item Finally we experiment the the efficiency both our algorithm and $k$-means clustering by increasing the value of $k$ on another benchmark dataset and show that our algorithm performs better than $k$-means clustering.
+\end{enumerate}
 
-Finding good clusters is always the objective of any clustering algorithm. So we also wanted to test our algorithm against other well known clustering algorithms. We chose $k$-Means algorithm~\cite{lloyd1982least} for this purpose. Berkhin~\cite{berkhin2006survey} stated in his survey that ``The $k$-means algorithm is by far the most popular clustering tool used in scientific and industrial applications". Lloyd~\cite{lloyd1982least} proposed a local search solution to this problem which is the most popular version of the $k$-Means algorithm. Though $k$-Means is the the most used and popular algorithm, its running time is superpolynomial i.e., exponential in worst case~\cite{arthur2006slow,vattani2011k}. We test our algorithm against this widely known algorithm and overcome some cases where the $k$-Means algorithm fails to generate good clusters. We also compare the accuracy of our algorithm and $k$-means clustering for some benchmark datasets and present results in tables and graphs.
+The rest of the paper is organized accordingly. Section~\ref{s:pr} consists of some preliminary terms, Section~\ref{s:a} describes the whole algorithm, Section~\ref{expa} deals with the experiments, results and analysis of our algorithm and comparison with $k$-means clustering. Finally we conclude our paper in Section~\ref{s:fw} mentioning some extensions and future works.
 
-\section{Preliminaries}
-Finding good clusters is a very complex problem. A good clustering algorithm should find clusters should find clusters so that intra-cluster cluster similarity is high as possible and inter-cluster similarity is as low as possible. Anil K. Jain~\cite{jain2010data} stated in his paper that ``there is no best clustering algorithm". Every clustering algorithm tries to follow these properties by maintaining an objective function.
+\section{Preliminaries} \label{s:pr}
+%Finding good clusters is a very complex problem. A good clustering algorithm should find clusters should find clusters so that intra-cluster cluster similarity is high as possible and inter-cluster similarity is as low as possible. Anil K. Jain~\cite{jain2010data} stated in his paper that ``there is no best clustering algorithm". Every clustering algorithm tries to follow these properties by maintaining an objective function.
 
-The \textit{radius} of a cluster is the maximum distance between the centroid and all the points cluster. On the other hand, the \textit{diameter} of a cluster is the maximum distance between any two points of the cluster. The radius and diameter of a cluster are not related directly, but they tend to be proportional.
+% The \textit{centroid} of a cluster of points is the point whose co-ordinates are the mean of every co-ordinates of the points of the cluster. Let $C$ be a cluster of $n$ points of $d$ dimensions, i.e., $C = \{p_1, p_2, p_3, \ldots, p_n\}$, where $p_i \in \R^d$ for $i = 1, 2, \ldots, n$. Suppose, $p_i^j$ be the value of the $j^{th}$ dimensional coordinate of the $i^{th}$ data point of $C$. Then the centroid of $C$ is a $d$ dimensional vector where the value of the $i^{th}$ dimensional coordinate denoted by $c^i$ is as follows $-$ 
+% \begin{equation*}
+%     %c = \frac{p_1 + p_2 + p_3 + \ldots + p_n}{n}
+%     c^i = \frac{p_1^i + p_2^i + \ldots + p_n^i}{n}
+% \end{equation*}
 
-Our algorithm is a hierarchical algorithm and a divisive one. A divisive hierarchical clustering algorithm starts by putting all the points in a single cluster and then recursively divides the cluster into smaller clusters~\cite{jain2010data}. Divisive algorithms usually find more correct solution than agglomerative algorithms. Agglomerative algorithms (bottom-up approach) does not have idea about the whole data pattern initially, it proceeds by finding patterns locally. But divisive algorithms (top-down approach) does have idea about the whole data pattern initially and so it makes better choices during clustering.
+Given a cluster $C$ consisting of $n$ points $p_1, p_2, \ldots, p_n$, where $p_i \in \R^d$ for $i = 1, 2, \ldots, n$, the \textit{centroid} $c$ of $C$ is a $d$-dimensional vector which is the arithmetic mean position of all the points of $C$. Centroid $c$ can be expressed as follows $-$
+\begin{equation*}
+   c = \frac{1}{n} \sum_{i=1}^{n} p_i
+\end{equation*}
 
-The objective function of $k$-Means algorithm is to minimize intra-cluster variance i.e., sum of squared error (SSE). For every data point $p$ and centroid $c$, the sum squared error can be defined as follows where $p_j^{i}$ is the \(j^{th}\) data point assigned to \(i^{th}\) cluster.
+%The \textit{radius} of a cluster is the maximum distance between the centroid and all the points cluster. On the other hand, 
+The \textit{diameter} of a cluster is the maximum distance between any two points of the cluster. Let, $C$ be a cluster of $n$ points, where $C = \{p_1, p_2, p_3, \ldots, p_n\}$. Suppose, $dist(p_i, p_j)$ be the distance between points $p_{i}$ and $p_{j}$ of $C$. Then the diameter $d(C)$ of $C$ is as follows $-$
+\begin{equation*}
+    %d = \forall_{i\in n, j \in n} max\big( distance(p_i, p_j)\big)
+    d(C) = \max_{p_i, p_j \in C} dist(p_i, p_j)
+\end{equation*}
+%The radius and diameter of a cluster are not related directly, but they tend to be proportional.
+
+The \textit{cardinality} of a set or cluster is the number of elements it contains. We denote the cardinality of a cluster $C$ by $\vert C \vert$.
+
+%Our algorithm is a hierarchical algorithm and a divisive one. A divisive hierarchical clustering algorithm starts by putting all the points in a single cluster and then recursively divides the cluster into smaller clusters~\cite{jain2010data}. Divisive algorithms usually find more correct solution than agglomerative algorithms. Agglomerative algorithms (bottom-up approach) does not have idea about the whole data pattern initially, it proceeds by finding patterns locally. But divisive algorithms (top-down approach) does have idea about the whole data pattern initially and so it makes better choices during clustering.
+
+\textit{$k$-means} is an iterative clustering method where $k$ pre-defined centroids are used to create $k$ clusters. Each data is assigned to the cluster with the nearest mean. The objective function of $k$-means algorithm is to minimize intra-cluster variance i.e., sum of squared error (SSE). For every data point $p$ and centroid $c$, the sum squared error can be defined as follows where $p_j^{i}$ is the \(j^{th}\) data point assigned to \(i^{th}\) cluster.
 \begin{equation*}
   SSE = \sum_{i=1}^{k} \sum_{j=1}^{n}  \abs[\Big]{\abs[\Big]{p_j^{i} - c_i}}^{2}
 \end{equation*}
 
-The similarity measure can vary among clustering algorithms. We use distance between two points as similarity measure for our algorithm in this paper. $k$-Means algorithm also uses the same similarity measure. We mostly use three types of Minkowski Distances as distance metrics for this purpose - Euclidean Distance, Manhattan Distance and Chebyshev Distance. For two points $X = \{x_1, x_2, \ldots, x_n\}$ and $Y = \{y_1, y_2, \ldots, y_n\}$, the Minkowski Distance of order $p$ between two points is defined as,
+Given a set of points, the \textit{convex hull} of the point set is defined as the smallest convex polygon that circumscribes all the points of the set. Convex hull is used in our algorithm for farthest point pair query of a point set.
+
+$kd$-tree is a binary tree data structure where each leaf node represents a point in a $k$-dimensional space. $kd$-tree is used in our algorithm for nearest neighbor search.
+
+We define a term \textit{ratio value} in this paper. This value is the ratio of the diameter to cardinality of a cluster. This ratio value is used as the criterion for splitting clusters in our divisive hierarchical clustering algorithm. Our objective is to minimize the maximum ratio value among all clusters.
+
+\textit{Heuristic} is a technique that is adopted to guide an algorithm to find good choices. The choices made using a heuristic might not always be optimal but it leads to at least a sufficiently good enough solution. Using a heuristic, an algorithm no longer needs to consider every possible solution, so heuristic based algorithms are generally faster than algorithms those find exact solution.
+
+% Hierarchical clustering algorithms can be of two types - agglomerative and divisive. Our algorithm is a divisive clustering algorithm. A \textit{divisive hierarchical clustering algorithm} is the one that starts by putting all the points in a single cluster and then recursively divides the cluster into smaller clusters~\cite{jain2010data}.
+
+% The similarity measure can vary among clustering algorithms. We use three types of Minkowski Distances as distance metrics for this purpose - Euclidean Distance, Manhattan Distance and Chebyshev Distance. For two points $X = \{x_1, x_2, \ldots, x_n\}$ and $Y = \{y_1, y_2, \ldots, y_n\}$, the Minkowski Distance of order $p$ between two points is defined as,
+% \begin{equation*}
+%   Minkowski(X, Y) = \Bigg( \sum_{i=1}^{n} \abs[\Big]{\abs[\Big]{x_i - y_i}}^{p} \Bigg)^{\frac{1}{p}}
+% \end{equation*}
+% $p = 1, 2$ and $\infty$ is equivalent to Manhattan Distance, Euclidean Distance and Chebyshev Distance, respectively.
+
+%Notice that, we are using the term point set instead of a point array. In a point array, the same point can be multiple times as there can be more than one point in a specific coordinate. But a point set can not have an element more than once. Besides, there is no need to handle multiple points in a specific coordinate as we consider all the points in a specific coordinate as a single point lying in that coordinate. The reason behind this is that closer points tend to be in the same cluster and so as no matter how many points are on a specific location, they all tend to be in the same cluster. That is why we do not need to bother about multiple points in the same coordinate during clustering. So putting all the input points in a point set is a better option.
+
+\subsection{Adjusted Rand Index(ARI)}
+William M. Rand proposed Rand Index(RI)~\cite{rand1971objective} to define a measure of similarity between two different clusterings of a specific point set. One of them is usually the ground truth clustering so that one can measure how accurate another clustering algorithm's result is to that of the ground truth clustering. Suppose a set of $n$ objects $S = \{\delta_1, \delta_2, \delta_3, \ldots, \delta_n\}$ is given. Let, $G =  \{g_1, g_2, g_3, \ldots, g_M\}$ and $C = \{c_1, c_2, c_3, \ldots, c_N\}$ be two different clusterings of $S$ where $C$ is the clustering algorithm's result and $G$ is the ``ground truth" classification. We construct the contingency table in Table~\ref{t:ct} to show the overlap between $G$ and $C$. Each entry $p_{ij}$ in Table~\ref{t:ct} indicates total number of objects both $g_i$ and $c_j$ contains.
+
+Let $a$ be the total pairs of objects those are in the same cluster in both $G$ and $C$, $b$ be the total pairs of objects those are in the same cluster in $G$ but not in the same cluster in $C$, $c$ be the total pairs of objects those are in the same cluster in $C$ but not in the same cluster in $G$ and $d$ be the total pairs of objects those are in different clusters in both $G$ and $C$. These variables can be expressed by the terms of Table~\ref{t:ct} by Equation~\ref{eqt:1} - \ref{eqt:4}.
+
+\begin{table}
+\centering
+\caption{Contingency Table for Comparing Clustering Output of G and C.}\label{t:ct}
+\begin{tabular}{|c|ccccc|c|}
+\hline
+\diagbox{Clustering($G$)}{Clustering($C$)} & $c_1$ & $c_2$ & $c_3$ & \ldots & $c_N$ & Total\\
+\hline
+$g_1$ & $p_{11}$ & $p_{12}$ & $p_{13}$ & \ldots & $p_{1N}$ & $p_{1.}$\\
+$g_2$ & $p_{21}$ & $p_{22}$ & $p_{23}$ & \ldots & $p_{2N}$ & $p_{2.}$\\
+$g_3$ & $p_{31}$ & $p_{32}$ & $p_{33}$ & \ldots & $p_{3N}$ & $p_{3.}$\\
+\vdots & \vdots & \vdots & \vdots & $\ddots$ & \vdots & \vdots\\
+$g_M$ & $p_{M1}$ & $p_{M2}$ & $p_{M3}$ & \ldots & $p_{MN}$ & $p_{M.}$\\
+\hline
+Total & $p_{.1}$ & $p_{.2}$ & $p_{.3}$ & \ldots & $p_{.N}$ & $p_{..} = n$\\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{align}
+    a &= \sum_{i=1}^{M} \sum_{j=1}^{N} \binom{p_{ij}}{2} \label{eqt:1}\\
+    b &= \sum_{i=1}^{M} \binom{p_{i.}}{2} - a \label{eqt:2}\\
+    c &= \sum_{j=1}^{N} \binom{p_{.j}}{2} - a \label{eqt:3}\\
+    d &= \binom{n}{2} - a - b - c \label{eqt:4}
+\end{align}
+
+RI can be calculated by the following equation - 
 \begin{equation*}
-  Minkowski(X, Y) = \Bigg( \sum_{i=1}^{n} \abs[\Big]{\abs[\Big]{x_i - y_i}}^{p} \Bigg)^{\frac{1}{p}}
+    RI = \frac{a + d}{a + b + c + d}
 \end{equation*}
-$p = 1, 2$ and $\infty$ is equivalent to Manhattan Distance, Euclidean Distance and Chebyshev Distance, respectively.
 
-Notice that, we are using the term point set instead of a point array. In a point array, the same point can be multiple times as there can be more than one point in a specific coordinate. But a point set can not have an element more than once. Besides, there is no need to handle multiple points in a specific coordinate as we consider all the points in a specific coordinate as a single point lying in that coordinate. The reason behind this is that closer points tend to be in the same cluster and so as no matter how many points are on a specific location, they all tend to be in the same cluster. That is why we do not need to bother about multiple points in the same coordinate during clustering. So putting all the input points in a point set is a better option.
+%It indicates the percentage of correct labels the clustering algorithm put on the objects of the point set.
+The range of RI is between $0$ to $1$ where higher values indicate good clustering and lower values indicate bad clustering. 
 
-\section{The Algorithm}
-In this section, we describe our algorithm. Let $S = \{p_1, p_2, p_3, \ldots, p_n\}$ be a point set of $n$ points and $k$ be an integer. The goal is to divide the point set into at most $k$ clusters so that similar points are assigned to same clusters and dissimilar points are assigned to different clusters. We divide our algorithm into four major steps. They are the following $-$
+However, there are some problems with this RI measure, such as the expected value of RI of two random clusterings never happens to be a constant value, it shows high variability~\cite{fowlkes1983method} and it is very sensitive to the total clusters computed in each clustering~\cite{morey1984measurement}. Hubert and Arabie proposed the Adjusted Rand Index(ARI)~\cite{hubert1985comparing} for removing these problems by assuming the generalized hypergeometrical distribution as model of randomness. ARI can be expressed as follows $-$
+% \begin{equation*}
+%     E\Bigg[\sum_{i=1}^{M} \sum_{j=1}^{N} \binom{p_{ij}}{2}\Bigg] = \frac{\sum_{i=1}^{M} \binom{p_{i.}}{2} \sum_{j=1}^{N} \binom{p_{.j}}{2}}{\binom{n}{2}}
+% \end{equation*}
+\begin{equation*}
+ARI = \frac{\binom{n}{2} \sum_{i=1}^{M} \sum_{j=1}^{N} \binom{p_{ij}}{2} - \Big[\sum_{i=1}^{M} \binom{p_{i.}}{2} \sum_{j=1}^{N} \binom{p_{.j}}{2}\Big]}{\frac{1}{2} \binom{n}{2} \Big[\sum_{i=1}^{M} \binom{p_{i.}}{2} + \sum_{j=1}^{N} \binom{p_{.j}}{2}\Big] - \Big[\sum_{i=1}^{M} \binom{p_{i.}}{2} \sum_{j=1}^{N} \binom{p_{.j}}{2}\Big]}
+\end{equation*}
+
+\section{The Algorithm} \label{s:a}
+In this section, we describe our algorithm. Let $S = \{p_1, p_2, p_3, \ldots, p_n\}$ be a point set of $n$ points and $k$ be an integer. The goal of any clustering algorithm is to divide the point set into meaningful clusters, i.e, similar points into same cluster and dissimilar points into separate clusters. There are many ways to measure similarity between two points. In this paper we select the distance between two points as similarity measure. We propose a new optimization criterion for our divisive hierarchical clustering algorithm, that is to partition $S$ into $k$ clusters such that the maximum diameter to cardinality ratio among all clusters is minimized. We divide our algorithm into four major steps. They are the briefly described below.
 \begin{enumerate}
-\item Initially dividing the point set $S$ into two clusters $C_1$ and $C_2$ in such a way that number of points in both the clusters are as close as possible. We name it the \textit{``Initial Divide"} step.
-\item Finding points those are actually nearer to the centroid of $S$ than the centroid of the cluster they are assigned to. We remove those points from their corresponding cluster and store it in a temporary cluster $C_{temp}$. We name it the \textit{``Temporary Cluster Creation"} step.
-\item Applying a greedy heuristic and merging the temporary cluster $(C_{temp})$ found in step $2$ with one of the clusters between $C_1$ and $C_2$. We use the greedy heuristic to determine which cluster between $C_1$ and $C_2$ we need to merge $C_{temp}$ with. We call it the \textit{``Merge by Greedy Heuristic"} step.
-\item Finally we remove all the points of $C_1$ those are nearer to the centroid of $C_2$ than that of $C_1$ and assign them to $C_2$. Then we do the same for $C_2$, that is, we remove all the points of $C_2$ those are nearer to the centroid of $C_1$ than that of $C_2$ and assign them to $C_1$. We call it the \textit{``Filtering"} step.
+\item Initially dividing the point set $S$ into two clusters $C_1$ and $C_2$ in such a way that number of points in both the clusters are as close as possible. We name it the \textit{initial divide} step.
+\item Finding points those are actually nearer to the centroid of $S$ than the centroid of the cluster they are assigned to. We remove those points from their corresponding cluster and store it in a temporary cluster $C_{temp}$. We name it the \textit{temporary cluster creation} step. \label{step:2}
+\item Applying a greedy heuristic and merging the temporary cluster $(C_{temp})$ found in step~\ref{step:2} with one of the clusters between $C_1$ and $C_2$. We use the greedy heuristic to determine which cluster between $C_1$ and $C_2$ we need to merge $C_{temp}$ with. We call it the \textit{merge by greedy heuristic} step.
+\item Finally we remove all the points of $C_1$ those are nearer to the centroid of $C_2$ than that of $C_1$ and assign them to $C_2$. Then we do the same for $C_2$, that is, we remove all the points of $C_2$ those are nearer to the centroid of $C_1$ than that of $C_2$ and assign them to $C_1$. We call it the \textit{filtering} step.
 \end{enumerate}
 
-These four steps creates two clusters $C_1$ and $C_2$ from point set $S$. Our objective is to get $\leq k$ clusters.  According to the rule of a divisive hierarchical clustering algorithm, we need to repeat the above mentioned four steps in either $C_1$ or $C_2$ and so on to divide into more clusters. For $k$ clusters, we need to use these steps $k - 1$ times. Our algorithm follows another greedy heuristic for deciding to pick which cluster to divide in the next iteration.
+These four steps creates two clusters $C_1$ and $C_2$ from point set $S$. Our objective is to get $k$ clusters. According to the rule of a divisive hierarchical clustering algorithm, we need to repeat the above mentioned four steps in either $C_1$ or $C_2$ and so on to divide into more clusters. For $k$ clusters, we need to use these steps $k - 1$ times. Our algorithm selects the cluster that has the maximum diameter to cardinality ratio among the existing clusters (another greedy heuristic) for dividing in each iteration. In Subsection~\ref{idv} - \ref{flt}, we discuss the four major steps in details.
 
-We also need to track the divide of the point set $S$ that has the least dissection effect. Suppose we have $k = 15$, but if we divide it more than $12$ clusters, the dissection effect increases. And also if we divide it less than $12$ clusters, the dissection effect increases. So we need to save the \textit{state} of clustering of each $k = 1, 2, 3, \ldots, 15$. The state for each $k$ here represents the clustering of the points for exactly $k$ clusters by our algorithm. $k = 1$ means that there is no clustering needed for $S$, as dividing $S$ will only increase the dissection effect. We then output the state that has the minimum dissection effect.
-
-In subsection~\crefrange{idv}{flt} we discuss the four major steps in details.
+%We also need to track the partition of the point set $S$ that has the best clustering state. For indicating best clustering state, we introduce a ratio value which discussed in details in Subsection~\ref{piat}, we calculate the average of this ratio value of the currently available clusters for indicating the state of the clustering. Suppose we have $k = 15$, but if we divide it more than $12$ clusters, the average ratio value increases. And also if we divide it less than $12$ clusters, the average ratio value increases. So we need to save the \textit{state} of clustering of each $k = 1, 2, 3, \ldots, 15$. The state for each $k$ here represents the clustering of the points for exactly $k$ clusters by our algorithm. $k = 1$ means that there is no clustering needed for $S$, as dividing $S$ will only increase the average ratio value. We then output the state that has the minimum average ratio value.
 
 \subsection{Initial Divide} \label{idv}
-Our algorithm first divides $S$ into two clusters $C_1$ and $C_2$. Our algorithm starts with finding the two farthest points $f_1$ and $f_2$ of the point set $S$. After finding the two farthest point $f_1$ and $f_2$ of the points set $S$, we assign $f_1$ to $C_1$ and $f_2$ to $C_2$ and remove $f_1$ and $f_2$ from $S$. Then we compute nearest points of $f_1$ and $f_2$ in $S$ and assign them to $C_1$ and $C_2$, respectively. Then we also remove them from $S$. We repeat the process of finding nearest points of the last assigned points of $C_1$ and $C_2$ and assigning them into clusters and removing them from the point set until $S$ is empty. The algorithm is presented below.
+Our algorithm first divides $S$ into two clusters $C_1$ and $C_2$. The algorithm starts by finding the two farthest points $f_1$ and $f_2$ of the point set $S$ and assigning $f_1$ to $C_1$ and $f_2$ to $C_2$ and removing those points from $S$. Then the algorithm computes nearest points of $f_1$ and $f_2$ in $S$ and assigns them to $C_1$ and $C_2$, respectively and removes those points from $S$. The process is repeated until $S$ is empty. A formal description of the algorithm is given in Algorithm~\ref{a:idv}.
+
 % \begin{enumerate}
 % \item Find closest point $x_1$ and $x_2$ of $f_1$ and $f_2$, respectively, where $x_1, x_2$ $\in S$.
 % \item Assign $x_1$ and $x_2$ to cluster $C_1$ and $C_2$, respectively.
@@ -204,6 +321,7 @@ Our algorithm first divides $S$ into two clusters $C_1$ and $C_2$. Our algorithm
 % \item Repeat steps $1, 2, 3$ until $S$ is empty.
 % \end{enumerate}
 
+\vspace{0.5em}
 \begin{algorithm}[H]
 \SetAlgoLined
 \nonl\textbf{Input: }The point set $S$ \\
@@ -232,12 +350,13 @@ Our algorithm first divides $S$ into two clusters $C_1$ and $C_2$. Our algorithm
  \caption{$InitialDivide(S)$}
  \label{a:idv}
 \end{algorithm}
-\vspace{0.5em}
 
-Computing farthest point pair of a $2d$ point set takes total $O(n \log n)$ complexity by rotating calipers method~\cite{toussaint1983solving}. This method first requires computing the convex hull of the point set which takes $O(n \log n)$ time. Then it searches for the two farthest points in $O(n)$ time with the rotating calipers. So in total it takes $O(n \log n)$ time. Nearest point query of a specific point within a point set takes $O(\log n)$ time in the expected case by using $kd$-trees~\cite{friedman1977algorithm}.
+Computing farthest point pair of a $2d$ point set takes total $O(n \log n)$ time by rotating calipers method~\cite{toussaint1983solving}. This method first requires computing the convex hull of the point set which takes $O(n \log n)$ time. Then it searches for the two farthest points in $O(n)$ time with the rotating calipers. So in total it takes $O(n \log n)$ time. Nearest point query of a specific point within a point set takes $O(\log n)$ time in the expected case by using a $kd$-tree~\cite{friedman1977algorithm}.
 
 \subsection{Temporary Cluster Creation} \label{tcc}
-In this step, we create a temporary cluster. We name it $C_{temp}$. This cluster is needed because some points lies closer to the mean of the whole point set rather than the centroid of the cluster it is assigned to in the previous step. After removing these points from their corresponding clusters, we assign them temporarily to $C_{temp}$. If the points of $C_{temp}$ comes from only one of the clusters between the two found in the previous step, then this step is not very significant. But if the points come from both the clusters, then this step is really vital. The algorithm is presented below.
+In this step the algorithm creates a temporary cluster $C_{temp}$. Some points may lie closer to the centroid of the whole point set rather than the centroid of the cluster it is assigned to in the previous step. Those points are temporarily assigned to $C_{temp}$ and removed from their respective cluster. 
+%If the points of $C_{temp}$ comes from only one of the clusters between the two found in the previous step, then this step is not very significant. But if the points come from both the clusters, then this step is really vital. 
+A formal description of the algorithm is presented in Algorithm~\ref{a:tcc}.
 
 %---------temporary cluster creation-------%
 \begin{algorithm}[H]
@@ -246,22 +365,26 @@ In this step, we create a temporary cluster. We name it $C_{temp}$. This cluster
 \nonl\textbf{Output: }Updated Clusters $C_1, C_2$ and a temporary cluster $C_{temp}$\\
  $c_1 \gets$ centroid of $C_1$ \\
  $c_2 \gets$ centroid of $C_2$ \\
- $cent \gets$ mid point of $c_1$ and $c_2$ \Comment{centroid of $C_1$ and $C_2$ combined} \\
+ $c \gets$ mid point of $c_1$ and $c_2$ \Comment{centroid of $C_1$ and $C_2$ combined} \\
  $C_{temp} \gets \phi$ \\
  \For{$i \gets C_1.begin$ to $C_1.end$}{
   $x \gets i^{th}$ point of $C_1$ \\
-  $dist$\underline{{ }{ }}$x$\underline{{ }{ }}$c_1 \gets$ distance between $x$ and $c_1$ \\
-  $dist$\underline{{ }{ }}$x$\underline{{ }{ }}$cent \gets$ distance between $x$ and $cent$ \\
-  \If{$dist$\underline{{ }{ }}$x$\underline{{ }{ }}$cent \leq dist$\underline{{ }{ }}$x$\underline{{ }{ }}$c_1$}{
+  %$dist$\underline{{ }{ }}$x$\underline{{ }{ }}$c_1 \gets$ distance between $x$ and $c_1$ \\
+  $dist(x, c_1) \gets$ distance between $x$ and $c_1$ \\
+  %$dist$\underline{{ }{ }}$x$\underline{{ }{ }}$cent \gets$ distance between $x$ and $cent$ \\
+  $dist(x, c) \gets$ distance between $x$ and $c$ \\
+  \If{$dist(x, c) < dist(x, c_1)$}{
    $C_{temp} \gets C_{temp} \cup \{x\}$ \\
    $C_1 \gets C_1$ \textbackslash $\{x\}$ \\
    }
  }
  \For{$i \gets C_1.begin$ to $C_2.end$}{
   $x \gets i^{th}$ point of $C_2$ \\
-  $dist$\underline{{ }{ }}$x$\underline{{ }{ }}$c_2 \gets$ distance between $x$ and $c_2$ \\
-  $dist$\underline{{ }{ }}$x$\underline{{ }{ }}$cent \gets$ distance between $x$ and $cent$ \\
-  \If{$dist$\underline{{ }{ }}$x$\underline{{ }{ }}$cent \leq dist$\underline{{ }{ }}$x$\underline{{ }{ }}$c_2$}{
+  %$dist$\underline{{ }{ }}$x$\underline{{ }{ }}$c_2 \gets$ distance between $x$ and $c_2$ \\
+  $dist(x, c_2) \gets$ distance between $x$ and $c_2$ \\
+  %$dist$\underline{{ }{ }}$x$\underline{{ }{ }}$cent \gets$ distance between $x$ and $cent$ \\
+  $dist(x, c) \gets$ distance between $x$ and $c$ \\
+   \If{$dist(x, c) < dist(x, c_2)$}{
    $C_{temp} \gets C_{temp} \cup \{x\}$ \\
    $C_2 \gets C_2$ \textbackslash $\{x\}$ \\
    }
@@ -273,7 +396,7 @@ In this step, we create a temporary cluster. We name it $C_{temp}$. This cluster
 \vspace{0.5em}
 %---------temporary cluster creation-------%
 
-\noindent We denote the distance between two point $x_1$ and $x_2$ by $x_1x_2$. Let, $C$ be a cluster and $c$ be its centroid. Suppose, $f$ is the farthest from from $c$ within all the points of $C$. Then we define the \textit{range} of cluster $C$ as the circular area taking $cf$ as the radius. Any point that is inside this circle is within the range of cluster $C$. The intuition of this step comes from the following Lemma -
+We denote the distance between two point $x_1$ and $x_2$ by $x_1x_2$. Let, $C$ be a cluster and $c$ be its centroid. Assume that $f$ is the farthest from from $c$ within all the points of $C$. Then we define the \textit{range} of cluster $C$ as the circular area taking $cf$ as the radius. Any point that is inside this circle is within the range of cluster $C$. The intuition of this step comes from Lemma~\ref{le:1} where the meaning of $C_1$ and $C_2$ is stated in Algorithm~\ref{a:tcc}.
 
 \begin{lemma} \label{le:1}
 Let, $p_1 \in C_1$ and $p_2 \in C_2$ and $c_1$ and $c_2$ be their centroid, respectively. Suppose, they are assigned to $C_{temp}$ by algorithm~\ref{a:tcc}. Then for some point $f_1$ collinear with $p_1$ and $c_1$  and some point $f_2$ collinear with $p_2$ and $c_2$ where $p_1c_1 = f_1c_1$ and $p_2c_2 = f_2c_2$, it can be stated that, $p_1p_2$ is at least smaller than either $p_1f_1$ or $p_2f_2$.
@@ -288,7 +411,7 @@ Let, $p_1 \in C_1$ and $p_2 \in C_2$ and $c_1$ and $c_2$ be their centroid, resp
 
 \begin{proof}
 %The convex hull of $C_1$ and $C_2$ are shown in Figure[1111]
-We denote the centroid of $C_1$ and $C_2$ combined by $c$. We choose $f_1$($f_2$) in such a way that $c_1$($c_2$) is equidistant from $p_1$($p_2$) and $f_1$($f_2$) and $p_1$($p_2$), $c_1$($c_2$), $f_1$($f_2$) are collinear. The reason is described below -
+Let, $c$ be the centroid of the points of $C_1$ and $C_2$ combined. We choose $f_1$($f_2$) in such a way that $c_1$($c_2$) is equidistant from $p_1$($p_2$) and $f_1$($f_2$) and $p_1$($p_2$), $c_1$($c_2$), $f_1$($f_2$) are collinear. The reason is described below.
 
 We consider a circle with $p_1c_1$ as radius. If $p_1$ is the farthest point of $C_1$ from $c_1$, then the circle will cover all the points of $C_1$. Else, at least point of $C_1$ will be outside of the circle. So in either case, $f_1$ is in the range of $C_1$. So we can consider a point at $f_1$ and if that point belonged the actual point set, it would have been assigned to $C_1$ as it is well inside the range of $C_1$. Same goes for $f_2$ being in the range of $C_2$.
 
@@ -325,25 +448,25 @@ Combining equation~\ref{eq:3}, \ref{eq:4} and \ref{eq:5}, we can say that, $p_1p
 \end{proof}
 
 \noindent Lemma~\ref{le:1} indicates that despite having a larger distance, if $(p_1, f_1)$ pair or $(p_2, f_2)$ pair deserve to be in the same cluster, then $(p_1, p_2)$ pair also deserves to be in the same cluster even more. That is why, all the points assigned to $C_{temp}$ are merged with either $C_1$ or $C_2$ in the next step so that they remain in the same cluster.
-\newpage
-\subsection{Merge by Greedy Heuristic} \label{mgh}
-We get three clusters $C_1, C_2$ and $C_{temp}$ from the previous step. In this step, we merge $C_{temp}$ with either $C_1$ or $C_2$ using a greedy heuristic.
 
-First we describe the greedy heuristic. We choose the ratio of the diameter of a cluster and the number of points of that cluster as the greedy heuristic for choosing between $C_1$ and $C_2$ for merging. This ratio gives the idea of the spacing of the points in every direction within the cluster. We present a helper function for calculating this ratio below.
+\subsection{Merge by Greedy Heuristic} \label{mgh}
+In this step we give a greedy heuristic to merge cluster $C_1$ or $C_2$ with cluster $C_{temp}$ obtained from the previous step. So final cluster pairs after this step would be either $(C_1 + C_{temp}, C_2)$ or $(C_1, C_2 + C_{temp})$. We denote $(C_1 + C_{temp})$ as $C_1^{\Asterisk}$ and $(C_2 + C_{temp})$ as $C_2^{\Asterisk}$.
+
+First we describe the greedy heuristic. We calculate the ratio value of all $C_1, C_2, C_1^{\Asterisk}$ and $C_2^{\Asterisk}$. If the sum of ratio values of $C_1$ and $C_2^{\Asterisk}$ is less than the sum of ratio values of $C_2$ and $C_1^{\Asterisk}$ we merge $C_{temp}$ with $C_2$. Similarly, we merge $C_{temp}$ with $C_1$ if the sum of ratio value of $C_2$ and $C_1^{\Asterisk}$ is less than the sum of ratio values of $C_1$ and $C_2^{\Asterisk}$. In every iteration we perform the greedy operation of selecting between $C_1$ and $C_2$ for merging with $C_{temp}$ in such a way that the sum of ratio value of the two output clusters of this step is minimized. That is because, a lower sum of ratio value means the points inside the clusters are more compact which is one of the desired properties of a good clustering. We present a helper function for calculating the ratio value in Algorithm~\ref{a:cr} and a formal description of this step is given in Algorithm~\ref{a:mgh}.
+%This value gives the idea of the spacing of the points in every direction within the cluster.
 
 \begin{algorithm}[H]
 \SetAlgoLined
 \nonl\textbf{Input: }A cluster $C$ \\
 \nonl\textbf{Output: } Ratio of diameter and number of points of C \\
  $d \gets$ diameter of $C$ \\ 
- $ratio \gets \frac{d}{C.length}$ \\
+ $ratio \gets \frac{d}{\vert C \vert}$ \\
  \Return $ratio$
  \caption{$CalculateRatio(C)$}
+ \label{a:cr}
 \end{algorithm}
+
 \vspace{0.5em}
-
-As the final cluster pairs after this step would either be $(C_1 + C_{temp}, C_2)$ or $(C_1, C_2 + C_{temp})$, so we calculate the ratio value for all these four clusters and always output that pair that has lower ratio value sum. This is because, lower ratio value means more compact clusters which is one of the most important properties of a good cluster. The algorithm is presented below.
-
 \begin{algorithm}[H]
 \SetAlgoLined
 \nonl\textbf{Input: }Three clusters $C_1, C_2$ and $C_{temp}$ \\
@@ -371,7 +494,7 @@ As the final cluster pairs after this step would either be $(C_1 + C_{temp}, C_2
 \vspace{0.5em}
 
 \subsection{Filtering} \label{flt}
-We got the updated $C_1$ and $C_2$ in the last step. The filtering step is plain and simple. It takes all the points of $C_1$ those are nearer to the centroid of $C_2$ than that of $C_1$ and assigns them to $C_2$. Similarly, it takes all the points of $C_2$ those are nearer to the centroid of $C_1$ than that of $C_2$ and assigns them to $C_1$. The algorithm is presented below. \newpage
+We got the updated $C_1$ and $C_2$ in the last step. The filtering step is plain and simple. It takes all the points of $C_1$ those are nearer to the centroid of $C_2$ than that of $C_1$ and assigns them to $C_2$. Similarly, it takes all the points of $C_2$ those are nearer to the centroid of $C_1$ than that of $C_2$ and assigns them to $C_1$. A formal description of the algorithm is given in Algorithm~\ref{a:flt}.
 
 \begin{algorithm}[H]
 \SetAlgoLined
@@ -381,18 +504,22 @@ We got the updated $C_1$ and $C_2$ in the last step. The filtering step is plain
  $c_2 \gets$ centroid of $C_2$ \\
  \For{$i \gets C_1.begin$ to $C_1.end$}{
   $x \gets i^{th}$ point of $C_1$ \\
-  $dist$\underline{{ }{ }}$c_1 \gets$ distance between $x$ and $c_1$ \\
-  $dist$\underline{{ }{ }}$c_2 \gets$ distance between $x$ and $c_2$ \\
-  \If{$dist$\underline{{ }{ }}$c_1 > dist$\underline{{ }{ }}$c_2$}{
+  %$dist$\underline{{ }{ }}$c_1 \gets$ distance between $x$ and $c_1$ \\
+  %$dist$\underline{{ }{ }}$c_2 \gets$ distance between $x$ and $c_2$ \\
+  $dist(x, c_1) \gets$ distance between $x$ and $c_1$ \\
+  $dist(x, c_2) \gets$ distance between $x$ and $c_2$ \\
+  \If{$dist(x, c_1) > dist(x, c_2)$}{
    $C_1 \gets C_1$ \textbackslash $\{x\}$ \\
    $C_2 \gets C_2 \cup \{x\}$ \\
    }
  }
  \For{$i \gets C_2.begin$ to $C_2.end$}{
   $x \gets i^{th}$ point of $C_2$ \\
-  $dist$\underline{{ }{ }}$c_1 \gets$ distance between $x$ and $c_1$ \\
-  $dist$\underline{{ }{ }}$c_2 \gets$ distance between $x$ and $c_2$ \\
-  \If{$dist$\underline{{ }{ }}$c_1 < dist$\underline{{ }{ }}$c_2$}{
+  %$dist$\underline{{ }{ }}$c_1 \gets$ distance between $x$ and $c_1$ \\
+  %$dist$\underline{{ }{ }}$c_2 \gets$ distance between $x$ and $c_2$ \\
+  $dist(x, c_1) \gets$ distance between $x$ and $c_1$ \\
+  $dist(x, c_2) \gets$ distance between $x$ and $c_2$ \\
+  \If{$dist(x, c_1) < dist(x, c_2)$}{
    $C_2 \gets C_2$ \textbackslash $\{x\}$ \\
    $C_1 \gets C_1 \cup \{x\}$ \\
    }
@@ -403,13 +530,14 @@ We got the updated $C_1$ and $C_2$ in the last step. The filtering step is plain
 \end{algorithm}
 \vspace{0.5em}
 
-\subsection{Putting It All Together}
-Here we combine all the steps and complete our divisive hierarchical algorithm. As we said earlier, algorithm~\crefrange{a:idv}{a:flt} divides a point set into two clusters. We then present a helper function below combining all these steps which is a part of every iteration of our divisive hierarchical clustering algorithm.
+\subsection{Putting it all Together} \label{piat}
+Here we combine all the steps and complete our divisive hierarchical algorithm. As we said earlier, Algorithm~\ref{a:idv} - \ref{a:tcc} and \ref{a:mgh} - \ref{a:flt} divides a point set into two clusters. Algorithm~\ref{a:ctc} is a combined version of all these steps which is a part of every iteration of our algorithm.
 
+\vspace{0.5em}
 \begin{algorithm}[H]
 \SetAlgoLined
 \nonl\textbf{Input: }A cluster $C$ \\
-\nonl\textbf{Output: }Clustering of $C$ to create two new clusters $C_1$ and $C_2$ \\
+\nonl\textbf{Output: }Clustering of $C$ to split it into two new clusters $C_1$ and $C_2$ \\
  $C_1, C_2 \gets InititalDivide(C)$ \\
  $C_1, C_2, C_{temp} \gets CreateTemporaryCluster(C_1, C_2)$ \\
  $C_1, C_2 \gets MergeByGreedyHeuristic(C_1, C_2, C_{temp})$ \\
@@ -420,9 +548,10 @@ Here we combine all the steps and complete our divisive hierarchical algorithm. 
 \end{algorithm}
 \vspace{0.5em}
 
-We discussed earlier that we apply another greedy heuristic to choose a cluster among remaining clusters to divide in the next iteration. For this, we calculate the ratio value(diameter and number of points ratio) of each cluster. We then create a state with the cluster along with its ratio value and store it in a set. Then we extract the cluster in that set that has the maximum ratio value(greedy heuristic), because larger ratio value means less compact cluster and so this needs to be divided next. So basically this greedy heuristic is kind of opposite of the previous one.
+We discussed earlier that we select the cluster that has the maximum ratio value among the existing clusters and select it for splitting using Algorithm~\ref{a:ctc} in each iteration as our optimization criterion is to minimize this ratio value. This indicates another greedy heuristic as we are always choosing the cluster that has the maximum ratio value for splitting. For this, we calculate the ratio value of each cluster. We then create a state with the cluster along with its ratio value and store it in a set. Then we extract the cluster in that set that has the maximum ratio value because our objective is to minimize the maximum ratio value among all clusters.
 
-Also we need to keep track of the clustering that has the least dissection effect. So we calculate the average of the ratio values according to the distribution in each iteration. We define a variable $minAvgRatio$ that keeps track of the minimum average ratio value. Also we store the clustering states till that iteration if the average ratio value in that iteration is minimum(assigned to $minAvgratio$). We finally output the clustering that has the minimum average ratio value. The complete divisive hierarchical clustering algorithm is presented below. 
+After $k - 1$ iterations of our algorithm, we get $k$ clusters that satisfies our optimization criterion. A formal definition of the complete divisive hierarchical clustering algorithm is presented in Algorithm~\ref{a:dhc}.
+
 % \begin{algorithm}[H]
 % \SetAlgoLined
 % \nonl\textbf{Input: }The point set $S$ and an integer $k$ \\
@@ -463,6 +592,7 @@ Also we need to keep track of the clustering that has the least dissection effec
 % \end{algorithm}
 % \vspace{0.5em}
 
+\vspace{0.5em}
 \begin{algorithm}[H]
 \SetAlgoLined
 \nonl\textbf{Input: }The point set $S$ and an integer $k$ \\
@@ -470,11 +600,11 @@ Also we need to keep track of the clustering that has the least dissection effec
  $C \gets \phi$ \\
  %$d \gets$ diameter of $S$ \\ 
  %$ratio \gets \frac{d}{S.length}$ \Comment{$ratio$ value $S$} \\
- $ratio \gets CalculateRatio(S)$ \Comment{$ratio$ value of $S$} \\
+ $ratio \gets CalculateRatio(S)$ \\
  create a state $c$ with $S$ and $ratio$ \\
  insert $c$ into $C$ \\
- $C_{state} \gets C$ \\
- $minAvgRatio \gets ratio$ \\
+ %foravgratio $C_{state} \gets C$ \\
+ %foravgratio $minAvgRatio \gets ratio$ \\
  \For{$i \gets 1$ to $k - 1$}{
   $state \gets$ extract the state with the maximum $ratio$ value from $C$ \\ 
   $cluster \gets$ extract the cluster from $
@@ -484,28 +614,31 @@ Also we need to keep track of the clustering that has the least dissection effec
   %$diam_2 \gets$ diameter of $C_2$ \\
   %$ratio_1 \gets \frac{diam_1}{C_1.length}$ \Comment{$ratio$ value $C_1$}\\
   %$ratio_2 \gets \frac{diam_2}{C_2.length}$ \Comment{$ratio$ value $C_2$}\\
-  $ratio_1 \gets CalculateRatio(C_1)$ \Comment{$ratio$ value of $C_1$} \\
-  $ratio_2 \gets CalculateRatio(C_2)$ \Comment{$ratio$ value of $C_2$} \\
+  $ratio_1 \gets CalculateRatio(C_1)$ \\
+  $ratio_2 \gets CalculateRatio(C_2)$ \\
   create a state $c_1$ with $C_1$ and its $ratio$ value \\
   insert $c_1$ into $C$ \\
   create a state $c_2$ with $C_2$ and its $ratio$ value \\
   insert $c_2$ into $C$ \\
-  $avgRatio \gets$ calculate the average of $ratio$ values of all clusters of $C$ \\
-  \If{$avgRatio < minAvgRatio$}{
-   $C_{state} \gets C$ \\
-   $minAvgRatio \gets avgRatio$ \\
-   }
+  %foravgratio $avgRatio \gets$ calculate the average of $ratio$ values of all clusters of $C$ \\
+  %foravgratio \If{$avgRatio < minAvgRatio$}{
+   %foravgratio $C_{state} \gets C$ \\
+   %foravgratio $minAvgRatio \gets avgRatio$ \\
+   %foravgratio }
  }
- \textbf{delete} $C$ \\
- $clusters \gets$ extract the clusters from $C_{state}$ \\
+ %foravgratio \textbf{delete} $C$ \\
+ $clusters \gets$ extract the clusters from $C$ \\%foravgratio C_{state} instead of of C
  \Return $clusters$
  \caption{$DHClustering(S)$}
  \label{a:dhc}
 \end{algorithm}
-\vspace{0.5em}
 
 \section{Results and  Analysis} \label{expa}
-Fig.~\ref{f:sim} shows step by step simulation of  algorithm~\ref{a:dhc} for $k = 2$ for a point set using euclidean distance. For $k = 1$, the output of the clustering is just putting the whole point set in one cluster. For $k = 2$, this cluster is then divided into two clusters. The points of the temporary cluster are marked by purple `*'. The final output is the output for $k = 2$ considering average ratio value in both cases.
+Fig.~\ref{f:sim} shows step by step simulation of  Algorithm~\ref{a:dhc} for $k = 2$ for a point set using euclidean distance. For $k = 1$, the output of the clustering is just putting the whole point set in one cluster. For $k = 2$, this cluster is then divided into two clusters. The points of the temporary cluster are marked by purple `*'. The final output is the output for $k = 2$ considering average ratio value in both cases.
+
+Sample outputs of Algorithm~\ref{a:dhc} for a point set for $k = 3$ using manhattan distance and for $k = 2$ using chebyshev distance is shown in Fig.~\ref{f:mcoutput}.
+
+We now compare our algorithm with $k$-means clustering. Berkhin~\cite{berkhin2006survey} stated in his survey that ``The $k$-means algorithm is by far the most popular clustering tool used in scientific and industrial applications". Lloyd~\cite{lloyd1982least} proposed a local search solution to this problem which is the most popular version of the $k$-means algorithm. We start by comparing their running time. For $n$ points in a $2d$ plane and at total $k$ desired clusters, our algorithm has $O(nk \log n)$ complexity. We now prove the following lemma.
 
 \begin{figure}[H]
 \centering
@@ -545,12 +678,19 @@ Fig.~\ref{f:sim} shows step by step simulation of  algorithm~\ref{a:dhc} for $k 
   \caption{Filtering ($k = 2$) and final output}
   \label{f:sim6}
 \end{subfigure}
-\caption{Step by step simulation of algorithm~\ref{a:dhc} for a point set using euclidean distance}
+\caption{Step by step simulation of algorithm~\ref{a:dhc} for a point set using euclidean distance.}
 \label{f:sim}
 \end{figure}
 
-Sample outputs of algorithm~\ref{a:dhc} for a point set for $k = 3$ using manhattan and chebyshev distance, respectively is shown in fig.~\ref{f:mcoutput}.
-\newpage
+\begin{lemma}
+Algorithm~\ref{a:dhc} has $O(nk \log n)$ complexity.
+\end{lemma}
+\begin{proof}
+
+The farthest point pair calculation of a point set takes $O(n \log n)$ complexity. The nearest neighbor calculation of a specific point of a point set takes amortized $O(\log n)$ complexity. So the total running time of the initial divide step is $O(n \log n)$. The calculation of the centroid of point set and the calculation of distance between two points both take $O(n)$ time. So the temporary cluster creation step has $O(n)$ complexity. The merge by greedy heuristic step takes $O(n \log n)$ time as the most costly calculation of this step is to find diameter by number of points ratio which takes $O(n \log n)$ time. Finally, the filtering step takes $O(n)$ time. Combining all these steps, we have algorithm~\ref{a:ctc} and so it has a complexity of $O(n \log n)$.
+
+Now, Algorithm~\ref{a:ctc} is a part of each iteration of our main algorithm. The iteration goes over for $k - 1$ times. The other parts of each iteration are finding the cluster with highest ratio value for splitting and finding ratio values of the two new clusters found in that iteration. So the calculations of each iteration has a complexity of $O(n \log n)$. So, considering $k - 1$ iterations, finally we can say that, Algorithm~\ref{a:dhc} has a complexity of $O(nk \log n)$.
+\end{proof}
 
 \begin{figure}[H]
 \centering
@@ -578,35 +718,11 @@ Sample outputs of algorithm~\ref{a:dhc} for a point set for $k = 3$ using manhat
   \caption{Output using chebyshev distance}
   \label{f:simc2}
 \end{subfigure}
-\caption{Sample output of algorithm~\ref{a:dhc} for $k = 3$ using manhattan and chebyshev distances}
+\caption{Sample output of algorithm~\ref{a:dhc} for (i) $k = 3$ using manhattan distance and (ii) $k = 2$ using chebyshev distance.}
 \label{f:mcoutput}
 \end{figure}
 
-Now, we compare our algorithm with $k$-means clustering. We start by comparing their running time. For $n$ $2d$ points and at most $k$ clusters allowed, our algorithm has $O(nk \log n)$ complexity.
-
-\begin{lemma}
-Algorithm~\ref{a:dhc} has $O(nk \log n)$ complexity.
-\end{lemma}
-\begin{proof}
-The farthest point pair calculation of a point set takes $O(n \log n)$ complexity. The nearest neighbor calculation of a specific point of a point set takes amortized $O(\log n)$ complexity. So the total running time of the `initial divide' steps is $O(n \log n)$. The calculation of the centroid of point set and the calculation of distance between two points both take $O(n)$ time. So the `temporary cluster creation' step has $O(n)$ complexity. The 'merge by greedy heuristic' step takes $O(n \log n)$ time as the most costly calculation of this step is to find diameter by number of points ratio which takes $O(n \log n)$ time. Finally, the `filtering' step takes $O(n)$ time. Combining all these steps, we have algorithm~\ref{a:ctc} and so it has a complexity of $O(n \log n)$.
-
-Now, algorithm~\ref{a:ctc} is a part of each iteration of our main algorithm. The iteration goes over for $k - 1$ times. The other parts of each iteration are finding ratio values of each cluster and finding the average ratio value for each iteration. So the calculations of each iteration has a complexity of $O(n \log n)$. So, considering $k - 1$ iterations, finally we can say that, algorithm~\ref{a:dhc} has a complexity of $O(nk \log n)$.
-\end{proof}
-
-The converge of $k$-means clustering is highly researched and
-it is known to have exponential running time in worst case~\cite{arthur2006slow,vattani2011k}. Also the accuracy of the $k$-means output is depended on the initialization because the iterations of $k$-means clustering can get stuck in a local minimum for bad initialization. Also, the quality of $k$-means clustering depends on the value of $k$. It is shown in \cite{franti2018k} that, the success of $k$-means clustering has an inverse linear dependency on $k$. It is also shown in \cite{franti2018k} that, $k$-means performs poorly when cluster sizes have a strong unbalance.
-
-For this paper, for producing $k$-means output, we run $k$-means clustering $30$ times with different centroid seeds. Then we find the run with the minimum sum squared error and choose it as the final output.
-
-Fig.~\ref{f:kmeanfailure} shows some cases where $k$-means clustering fails to generate good clusters but our algorithm succeeds to find the proper clusters. The comparison of results of these cases are shown in Table~\ref{t:comp1}. The problem generates because it tries to minimize the intra-cluster variance.
-
-Now, we compare our algorithm with $k$-means clustering for some benchmark datasets. We select $8$ datasets for this purpose - Aggregation, Flame, Unbalance, S1, A-Sets(A1, A2, A3) and Birch2. Details about these datasets can be found in \cite{franti2018k}.
-
-We run our algorithm using two different metrics(euclidean and manhattan) and $k$-means clustering on these datasets. Table~\ref{t:comp2} shows the results and comparison of our algorithm and $k$-means clustering. As described earlier, the $k$-means clustering does not perform well on the unbalanced datasets. The difference of accuracy between our algorithm and $k$-means clustering is huge in this case. The only dataset that $k$-means performs slightly better on than our algorithm is the S1 dataset. For A-Sets, the performance of all these algorithm does not vary much but our algorithm with euclidean distance metric has the better accuracy. Our algorithm with manhattan distance metric outperforms all in the Aggregation dataset, but it performs poorly for Flame dataset. In average, our algorithm with euclidean distance metric has the best accuracy among all.Fig.~\ref{f;comp1} shows the comparison plot of our algorithm with two different distance metrics and $k$-means clustering.
-
-Then we run our algorithm with euclidean distance metric and $k$-means clustering on Birch2 dataset. We run the algorithm for $k = 10$ to $100$ for an interval of $10$ clusters. We plot the results and it is shown in fig.~\ref{f;com2}. We see that, the accuracy of $k$-means gradually decreases with increasing value of $k$ which is also described in \cite{franti2018k} that k-means works worse with increasing number of clusters. The performance of our algorithm also decreases with increasing $k$ but still has a better accuracy than $k$-means.
-
-\newpage
+The converge of $k$-means clustering is highly researched and it is known to be superpolynomial, i.e., exponential running time in worst case~\cite{arthur2006slow,vattani2011k}. Also the accuracy of the $k$-means output is depended on the initialization because the iterations of $k$-means clustering can get stuck in a local minimum for bad initialization. Also, the quality of $k$-means clustering depends on the value of $k$. It is shown from \cite{franti2018k} that the success of $k$-means clustering has an inverse linear dependency on $k$. It is also shown from \cite{franti2018k} that $k$-means performs poorly when cluster sizes have a strong unbalance.
 
 \begin{figure}[H]
 \centering
@@ -625,7 +741,7 @@ Then we run our algorithm with euclidean distance metric and $k$-means clusterin
 \begin{subfigure}{.32\textwidth}
   \centering
   \includegraphics[width=\linewidth]{kmeans_failure_1c.png}
-  \caption{$k$-Means output}
+  \caption{$k$-means output}
   \label{f:simm3}
 \end{subfigure}
 \begin{subfigure}{.32\textwidth}
@@ -643,7 +759,7 @@ Then we run our algorithm with euclidean distance metric and $k$-means clusterin
 \begin{subfigure}{.32\textwidth}
   \centering
   \includegraphics[width=\linewidth]{kmeans_failure_2c.png}
-  \caption{$k$-Means output}
+  \caption{$k$-means output}
   \label{f:simm6}
 \end{subfigure}
 \begin{subfigure}{.32\textwidth}
@@ -661,7 +777,7 @@ Then we run our algorithm with euclidean distance metric and $k$-means clusterin
 \begin{subfigure}{.32\textwidth}
   \centering
   \includegraphics[width=\linewidth]{kmeans_failure_3c.png}
-  \caption{$k$-Means output}
+  \caption{$k$-means output}
   \label{f:simm9}
 \end{subfigure}
 \begin{subfigure}{.32\textwidth}
@@ -679,7 +795,7 @@ Then we run our algorithm with euclidean distance metric and $k$-means clusterin
 \begin{subfigure}{.32\textwidth}
   \centering
   \includegraphics[width=\linewidth]{kmeans_failure_4c.png}
-  \caption{$k$-Means output}
+  \caption{$k$-means output}
   \label{f:simm12}
 \end{subfigure}
 \begin{subfigure}{.32\textwidth}
@@ -697,7 +813,7 @@ Then we run our algorithm with euclidean distance metric and $k$-means clusterin
 \begin{subfigure}{.32\textwidth}
   \centering
   \includegraphics[width=\linewidth]{kmeans_failure_6c.png}
-  \caption{$k$-Means output}
+  \caption{$k$-means output}
   \label{f:simm15}
 \end{subfigure}
 \begin{subfigure}{.32\textwidth}
@@ -715,86 +831,93 @@ Then we run our algorithm with euclidean distance metric and $k$-means clusterin
 \begin{subfigure}{.32\textwidth}
   \centering
   \includegraphics[width=\linewidth]{kmeans_failure_5c.png}
-  \caption{$k$-Means output}
+  \caption{$k$-means output}
   \label{f:simm18}
 \end{subfigure}
-\caption{Some cases where $k$-Means clustering fails to generate proper clusters but our algorithm excels.}
+\caption{Some cases where $k$-means clustering fails to generate proper clusters but our algorithm excels.}
 \label{f:kmeanfailure}
 \end{figure}
 
-\newpage
+In this paper for producing $k$-means output we run $k$-means clustering $30$ times with different centroid seeds. Then we find the run with the minimum sum squared error and choose it as the final output.
+
+Fig.~\ref{f:kmeanfailure} shows some cases where $k$-means clustering fails to generate good clusters but our algorithm succeeds to find the proper clusters. The comparison of results of these cases are shown in Table~\ref{t:comp1}. The problem generates because it tries to minimize the intra-cluster variance.
+
+We now compare our algorithm with $k$-means clustering for some benchmark datasets. We select $6$ datasets for this purpose - Unbalance, S1, A-Sets(A1, A2, A3) and Birch2. Details about these datasets can be found in \cite{franti2018k}. We also select $2$ shape sets~\cite{gionis2007clustering,fu2007flame} for comparing.
+
+We run our algorithm using both euclidean and manhattan distance metrics and $k$-means clustering on these datasets. Table~\ref{t:comp2} shows the results and comparison of our algorithm and $k$-means clustering. As described earlier, the $k$-means clustering does not perform well on the unbalanced datasets. The difference of accuracy between our algorithm and $k$-means clustering is huge in this case. The only dataset that $k$-means performs slightly better on than our algorithm is the S1 dataset. For A-Sets, the performance of all these algorithm does not vary much but our algorithm with euclidean distance metric has the better accuracy. Our algorithm with manhattan distance metric outperforms all in the Aggregation dataset, but it performs poorly for Flame dataset. In average, our algorithm with euclidean distance metric has the best accuracy among all. Fig.~\ref{f;comp1} shows the comparison plot of our algorithm with two different distance metrics and $k$-means clustering.
+
+Then we run our algorithm with euclidean distance metric and $k$-means clustering on Birch2 dataset. We run the algorithm for $k = 10$ to $100$ for an interval of $10$ clusters. We plot the results and it is shown in Fig.~\ref{f;com2}. We see that, the accuracy of $k$-means gradually decreases with increasing value of $k$ which is also described in \cite{franti2018k} that $k$-means works worse with increasing number of clusters. The performance of our algorithm also decreases with increasing $k$ but still has a better accuracy than $k$-means.
 
 \begin{table}
 \centering
 \caption{Comparison of Our Algorithm and $k$-means clustering for the examples of Fig.~\ref{f:mcoutput}.}\label{t:comp1}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
-\multirow{2}{*}{Example} & \multirow{2}{*}{Total Points} & \multicolumn{2}{c|}{Total mislabeled points} & \multicolumn{2}{c|}{Accuracy}\\ \cline{3-6}
+\multirow{2}{*}{Example} & \multirow{2}{*}{Total Points} & \multicolumn{2}{c|}{RI} & \multicolumn{2}{c|}{ARI}\\ \cline{3-6}
 & & $k$-means & Alg.~\ref{a:dhc} & $k$-means & Alg.~\ref{a:dhc}\\
 \hline
-$1$ & $10$ & $5$ & $0$ & $50\%$ & $100\%$\\
-$2$ & $10$ & $2$ & $0$ & $80\%$& $100\%$\\
-$3$ & $20$ & $1$ & $0$ & $95\%$ & $100\%$\\
-$4$ & $38$ & $19$ & $0$ & $50\%$ & $100\%$\\
-$5$ & $36$ & $10$ & $0$ & $72.2\%$ & $100\%$\\
-$6$ & $110$ & $3$ & $0$ & $97.5\%$ & $100\%$\\
+$1$ & $10$ & $0.4444$ & $1.00$ & $-0.1194$ & $1.00$\\
+$2$ & $10$ & $0.6444$ & $1.00$ & $0.28$ & $1.00$\\
+$3$ & $20$ & $0.9$ & $1.00$ & $0.7996$ & $1.00$\\
+$4$ & $38$ & $0.4865$ & $1.00$ & $-0.0277$ & $1.00$\\
+$5$ & $36$ & $0.5873$ & $1.00$ & $0.1814$ & $1.00$\\
+$6$ & $110$ & $0.9615$ & $1.00$ & $0.9227$ & $1.00$\\
 \hline
 \end{tabular}
 \end{table}
 
-\vspace{-3em}
+%\vspace{-3em}
 
 \begin{table}
 \centering
 \caption{Comparison of Our Algorithm and $k$-means clustering for different benchmark datasets.}\label{t:comp2}
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
-\multirow{3}{*}{Dataset} & \multirow{3}{*}{~Total Points~} & \multirow{3}{*}{$~k~$} & \multicolumn{3}{c|}{Accuracy} \\ \cline{4-6}
+\multirow{3}{*}{Dataset} & \multirow{3}{*}{~Total Points~} & \multirow{3}{*}{$~k~$} & \multicolumn{3}{c|}{ARI} \\ \cline{4-6}
 & & & \multicolumn{2}{c|}{Alg.~\ref{a:dhc}} & \multirow{2}{*}{~$k$-means~}\\ \cline{4 - 5}
 & & & ~euclidean~ & ~manhattan~ &\\
 \hline
-Aggregation & $788$ & $7$ & $80.838$\% & $85.787$\% & $78.553$\%\\
-S1 & $5000$ & $15$ & $87.02\%$ & $85.32\%$ & $82.04\%$\\
-Unbalance & $6500$ & $8$ & $94.169\%$ & $88.277\%$ & $68.108\%$\\
-Flame & $240$ & $2$ & $87.083\%$ & $73.333\%$ & $81.250\%$\\
-A1 & $3000$ & $20$ & $85.067\%$ & $81.133\%$ & $83.2\%$\\
-A2 & $5250$ & $35$ & $83.048\%$ & $78.038\%$ & $79.086\%$\\
-A3 & $7500$ & $50$ & $84.013\%$ & $78.933\%$ & $81.907\%$\\
+Aggregation & $788$ & $7$ & $0.8133$ & $0.8561$ & $0.7952$\\
+S1 & $5000$ & $15$ & $0.8341$ & $0.8214$ & $0.8523$\\
+Unbalance & $6500$ & $8$ & $0.945$ & $0.8898$ & $0.6478$\\
+Flame & $240$ & $2$ & $0.762$ & $0.7475$ & $0.4901$\\
+A1 & $3000$ & $20$ & $0.8724$ & $0.8314$ & $0.826$\\
+A2 & $5250$ & $35$ & $0.849$ & $0.8158$ & $0.8277$\\
+A3 & $7500$ & $50$ & $0.8573$ & $0.7835$ & $0.8213$\\
 \hline
 \end{tabular}
 \end{table}
 
-\vspace{-2em}
+%\vspace{-2em}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{comparison_plot4.png}
+\includegraphics[width=0.7\textwidth]{comparison_plot_ari.png}
 \caption{Performance of our algorithm and $k$-means clustering for different benchmark datasets.} \label{f;comp1}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{comparison_plot_graph.png}
+\includegraphics[width=0.7\textwidth]{comparison_plot_graph_ari.png}
 \caption{Performance of our algorithm and $k$-means clustering for increasing number of clusters on Birch2 dataset.} \label{f;com2}
 \end{figure}
-\section{Future Works}
-We focused on $2$-dimensional points in this paper. But our algorithm can be extended for higher dimensions. Analyzing the running time and accuracy of our algorithm for higher dimensions would be an interesting problem.
 
-We tested our algorithm for only 3 kinds of Minkowski distances(euclidean, manhattan and chebyshev). But the question remains is that will our algorithm work better for other similarity metrics. The cosine similarity is a widely used metric for data clustering. Mahalonobis distance is extremely popular in machine learning and pattern recognition these day. Euclidean distance does not differentiate between correlated and uncorrelated dimensions. But mahalonobis distance takes account of the correlation between the dimesions of the data and that is why it is widely used in machine learning these days.
+\section{Future Works and Conclusion} \label{s:fw}
+We focused on $2$-dimensional points in this paper. But our algorithm can be extended for higher dimensions. 
+%Analyzing the running time and evaluating the performance of our algorithm for higher dimensions would be an interesting problem.
+We tested our algorithm using only euclidean and manhattan distances. But our algorithm can also be tested on other similarity metrics such as cosine similarity and mahalanobis distance. 
+%Euclidean distance does not differentiate between correlated and uncorrelated dimensions but mahalanobis distance takes account of the correlation between the dimensions of the data and that is why it is widely used in machine learning and pattern recognition.
 
-Finding a better way to overcome the problem of decreasing accuracy with increasing number of clusters would be a great job. As the real world data is huge and can be really complex in structure, higher number of clusters are often needed to produce.
+Finding a better way to overcome the problem of decreasing accuracy with increasing number of clusters would be a great job. As the real world data is huge and can be really complex in structure, higher number of clusters are often needed to be produced.
 
-Finally, testing accuracy on different datasets can find more clues about how to increase the quality of our algorithm. Similarity based on distance measure really do not work on some datasets like some specific image data or audio data. In these case, we need to test our algorithm with completely new kind of similarity metrics and see whether these metrics actually work with the flow of our algorithm.
+Finally testing accuracy on different datasets can find more clues about how to increase the quality of our algorithm. Similarity based on distance measure really do not work on some datasets such as some specific image data and audio data etc. In these cases, we need to test our algorithm with completely new kinds of similarity metrics and see whether these metrics actually work with the flow of our algorithm.
 
-\section{Conclusion}
-We presented a new clustering algorithm in this paper. Our algorithm is a divisive hierarchical algorithm. It starts by considering the whole input point set a single cluster and then recursively divides the cluster into smaller clusters. 
-We focused on $2$-dimensional points only in this paper. For maximum $k$ clusters allowed and given an input point set consisting of $n$ points, we proved that our algorithm has a running time complexity of $O(nk \log n)$.
+In this paper, we presented a new and efficient divisive hierarchical clustering algorithm in to minimize the maximum diameter to cardinality ratio among all clusters. We focused on point set comprised of $2$-dimensional data points. %For maximum $k$ clusters allowed and given an input point set consisting of $n$ points, we proved that our algorithm has a running time complexity of $O(nk \log n)$.
+Our algorithm has basically four steps those repeat in every iteration. It follows a greedy heuristic to complete one of these steps. After each iteration, it also follows the optimization criterion to select a cluster from the remaining clusters to split it and create two new clusters.
 
-Our algorithm has basically four steps those repeat in every iteration. It follows a greedy heuristic to complete one of these steps. After each iteration, it also follows that greedy heuristic to select a cluster from the remaining cluster to divide it and create two new clusters. It also has a selection criterion that selects the best clustering state among each value of $k$ and finally outputs that state.
+Experimental results validates the efficiency of our algorithm. We compared our algorithm with the widely popular $k$-means clustering. We discussed the cases where $k$-means performs poorly. We also showed some cases experimentally where $k$-means clustering fails but our algorithm excels.
 
-We compared our algorithm with the widely popular $k$-means clustering. We discussed the cases where $k$-means performs poorly. We also showed some cases experimentally where $k$-means clustering fails but our algorithm excels.
-
-We compared our algorithm's performance with $k$-means clustering on some benchmark datasets. These datasets differ in size and shape. We tested the performance of both our algorithm(with 2 different distance metrics) and $k$-means clustering on these datasets and find that our algorithm with euclidean distance metric has the best accuracy among all these. We then tested both algorithms' accuracy with increasing value of $k$ and find that our algorithm performs better than $k$-means clustering.
+We compared our algorithm's performance with $k$-means clustering on some benchmark datasets. These datasets differ in size and shape. We compared the performance of our algorithm with $k$-means clustering on these datasets using two different distance metrics and find that our algorithm with euclidean distance metric has the best efficiency among all these. We then tested both algorithms' accuracy with increasing value of $k$ and find that our algorithm performs better than $k$-means clustering.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{Extra}
 % Table~\ref{tab1} gives a summary of all heading levels.
