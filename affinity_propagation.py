@@ -6,13 +6,14 @@ from sklearn.cluster import KMeans, AffinityPropagation, SpectralClustering, \
 from sklearn.mixture import GaussianMixture
     
 
-inputFile = open("input.txt","r")
+inputFile = open("input1.txt","r")
 n = int(inputFile.readline())
 points = []
 
 for i in range(0, n):
     line = inputFile.readline()
-    x,y = line.split(" ")
+    line = line.strip()
+    x,y = line.split("    ")
     x = float(x)
     y = float(y)
     singlePoint = []

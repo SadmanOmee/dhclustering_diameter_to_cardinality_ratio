@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 num_clusters = 2
 
 points = []
-inputFile = open("input.txt","r")
+inputFile = open("input1.txt","r")
 n = int(inputFile.readline())
 
 for i in range(0, n):

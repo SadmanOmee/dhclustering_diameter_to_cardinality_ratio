@@ -1,14 +1,17 @@
 import numpy as np
 import math
 import matplotlib.pyplot as plt
+#from scipy.spatial import distance
 
 points = []
-inputFile = open("input.txt","r")
+inputFile = open("input1.txt","r")
 n = int(inputFile.readline())
 
 for i in range(0, n):
     line = inputFile.readline()
-    x,y = line.split(" ")
+    #line = line.strip()
+    #print(line)
+    x,y = line.split("    ")
     x = float(x)
     y = float(y)
     singlePoint = []
@@ -23,8 +26,27 @@ def euclidean(p1, p2):
     dist = (((p1[0] - p2[0]) * (p1[0] - p2[0])) + ((p1[1] - p2[1]) * (p1[1] - p2[1]))) ** 0.5
     return dist
 
+def manhattan(p1, p2):
+    dist = abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+    return dist
+
+def chebyshev(p1, p2):
+    dist = max(abs(p1[0] - p2[0]), abs(p1[1] - p2[1]))
+    return dist
+
+def mahalanobis(p1, p2):
+    p1 = np.array(p1)
+    p2 = np.array(p2)
+    V = np.cov(np.array([p1, p2]).T)
+    IV = np.linalg.pinv(V)
+    dist = distance.mahalanobis(p1, p2, IV)
+    return dist
+
 def distance(p1, p2):
     dist = euclidean(p1, p2)
+    #dist = manhattan(p1, p2)
+    #dist = chebyshev(p1, p2)
+    #dist = mahalanobis(p1, p2)
     return dist
 
 def centroid(points):
@@ -56,8 +78,8 @@ def nearestNeighbor(point, points):
     nearestDist = 99999999.0
     totalPoints = len(points)
     for i in range(totalPoints):
-        dist = math.floor(distance(point, points[i]))
-        #dist = distance(point, points[i])
+        #dist = math.floor(distance(point, points[i]))
+        dist = distance(point, points[i])
         if dist < nearestDist:
             nearestDist = dist
             ind = i
@@ -74,6 +96,11 @@ def cleanCluster(cluster):
     return newCluster
 
 def calculateRatio(cluster):
+    diam, ind1, ind2 = diameter(cluster)
+    #return diam / len(cluster)
+    return diam
+
+def calculateRatio2(cluster):
     diam, ind1, ind2 = diameter(cluster)
     return diam / len(cluster)
             
@@ -156,8 +183,11 @@ def mergeByGreedyHeuristics(C_1, C_2, C_temp):
     
     #print(C_2_star)
     
-    ratio1 = calculateRatio(C_1) + calculateRatio(C_2_star)
-    ratio2 = calculateRatio(C_2) + calculateRatio(C_1_star)
+    #ratio1 = calculateRatio(C_1) + calculateRatio(C_2_star)
+    #ratio2 = calculateRatio(C_2) + calculateRatio(C_1_star)
+    
+    ratio1 = calculateRatio(C_2_star)
+    ratio2 = calculateRatio(C_1_star)
     
     if ratio1 <= ratio2:
         C_2 = C_2_star[:]
@@ -177,7 +207,7 @@ def filtering(C_1, C_2):
         if distCent1 > distCent2:
             C_2.append(C_1[i])
             C_1[i] = 'pop'
-            print('a')
+            #print('a')
     C_1 = cleanCluster(C_1)
     
 
@@ -190,7 +220,7 @@ def filtering(C_1, C_2):
         if distCent1 < distCent2:
             C_1.append(C_2[i])
             C_2[i] = 'pop'
-            print('b')
+            #print('b')
     C_2 = cleanCluster(C_2)
     return C_1, C_2
 
@@ -199,15 +229,18 @@ def dhclustering(points):
     '''points_ = np.array(points)
     plt.scatter(points_[:, 0], points_[:, 1], color="black")
     plt.show()'''
-    colorList = ['blue', 'red', 'green', 'darkorange', 'black', 'pink']
-    colorCount = -1
-    k = 6
+    colorList = ['blue', 'red', 'green', 'darkorange', 'black', 'lime', 'deeppink', 'turquoise', \
+                 'slategray', 'pink', 'peru', 'cyan', 'yellow', 'khaki']
+    k = 2
     ratios = []
     currClusters = []
     for i in range(k - 1):
         C_1, C_2 = initialDivide(points)
+        print("id done")
         C_1, C_2, C_temp = temporaryClusterCreation(C_1, C_2)
+        print("tcc done")
         C_1, C_2 = mergeByGreedyHeuristics(C_1, C_2, C_temp)
+        print("mbgh done")
         C_1, C_2 = filtering(C_1, C_2)
         
         currClusters.append(C_1)
@@ -236,37 +269,18 @@ def dhclustering(points):
         
     for i in range(len(currClusters)):
         cluster = np.array(currClusters[i])
-        plt.scatter(cluster[:, 0], cluster[:, 1], color=colorList[i])
+        markerNo = str(i + 1)
+        markerNo = '$' + markerNo + '$'
+        plt.scatter(cluster[:, 0], cluster[:, 1], color=colorList[i], marker=markerNo)
     plt.show()
-        
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
