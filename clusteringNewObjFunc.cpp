@@ -178,7 +178,8 @@ diameter findDiameter(vp points)
 ll nearestNeighbour(vp points, point pnt)
 {
     ll ind = -1;
-    ll minDist = 9999999999999, minIndex;
+    ll minDist = 999999.0;
+    ll minIndex;
     for(auto i=points.begin(); i<points.end(); ++i)
     {
         ind++;
@@ -187,6 +188,10 @@ ll nearestNeighbour(vp points, point pnt)
         {
             minDist = pointDistance(Point, pnt);
             minIndex = ind;
+            /*if(pnt.x == 17.85 && pnt.y == 13.05)
+            {
+                cout << minDist << "\n";
+            }*/
         }
     }
     return minIndex;
@@ -244,6 +249,7 @@ cluster clustering(vp &points)
     diameter d = findDiameter(points);
     cluster1.push_back(d.a);
     cluster2.push_back(d.b);
+    //cout << d.a.x << " " << d.a.y << "\n";
     if(d.it_a < d.it_b)
     {
         points.erase(points.begin() + d.it_a);
@@ -303,6 +309,8 @@ cluster clustering(vp &points)
         {
             centroidCluster1 = cluster1.back();
             centroidCluster2 = cluster2.back();
+            //cout << centroidCluster1.x << " " << centroidCluster1.y << " ||| ";
+            //cout << centroidCluster2.x << " " << centroidCluster2.y << "\n";
             //centroidCluster1 = centroid(cluster1);
             //centroidCluster2 = centroid(cluster2);
 

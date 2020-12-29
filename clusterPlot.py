@@ -108,9 +108,9 @@ C = kmeans.cluster_centers_
 #colors = ['red', 'blue', 'green', 'purple', 'orange', 'yellow', 'pink', 'grey']
 kDataX = [points[i][0] for i in range (len(points))]
 kDataY = [points[i][1] for i in range (len(points))]
-plt.scatter(kDataX, kDataY, c = labels, cmap='Set1')
+#plt.scatter(kDataX, kDataY, c = labels, cmap='Set1')
 #print(labels)
-p1 = 0
+'''p1 = 0
 p2 = 0
 p3 = 0
 p4 = 0
@@ -143,7 +143,7 @@ print('p4: ', p4)
 print('p5: ', p5)
 print('p6: ', p6)
 print('p7: ', p7)
-print('p8: ', p8)
+print('p8: ', p8)'''
 
 rad1 = 0.0
 rad2 = 0.0
@@ -152,11 +152,11 @@ for i in range (0, len(points)):
     dist1 = np.linalg.norm(points[i]-C[0])
     dist2 = np.linalg.norm(points[i]-C[1])
     if dist1 < dist2:
-        #plt.scatter(points[i][0], points[i][1], c = "green", marker='^')
+        plt.scatter(points[i][0], points[i][1], c = "green", marker='^')
         cluster1.append(points[i])
         rad1 = max(rad1, dist1)
     else:
-        #plt.scatter(points[i][0], points[i][1], c = "darkorange", marker='x')
+        plt.scatter(points[i][0], points[i][1], c = "darkorange", marker='x')
         cluster2.append(points[i])
         rad2 = max(rad2, dist2)
 
