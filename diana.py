@@ -9,7 +9,9 @@ n = int(inputFile.readline())
 
 for i in range(0, n):
     line = inputFile.readline()
-    x,y = line.split(" ")
+    line = line.strip()
+    x,y = line.split("    ")
+    #x,y = line.split(" ")
     x = float(x)
     y = float(y)
     singlePoint = []
@@ -111,7 +113,7 @@ level = 1
 index = 0
 #while(index!=-1):
 while(level < num_clusters):
-    print(level, points)
+    #print(level, points)
     (a_clstr, b_clstr) = split(current_clusters[index])
     del current_clusters[index]
     current_clusters.append(a_clstr)
@@ -122,18 +124,18 @@ while(level < num_clusters):
 print()
 cluster1 = []
 cluster2 = []
-print(level, end = ' Cluster 1: ')
+#print(level, end = ' Cluster 1: ')
 for i in range(len(current_clusters[0])):
     cluster1.append(points[current_clusters[0][i]])
     #print(points[current_clusters[0][i]], end=' ')
-print(cluster1)
-print()
-print(level, end = ' Cluster 2: ')
+#print(cluster1)
+#print()
+#print(level, end = ' Cluster 2: ')
 for i in range(len(current_clusters[1])):
     cluster2.append(points[current_clusters[1][i]])
     #print(points[current_clusters[1][i]], end=' ')
-print(cluster2)
-print()
+#print(cluster2)
+#print()
 
 _cluster1 = np.array(cluster1)
 _cluster2 = np.array(cluster2)

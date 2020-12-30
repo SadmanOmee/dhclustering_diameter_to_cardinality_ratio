@@ -5,6 +5,7 @@ from sklearn.cluster import KMeans, AffinityPropagation, SpectralClustering, \
     AgglomerativeClustering, DBSCAN, OPTICS, Birch, MeanShift
 from sklearn.mixture import GaussianMixture
     
+k = 8
 
 inputFile = open("input1.txt","r")
 n = int(inputFile.readline())
@@ -12,8 +13,9 @@ points = []
 
 for i in range(0, n):
     line = inputFile.readline()
-    line = line.strip()
-    x,y = line.split("    ")
+    #line = line.strip()
+    #x,y = line.split("    ")
+    x,y = line.split(" ")
     x = float(x)
     y = float(y)
     singlePoint = []
@@ -48,41 +50,44 @@ plt.show()'''
 
 
 '''---------kmeans----------'''
-clustering = KMeans(n_clusters=2, init='k-means++', n_init=30, max_iter=300)
-clustering = clustering.fit(points)
-labels = clustering.predict(points)
-C = clustering.cluster_centers_
-DataX = [points[i][0] for i in range (len(points))]
-DataY = [points[i][1] for i in range (len(points))]
-plt.scatter(DataX, DataY, c = labels, cmap='Set1')
-plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
-plt.title('kmeans')
-plt.show()
+def kmeans():
+    clustering = KMeans(n_clusters=k, init='k-means++', n_init=30, max_iter=1000)
+    clustering = clustering.fit(points)
+    labels = clustering.predict(points)
+    C = clustering.cluster_centers_
+    DataX = [points[i][0] for i in range (len(points))]
+    DataY = [points[i][1] for i in range (len(points))]
+    plt.scatter(DataX, DataY, c = labels, cmap='Set1')
+    plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
+    plt.title('kmeans')
+    plt.show()
 
 
 '''--------Spectral Clustering---------'''
-clustering = SpectralClustering(n_clusters=2, assign_labels="discretize", random_state=0)
-clustering = clustering.fit(points)
-labels = clustering.labels_
-#C = clustering.cluster_centers_
-DataX = [points[i][0] for i in range (len(points))]
-DataY = [points[i][1] for i in range (len(points))]
-plt.scatter(DataX, DataY, c = labels, cmap='Set1')
-#plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
-plt.title('Spectral Clustering')
-plt.show()
+def spectralClustering():
+    clustering = SpectralClustering(n_clusters=k, assign_labels="discretize", random_state=0)
+    clustering = clustering.fit(points)
+    labels = clustering.labels_
+    #C = clustering.cluster_centers_
+    DataX = [points[i][0] for i in range (len(points))]
+    DataY = [points[i][1] for i in range (len(points))]
+    plt.scatter(DataX, DataY, c = labels, cmap='Set1')
+    #plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
+    plt.title('Spectral Clustering')
+    plt.show()
 
 '''--------Agglomerative Clustering---------'''
-clustering = AgglomerativeClustering(n_clusters=2, linkage='ward')
-clustering = clustering.fit(points)
-labels = clustering.labels_
-#C = clustering.cluster_centers_
-DataX = [points[i][0] for i in range (len(points))]
-DataY = [points[i][1] for i in range (len(points))]
-plt.scatter(DataX, DataY, c = labels, cmap='Set1')
-#plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
-plt.title('Agglomerative Clustering')
-plt.show()
+def wardAC():
+    clustering = AgglomerativeClustering(n_clusters=k, linkage='ward')
+    clustering = clustering.fit(points)
+    labels = clustering.labels_
+    #C = clustering.cluster_centers_
+    DataX = [points[i][0] for i in range (len(points))]
+    DataY = [points[i][1] for i in range (len(points))]
+    plt.scatter(DataX, DataY, c = labels, cmap='Set1')
+    #plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
+    plt.title('Agglomerative Clustering')
+    plt.show()
 
 
 '''--------OPTICS---------'''
@@ -99,57 +104,77 @@ plt.show()'''
 
 
 '''--------Birch---------'''
-clustering = Birch(n_clusters=2)
-clustering = clustering.fit(points)
-labels = clustering.predict(points)
-#C = clustering.cluster_centers_
-DataX = [points[i][0] for i in range (len(points))]
-DataY = [points[i][1] for i in range (len(points))]
-plt.scatter(DataX, DataY, c = labels, cmap='Set1')
-#plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
-plt.title('Birch')
-plt.show()
+def birch():
+    clustering = Birch(n_clusters=k)
+    clustering = clustering.fit(points)
+    labels = clustering.predict(points)
+    #C = clustering.cluster_centers_
+    DataX = [points[i][0] for i in range (len(points))]
+    DataY = [points[i][1] for i in range (len(points))]
+    plt.scatter(DataX, DataY, c = labels, cmap='Set1')
+    #plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
+    plt.title('Birch')
+    plt.show()
 
 
 '''--------MeanShift---------'''
-clustering = MeanShift()
-#clustering = MeanShift(bandwidth=2)
-clustering = clustering.fit(points)
-labels = clustering.labels_
-C = clustering.cluster_centers_
-DataX = [points[i][0] for i in range (len(points))]
-DataY = [points[i][1] for i in range (len(points))]
-plt.scatter(DataX, DataY, c = labels, cmap='Set1')
-plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
-plt.title('MeanShift')
-plt.show()
+def meanShift():
+    clustering = MeanShift()
+    #clustering = MeanShift(bandwidth=2)
+    clustering = clustering.fit(points)
+    labels = clustering.labels_
+    C = clustering.cluster_centers_
+    DataX = [points[i][0] for i in range (len(points))]
+    DataY = [points[i][1] for i in range (len(points))]
+    plt.scatter(DataX, DataY, c = labels, cmap='Set1')
+    plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
+    plt.title('MeanShift')
+    plt.show()
 
 
 '''--------GaussianMixture---------'''
-clustering = GaussianMixture(n_components=2, random_state=0)
-clustering = clustering.fit(points)
-labels = clustering.predict(points)
-#C = clustering.cluster_centers_
-DataX = [points[i][0] for i in range (len(points))]
-DataY = [points[i][1] for i in range (len(points))]
-plt.scatter(DataX, DataY, c = labels, cmap='Set1')
-#plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
-plt.title('GaussianMixture')
-plt.show()
+def gaussianMixture():
+    #clustering = GaussianMixture(n_components=2, random_state=0)
+    clustering = GaussianMixture(n_components=k, random_state=0)
+    clustering = clustering.fit(points)
+    labels = clustering.predict(points)
+    #C = clustering.cluster_centers_
+    DataX = [points[i][0] for i in range (len(points))]
+    DataY = [points[i][1] for i in range (len(points))]
+    plt.scatter(DataX, DataY, c = labels, cmap='Set1')
+    #plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
+    plt.title('GaussianMixture')
+    plt.show()
 
 
 
 '''--------DBSCAN---------'''
-clustering = DBSCAN(eps=3, min_samples=2)
-clustering = clustering.fit(points)
-labels = clustering.labels_
-#C = clustering.cluster_centers_
-DataX = [points[i][0] for i in range (len(points))]
-DataY = [points[i][1] for i in range (len(points))]
-plt.scatter(DataX, DataY, c = labels, cmap='Set1')
-#plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
-plt.title('DBSCAN')
-plt.show()
+def dbscan():
+    clustering = DBSCAN(eps=3, min_samples=2)
+    clustering = clustering.fit(points)
+    labels = clustering.labels_
+    #C = clustering.cluster_centers_
+    DataX = [points[i][0] for i in range (len(points))]
+    DataY = [points[i][1] for i in range (len(points))]
+    plt.scatter(DataX, DataY, c = labels, cmap='Set1')
+    #plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
+    plt.title('DBSCAN')
+    plt.show()
+
+
+
+
+def main():
+    kmeans()
+    spectralClustering()
+    wardAC()
+    birch()
+    meanShift()
+    gaussianMixture()
+    dbscan()
+          
+if __name__ == "__main__":
+    main()
 
 
 

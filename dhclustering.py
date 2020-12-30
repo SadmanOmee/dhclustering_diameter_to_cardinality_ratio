@@ -9,9 +9,9 @@ n = int(inputFile.readline())
 
 for i in range(0, n):
     line = inputFile.readline()
-    #line = line.strip()
-    #print(line)
+    line = line.strip()
     x,y = line.split("    ")
+    #x,y = line.split(" ")
     x = float(x)
     y = float(y)
     singlePoint = []
@@ -229,19 +229,21 @@ def dhclustering(points):
     '''points_ = np.array(points)
     plt.scatter(points_[:, 0], points_[:, 1], color="black")
     plt.show()'''
-    colorList = ['blue', 'red', 'green', 'darkorange', 'black', 'lime', 'deeppink', 'turquoise', \
-                 'slategray', 'pink', 'peru', 'cyan', 'yellow', 'khaki']
-    k = 2
+    colorList = ['blue', 'red', 'green', 'darkorange', 'black', 'lime', 'turquoise', 'deeppink', \
+                 'slategray', 'pink', 'peru', 'cyan', 'tan', 'yellow', 'khaki', 'crimson', \
+                 'indigo', 'darkorchid', 'darkseagreen']
+    k = 12
     ratios = []
     currClusters = []
     for i in range(k - 1):
         C_1, C_2 = initialDivide(points)
-        print("id done")
+        print("id done", i + 1)
         C_1, C_2, C_temp = temporaryClusterCreation(C_1, C_2)
-        print("tcc done")
+        print("tcc done", i + 1)
         C_1, C_2 = mergeByGreedyHeuristics(C_1, C_2, C_temp)
-        print("mbgh done")
+        print("mbgh done", i + 1)
         C_1, C_2 = filtering(C_1, C_2)
+        print("flt done", i + 1)
         
         currClusters.append(C_1)
         currClusters.append(C_2)
@@ -255,7 +257,7 @@ def dhclustering(points):
         maxIndex = -1
         index = -1
         for j in ratios:
-            print(j)
+            #print(j)
             index += 1
             if j > maxRatio:
                 maxIndex = index
