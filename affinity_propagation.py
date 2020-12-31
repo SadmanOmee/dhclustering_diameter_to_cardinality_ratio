@@ -5,7 +5,7 @@ from sklearn.cluster import KMeans, AffinityPropagation, SpectralClustering, \
     AgglomerativeClustering, DBSCAN, OPTICS, Birch, MeanShift
 from sklearn.mixture import GaussianMixture
     
-k = 8
+k = 6
 
 inputFile = open("input1.txt","r")
 n = int(inputFile.readline())
@@ -33,20 +33,19 @@ plt.scatter(points[:, 0], points[:, 1], color="black")
 #print(points)
 plt.show()
 
-markers = ['^', 'x', 'o']
-
 '''---------Affinity Propagation----------'''
-'''clustering = AffinityPropagation()
-clustering = clustering.fit(points)
-labels = clustering.labels_
-C = clustering.cluster_centers_
-
-DataX = [points[i][0] for i in range (len(points))]
-DataY = [points[i][1] for i in range (len(points))]
-plt.scatter(DataX, DataY, c = labels, cmap='Set1')
-plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
-plt.title('Affinity Propagation')
-plt.show()'''
+def affinityPropagation():
+    clustering = AffinityPropagation()
+    clustering = clustering.fit(points)
+    labels = clustering.labels_
+    C = clustering.cluster_centers_
+    
+    DataX = [points[i][0] for i in range (len(points))]
+    DataY = [points[i][1] for i in range (len(points))]
+    plt.scatter(DataX, DataY, c = labels, cmap='Set1')
+    plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
+    plt.title('Affinity Propagation')
+    plt.show()
 
 
 '''---------kmeans----------'''
@@ -150,7 +149,7 @@ def gaussianMixture():
 
 '''--------DBSCAN---------'''
 def dbscan():
-    clustering = DBSCAN(eps=3, min_samples=2)
+    clustering = DBSCAN(eps=3, min_samples=3)
     clustering = clustering.fit(points)
     labels = clustering.labels_
     #C = clustering.cluster_centers_
@@ -171,6 +170,7 @@ def main():
     birch()
     meanShift()
     gaussianMixture()
+    affinityPropagation()
     dbscan()
           
 if __name__ == "__main__":

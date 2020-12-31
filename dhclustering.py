@@ -9,9 +9,9 @@ n = int(inputFile.readline())
 
 for i in range(0, n):
     line = inputFile.readline()
-    line = line.strip()
-    x,y = line.split("    ")
-    #x,y = line.split(" ")
+    #line = line.strip()
+    #x,y = line.split("    ")
+    x,y = line.split(" ")
     x = float(x)
     y = float(y)
     singlePoint = []
@@ -232,7 +232,7 @@ def dhclustering(points):
     colorList = ['blue', 'red', 'green', 'darkorange', 'black', 'lime', 'turquoise', 'deeppink', \
                  'slategray', 'pink', 'peru', 'cyan', 'tan', 'yellow', 'khaki', 'crimson', \
                  'indigo', 'darkorchid', 'darkseagreen']
-    k = 12
+    k = 6
     ratios = []
     currClusters = []
     for i in range(k - 1):
@@ -273,7 +273,8 @@ def dhclustering(points):
         cluster = np.array(currClusters[i])
         markerNo = str(i + 1)
         markerNo = '$' + markerNo + '$'
-        plt.scatter(cluster[:, 0], cluster[:, 1], color=colorList[i], marker=markerNo)
+        #plt.scatter(cluster[:, 0], cluster[:, 1], color=colorList[i], marker=markerNo)
+        plt.scatter(cluster[:, 0], cluster[:, 1], marker=markerNo)
     plt.show()
     
     
