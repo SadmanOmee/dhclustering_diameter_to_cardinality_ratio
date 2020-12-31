@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-num_clusters = 2
 
 points = []
 inputFile = open("input1.txt","r")
@@ -9,11 +8,15 @@ n = int(inputFile.readline())
 
 for i in range(0, n):
     line = inputFile.readline()
-    line = line.strip()
-    x,y = line.split("    ")
+    #line = line.strip()
+    #x,y = line.split("    ")
     #x,y = line.split(" ")
-    x = float(x)
-    y = float(y)
+    #x = float(x)
+    #y = float(y)
+    
+    xyz = [i for i in line.split()]
+    x = float(xyz[0])
+    y = float(xyz[1])
     singlePoint = []
     singlePoint.append(x)
     singlePoint.append(y)
@@ -108,37 +111,47 @@ def max_diameter(cluster_list):
     return max_diameter_cluster_index
     
 
-current_clusters = ([all_elements])
-level = 1
-index = 0
-#while(index!=-1):
-while(level < num_clusters):
-    #print(level, points)
-    (a_clstr, b_clstr) = split(current_clusters[index])
-    del current_clusters[index]
-    current_clusters.append(a_clstr)
-    current_clusters.append(b_clstr)
-    index = max_diameter(current_clusters)
-    level +=1
+def diana():
+    num_clusters = 2
+    #currClusters = []
+    current_clusters = ([all_elements])
+    level = 1
+    index = 0
+    #while(index!=-1):
+    while(level < num_clusters):
+        #print(level, points)
+        (a_clstr, b_clstr) = split(current_clusters[index])
+        del current_clusters[index]
+        current_clusters.append(a_clstr)
+        current_clusters.append(b_clstr)
+        index = max_diameter(current_clusters)
+        level +=1
+        print(level - 1, "done")
+    
+    #print()
+    
+    for i in range(len(current_clusters)):
+        clusterIndices = current_clusters[i]
+        aCluster = []
+        for j in range(len(clusterIndices)):
+            aCluster.append(points[current_clusters[i][j]])
+        aCluster = np.array(aCluster)
+        markerNo = str(i + 1)
+        markerNo = '$' + markerNo + '$'
+        #print(aCluster)
+        plt.scatter(aCluster[:, 0], aCluster[:, 1], marker=markerNo)
+    plt.show()
+    
 
-print()
-cluster1 = []
-cluster2 = []
-#print(level, end = ' Cluster 1: ')
-for i in range(len(current_clusters[0])):
-    cluster1.append(points[current_clusters[0][i]])
-    #print(points[current_clusters[0][i]], end=' ')
-#print(cluster1)
-#print()
-#print(level, end = ' Cluster 2: ')
-for i in range(len(current_clusters[1])):
-    cluster2.append(points[current_clusters[1][i]])
-    #print(points[current_clusters[1][i]], end=' ')
-#print(cluster2)
-#print()
 
-_cluster1 = np.array(cluster1)
-_cluster2 = np.array(cluster2)
-plt.scatter(_cluster1[:, 0], _cluster1[:, 1], color="blue")
-plt.scatter(_cluster2[:, 0], _cluster2[:, 1], color="red")
-plt.show()
+
+
+
+
+
+
+def main():
+    diana()
+          
+if __name__ == "__main__":
+    main()

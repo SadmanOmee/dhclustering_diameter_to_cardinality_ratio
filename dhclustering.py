@@ -9,11 +9,17 @@ n = int(inputFile.readline())
 
 for i in range(0, n):
     line = inputFile.readline()
+    #print(line)
     #line = line.strip()
     #x,y = line.split("    ")
-    x,y = line.split(" ")
-    x = float(x)
-    y = float(y)
+    #x,y = line.split(" ")
+    #x = float(x)
+    #y = float(y)
+    xyz = [i for i in line.split()]
+    x = float(xyz[0])
+    y = float(xyz[1])
+    z = float(xyz[2])
+    
     singlePoint = []
     singlePoint.append(x)
     singlePoint.append(y)
@@ -232,7 +238,7 @@ def dhclustering(points):
     colorList = ['blue', 'red', 'green', 'darkorange', 'black', 'lime', 'turquoise', 'deeppink', \
                  'slategray', 'pink', 'peru', 'cyan', 'tan', 'yellow', 'khaki', 'crimson', \
                  'indigo', 'darkorchid', 'darkseagreen']
-    k = 6
+    k = 2
     ratios = []
     currClusters = []
     for i in range(k - 1):

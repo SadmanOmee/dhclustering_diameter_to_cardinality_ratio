@@ -4,20 +4,30 @@ from sklearn.datasets.samples_generator import make_blobs, make_moons, make_circ
 from sklearn.cluster import KMeans, AffinityPropagation, SpectralClustering, \
     AgglomerativeClustering, DBSCAN, OPTICS, Birch, MeanShift
 from sklearn.mixture import GaussianMixture
+from sklearn.metrics.cluster import adjusted_rand_score
     
-k = 6
+k = 2
 
 inputFile = open("input1.txt","r")
 n = int(inputFile.readline())
 points = []
+qMetrics = True
+trueLabels = []
 
 for i in range(0, n):
     line = inputFile.readline()
     #line = line.strip()
     #x,y = line.split("    ")
-    x,y = line.split(" ")
-    x = float(x)
-    y = float(y)
+    #x,y = line.split(" ")
+    #x = float(x)
+    #y = float(y)
+    
+    xyz = [i for i in line.split()]
+    x = float(xyz[0])
+    y = float(xyz[1])
+    z = float(xyz[2])
+    trueLabels.append(z)
+    
     singlePoint = []
     singlePoint.append(x)
     singlePoint.append(y)
@@ -46,6 +56,8 @@ def affinityPropagation():
     plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
     plt.title('Affinity Propagation')
     plt.show()
+    if qMetrics == True:
+        print("Affinity Propagation ARI:", adjusted_rand_score(trueLabels, labels))
 
 
 '''---------kmeans----------'''
@@ -60,6 +72,8 @@ def kmeans():
     plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
     plt.title('kmeans')
     plt.show()
+    if qMetrics == True:
+        print("kmeans ARI:", adjusted_rand_score(trueLabels, labels))
 
 
 '''--------Spectral Clustering---------'''
@@ -74,6 +88,8 @@ def spectralClustering():
     #plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
     plt.title('Spectral Clustering')
     plt.show()
+    if qMetrics == True:
+        print("Spectral Clustering ARI:", adjusted_rand_score(trueLabels, labels))
 
 '''--------Agglomerative Clustering---------'''
 def wardAC():
@@ -87,6 +103,8 @@ def wardAC():
     #plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
     plt.title('Agglomerative Clustering')
     plt.show()
+    if qMetrics == True:
+        print("Agglomerative Clustering ARI:", adjusted_rand_score(trueLabels, labels))
 
 
 '''--------OPTICS---------'''
@@ -114,6 +132,8 @@ def birch():
     #plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
     plt.title('Birch')
     plt.show()
+    if qMetrics == True:
+        print("Birch ARI:", adjusted_rand_score(trueLabels, labels))
 
 
 '''--------MeanShift---------'''
@@ -129,9 +149,11 @@ def meanShift():
     plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
     plt.title('MeanShift')
     plt.show()
+    if qMetrics == True:
+        print("MeanShift ARI:", adjusted_rand_score(trueLabels, labels))
 
 
-'''--------GaussianMixture---------'''
+'''--------Gaussian Mixture---------'''
 def gaussianMixture():
     #clustering = GaussianMixture(n_components=2, random_state=0)
     clustering = GaussianMixture(n_components=k, random_state=0)
@@ -144,6 +166,8 @@ def gaussianMixture():
     #plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
     plt.title('GaussianMixture')
     plt.show()
+    if qMetrics == True:
+        print("Gaussian Mixture ARI:", adjusted_rand_score(trueLabels, labels))
 
 
 
@@ -159,6 +183,8 @@ def dbscan():
     #plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
     plt.title('DBSCAN')
     plt.show()
+    if qMetrics == True:
+        print("DBSCAN ARI:", adjusted_rand_score(trueLabels, labels))
 
 
 
