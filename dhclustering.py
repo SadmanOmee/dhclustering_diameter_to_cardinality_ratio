@@ -1,9 +1,10 @@
 import numpy as np
 from numpy import dot
 from numpy.linalg import norm
-import math
+#import math
 import matplotlib.pyplot as plt
 #from scipy.spatial import distance
+import time
 
 points = []
 inputFile = open("input1.txt","r")
@@ -14,14 +15,15 @@ for i in range(0, n):
     #print(line)
     #line = line.strip()
     #x,y = line.split("    ")
-    x,y = line.split(" ")
-    x = float(x)
-    y = float(y)
+    #x,y = line.split(" ")
+    #x = float(x)
+    #y = float(y)
     
-    '''xyz = [i for i in line.split()]
+    xyz = [i for i in line.split()]
     x = float(xyz[0])
     y = float(xyz[1])
-    z = float(xyz[2])'''
+    #z = float(xyz[2])
+    #print(x, y)
     
     singlePoint = []
     singlePoint.append(x)
@@ -117,7 +119,7 @@ def calculateRatio(cluster):
 
 def calculateRatio2(cluster):
     diam, ind1, ind2 = diameter(cluster)
-    return diam / len(cluster)
+    return diam
             
 
 def initialDivide(points):
@@ -244,12 +246,14 @@ def dhclustering(points):
     '''points_ = np.array(points)
     plt.scatter(points_[:, 0], points_[:, 1], color="black")
     plt.show()'''
-    colorList = ['blue', 'red', 'green', 'darkorange', 'black', 'lime', 'turquoise', 'deeppink', \
+    '''colorList = ['blue', 'red', 'green', 'darkorange', 'black', 'lime', 'turquoise', 'deeppink', \
                  'slategray', 'pink', 'peru', 'cyan', 'tan', 'yellow', 'khaki', 'crimson', \
-                 'indigo', 'darkorchid', 'darkseagreen']
-    k = 2
+                 'indigo', 'darkorchid', 'darkseagreen']'''
+    k = 15
     ratios = []
     currClusters = []
+    start_time = time.time()
+    
     for i in range(k - 1):
         C_1, C_2 = initialDivide(points)
         print("id done", i + 1)
@@ -270,19 +274,25 @@ def dhclustering(points):
         
         maxRatio = -1
         maxIndex = -1
+        totalRatio = 0.0
         index = -1
         for j in ratios:
             #print(j)
+            totalRatio += j
             index += 1
             if j > maxRatio:
                 maxIndex = index
                 maxRatio = j
+        print("Average Total Ratio: ", totalRatio / len(ratios))
         
         if i != k - 2:
             ratios.pop(maxIndex)
             points = currClusters[maxIndex]
             currClusters.pop(maxIndex)
         print()
+    
+    end_time = time.time()
+    print("total execution time: %s seconds" % (end_time - start_time))
         
     for i in range(len(currClusters)):
         cluster = np.array(currClusters[i])

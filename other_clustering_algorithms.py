@@ -8,12 +8,12 @@ from sklearn.metrics.cluster import adjusted_rand_score, adjusted_mutual_info_sc
      completeness_score, v_measure_score, fowlkes_mallows_score, silhouette_score, calinski_harabasz_score, \
      davies_bouldin_score
     
-k = 2
+k = 15
 
 inputFile = open("input1.txt","r")
 n = int(inputFile.readline());
 points = []
-qMetrics = True
+qMetrics = False
 trueLabels = []
 
 for i in range(0, n):
@@ -27,8 +27,8 @@ for i in range(0, n):
     xyz = [i for i in line.split()]
     x = float(xyz[0])
     y = float(xyz[1])
-    z = float(xyz[2])
-    trueLabels.append(z)
+    #z = float(xyz[2])
+    #trueLabels.append(z)
     
     singlePoint = []
     singlePoint.append(x)

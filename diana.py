@@ -17,6 +17,7 @@ for i in range(0, n):
     xyz = [i for i in line.split()]
     x = float(xyz[0])
     y = float(xyz[1])
+    
     singlePoint = []
     singlePoint.append(x)
     singlePoint.append(y)
