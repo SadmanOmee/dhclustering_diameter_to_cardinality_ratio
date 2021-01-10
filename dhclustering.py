@@ -1,4 +1,6 @@
 import numpy as np
+from numpy import dot
+from numpy.linalg import norm
 import math
 import matplotlib.pyplot as plt
 #from scipy.spatial import distance
@@ -12,13 +14,14 @@ for i in range(0, n):
     #print(line)
     #line = line.strip()
     #x,y = line.split("    ")
-    #x,y = line.split(" ")
-    #x = float(x)
-    #y = float(y)
-    xyz = [i for i in line.split()]
+    x,y = line.split(" ")
+    x = float(x)
+    y = float(y)
+    
+    '''xyz = [i for i in line.split()]
     x = float(xyz[0])
     y = float(xyz[1])
-    z = float(xyz[2])
+    z = float(xyz[2])'''
     
     singlePoint = []
     singlePoint.append(x)
@@ -40,6 +43,11 @@ def chebyshev(p1, p2):
     dist = max(abs(p1[0] - p2[0]), abs(p1[1] - p2[1]))
     return dist
 
+def cosineSimilarity(p1, p2):
+    #dist = (p1[0] * p2[0] + p1[1] * p2[1]) / (((p1[0] * p1[0] + p1[1] * p1[1]) ** 0.5) * ((p2[0] * p2[0] + p2[1] * p2[1]) ** 0.5))
+    dist = dot(p1, p2) / (norm(p1) * norm(p2))
+    return dist
+
 def mahalanobis(p1, p2):
     p1 = np.array(p1)
     p2 = np.array(p2)
@@ -52,6 +60,7 @@ def distance(p1, p2):
     dist = euclidean(p1, p2)
     #dist = manhattan(p1, p2)
     #dist = chebyshev(p1, p2)
+    #dist = cosineSimilarity(p1, p2)
     #dist = mahalanobis(p1, p2)
     return dist
 
@@ -103,8 +112,8 @@ def cleanCluster(cluster):
 
 def calculateRatio(cluster):
     diam, ind1, ind2 = diameter(cluster)
-    #return diam / len(cluster)
-    return diam
+    return diam / len(cluster)
+    #return diam
 
 def calculateRatio2(cluster):
     diam, ind1, ind2 = diameter(cluster)
