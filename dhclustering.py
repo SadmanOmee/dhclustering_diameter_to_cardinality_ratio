@@ -5,10 +5,17 @@ from numpy.linalg import norm
 import matplotlib.pyplot as plt
 #from scipy.spatial import distance
 import time
+from sklearn.metrics.cluster import adjusted_rand_score, adjusted_mutual_info_score, homogeneity_score, \
+     completeness_score, v_measure_score, fowlkes_mallows_score, silhouette_score, calinski_harabasz_score, \
+     davies_bouldin_score
 
 points = []
+labels = []
 inputFile = open("input1.txt","r")
 n = int(inputFile.readline())
+labels = [0] * n
+dupPoints = []
+qMetrics = True
 
 for i in range(0, n):
     line = inputFile.readline()
@@ -30,6 +37,7 @@ for i in range(0, n):
     singlePoint.append(y)
     points.append(singlePoint)
 #print(points)
+dupPoints = points[:]
 inputFile.close()
 
 
@@ -249,7 +257,7 @@ def dhclustering(points):
     '''colorList = ['blue', 'red', 'green', 'darkorange', 'black', 'lime', 'turquoise', 'deeppink', \
                  'slategray', 'pink', 'peru', 'cyan', 'tan', 'yellow', 'khaki', 'crimson', \
                  'indigo', 'darkorchid', 'darkseagreen']'''
-    k = 15
+    k = 6
     ratios = []
     currClusters = []
     start_time = time.time()
@@ -302,7 +310,32 @@ def dhclustering(points):
         plt.scatter(cluster[:, 0], cluster[:, 1], marker=markerNo)
     plt.show()
     
-    
+    for i in range(len(currClusters)):
+        cluster = currClusters[i]
+        #print(cluster[:][0])
+        #print(len(cluster))
+        #print(dupPoints[4][1])
+        #break
+        for j in range(len(cluster)):
+            for l in range(len(dupPoints)):
+                #print(cluster[:][0])
+                if cluster[:][j] == dupPoints[l]:
+                    labels[l] = i + 1
+    #print(labels)
+    #print(dupPoints)
+    pnt = np.array(dupPoints)
+    if qMetrics == True:
+        points = np.array(points)
+        #print("Affinity Propagation RI:", rand_score(trueLabels, labels))
+        '''print("Affinity Propagation ARI:", adjusted_rand_score(trueLabels, labels))
+        print("Affinity Propagation AMI:", adjusted_mutual_info_score(trueLabels, labels))
+        print("Affinity Propagation HS:", homogeneity_score(trueLabels, labels))
+        print("Affinity Propagation CS:", completeness_score(trueLabels, labels))
+        print("Affinity Propagation VM:", v_measure_score(trueLabels, labels))
+        print("Affinity Propagation FM:", fowlkes_mallows_score(trueLabels, labels))'''
+        print("Affinity Propagation SC:", silhouette_score(pnt, labels, metric='euclidean'))
+        '''print("Affinity Propagation CH:", calinski_harabasz_score(dupPoints, labels))
+        print("Affinity Propagation DB:", davies_bouldin_score(points, labels))'''
     
     
     

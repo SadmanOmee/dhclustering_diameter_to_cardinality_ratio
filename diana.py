@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import time
 
 points = []
 inputFile = open("input1.txt","r")
@@ -113,7 +114,8 @@ def max_diameter(cluster_list):
     
 
 def diana():
-    num_clusters = 2
+    start_time = time.time()
+    num_clusters = 6
     #currClusters = []
     current_clusters = ([all_elements])
     level = 1
@@ -130,6 +132,8 @@ def diana():
         print(level - 1, "done")
     
     #print()
+    end_time = time.time()
+    print("total execution time: %s seconds" % (end_time - start_time))
     
     for i in range(len(current_clusters)):
         clusterIndices = current_clusters[i]

@@ -7,13 +7,14 @@ from sklearn.mixture import GaussianMixture
 from sklearn.metrics.cluster import adjusted_rand_score, adjusted_mutual_info_score, homogeneity_score, \
      completeness_score, v_measure_score, fowlkes_mallows_score, silhouette_score, calinski_harabasz_score, \
      davies_bouldin_score
+import time
     
-k = 15
+k = 6
 
 inputFile = open("input1.txt","r")
 n = int(inputFile.readline());
 points = []
-qMetrics = False
+qMetrics = 1 - True
 trueLabels = []
 
 for i in range(0, n):
@@ -47,6 +48,7 @@ plt.show()
 
 '''---------Affinity Propagation----------'''
 def affinityPropagation():
+    start_time = time.time()
     clustering = AffinityPropagation()
     clustering = clustering.fit(points)
     labels = clustering.labels_
@@ -55,7 +57,7 @@ def affinityPropagation():
     DataX = [points[i][0] for i in range (len(points))]
     DataY = [points[i][1] for i in range (len(points))]
     plt.scatter(DataX, DataY, c = labels, cmap='Set1')
-    plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
+    #plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
     plt.title('Affinity Propagation')
     plt.show()
     if qMetrics == True:
@@ -69,10 +71,13 @@ def affinityPropagation():
         print("Affinity Propagation SC:", silhouette_score(points, labels, metric='euclidean'))
         print("Affinity Propagation CH:", calinski_harabasz_score(points, labels))
         print("Affinity Propagation DB:", davies_bouldin_score(points, labels))
+    end_time = time.time()
+    print("total execution time: %s seconds" % (end_time - start_time))
 
 
 '''---------kmeans----------'''
 def kmeans():
+    start_time = time.time()
     clustering = KMeans(n_clusters=k, init='k-means++', n_init=30, max_iter=1000)
     clustering = clustering.fit(points)
     labels = clustering.predict(points)
@@ -93,10 +98,13 @@ def kmeans():
         print("kmeans SC:", silhouette_score(points, labels, metric='euclidean'))
         print("kmeans CH:", calinski_harabasz_score(points, labels))
         print("kmeans DB:", davies_bouldin_score(points, labels))
+    end_time = time.time()
+    print("total execution time: %s seconds" % (end_time - start_time))
 
 
 '''--------Spectral Clustering---------'''
 def spectralClustering():
+    start_time = time.time()
     clustering = SpectralClustering(n_clusters=k, assign_labels="discretize", random_state=0)
     clustering = clustering.fit(points)
     labels = clustering.labels_
@@ -117,9 +125,12 @@ def spectralClustering():
         print("Spectral Clustering SC:", silhouette_score(points, labels, metric='euclidean'))
         print("Spectral Clustering CH:", calinski_harabasz_score(points, labels))
         print("Spectral Clustering DB:", davies_bouldin_score(points, labels))
+    end_time = time.time()
+    print("total execution time: %s seconds" % (end_time - start_time))
 
 '''--------Agglomerative Clustering---------'''
 def wardAC():
+    start_time = time.time()
     clustering = AgglomerativeClustering(n_clusters=k, linkage='ward')
     clustering = clustering.fit(points)
     labels = clustering.labels_
@@ -140,6 +151,8 @@ def wardAC():
         print("Agglomerative Clustering SC:", silhouette_score(points, labels, metric='euclidean'))
         print("Agglomerative Clustering CH:", calinski_harabasz_score(points, labels))
         print("Agglomerative Clustering DB:", davies_bouldin_score(points, labels))
+    end_time = time.time()
+    print("total execution time: %s seconds" % (end_time - start_time))
 
 
 '''--------OPTICS---------'''
@@ -157,6 +170,7 @@ plt.show()'''
 
 '''--------Birch---------'''
 def birch():
+    start_time = time.time()
     clustering = Birch(n_clusters=k)
     clustering = clustering.fit(points)
     labels = clustering.predict(points)
@@ -177,10 +191,13 @@ def birch():
         print("Birch SC:", silhouette_score(points, labels, metric='euclidean'))
         print("Birch CH:", calinski_harabasz_score(points, labels))
         print("Birch DB:", davies_bouldin_score(points, labels))
+    end_time = time.time()
+    print("total execution time: %s seconds" % (end_time - start_time))
 
 
 '''--------MeanShift---------'''
 def meanShift():
+    start_time = time.time()
     clustering = MeanShift()
     #clustering = MeanShift(bandwidth=2)
     clustering = clustering.fit(points)
@@ -202,10 +219,13 @@ def meanShift():
         print("MeanShift SC:", silhouette_score(points, labels, metric='euclidean'))
         print("MeanShift CH:", calinski_harabasz_score(points, labels))
         print("MeanShift DB:", davies_bouldin_score(points, labels))
+    end_time = time.time()
+    print("total execution time: %s seconds" % (end_time - start_time))
 
 
 '''--------Gaussian Mixture---------'''
 def gaussianMixture():
+    start_time = time.time()
     #clustering = GaussianMixture(n_components=2, random_state=0)
     clustering = GaussianMixture(n_components=k, random_state=0)
     clustering = clustering.fit(points)
@@ -227,11 +247,14 @@ def gaussianMixture():
         print("Gaussian Mixture SC:", silhouette_score(points, labels, metric='euclidean'))
         print("Gaussian Mixture CH:", calinski_harabasz_score(points, labels))
         print("Gaussian Mixture DB:", davies_bouldin_score(points, labels))
+    end_time = time.time()
+    print("total execution time: %s seconds" % (end_time - start_time))
 
 
 
 '''--------DBSCAN---------'''
 def dbscan():
+    start_time = time.time()
     clustering = DBSCAN(eps=3, min_samples=3)
     clustering = clustering.fit(points)
     labels = clustering.labels_
@@ -252,13 +275,15 @@ def dbscan():
         #print("DBSCAN SC:", silhouette_score(points, labels, metric='euclidean'))
         #print("DBSCAN CH:", calinski_harabasz_score(points, labels))
         #print("DBSCAN DB:", davies_bouldin_score(points, labels))
+    end_time = time.time()
+    print("total execution time: %s seconds" % (end_time - start_time))
 
 
 
 
 def main():
     kmeans()
-    spectralClustering()
+    #spectralClustering()
     wardAC()
     birch()
     meanShift()
