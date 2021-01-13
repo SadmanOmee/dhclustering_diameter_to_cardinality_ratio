@@ -1,0 +1,1 @@
+A dendrogram is a tree diagram used to show the hieararchical relationship between various objects. It is generally used to graphically show the formation of the clusters at each step of a hierarchical clustering algorithm. Fig. aaaaaa shows the dendrogram of a hierarchical clustering of some animals based on its type.
