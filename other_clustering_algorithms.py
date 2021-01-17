@@ -9,12 +9,12 @@ from sklearn.metrics.cluster import adjusted_rand_score, adjusted_mutual_info_sc
      davies_bouldin_score
 import time
     
-k = 6
+k = 2
 
 inputFile = open("input1.txt","r")
 n = int(inputFile.readline());
 points = []
-qMetrics = 1 - True
+qMetrics = True
 trueLabels = []
 
 for i in range(0, n):
@@ -28,8 +28,8 @@ for i in range(0, n):
     xyz = [i for i in line.split()]
     x = float(xyz[0])
     y = float(xyz[1])
-    #z = float(xyz[2])
-    #trueLabels.append(z)
+    z = float(xyz[2])
+    trueLabels.append(z)
     
     singlePoint = []
     singlePoint.append(x)
@@ -46,9 +46,25 @@ plt.scatter(points[:, 0], points[:, 1], color="black")
 #print(points)
 plt.show()
 
+
+
+
+'''labelInput = open("trueLabels.txt","r")
+totalLabels = int(labelInput.readline())
+for i in range(0, totalLabels):
+    line = labelInput.readline()
+    getLabel = int(line)
+    trueLabels.append(getLabel)
+labelInput.close()'''
+
+
+
+
+
 '''---------Affinity Propagation----------'''
 def affinityPropagation():
     start_time = time.time()
+    #clustering = AffinityPropagation(preference=50)
     clustering = AffinityPropagation()
     clustering = clustering.fit(points)
     labels = clustering.labels_
@@ -63,14 +79,14 @@ def affinityPropagation():
     if qMetrics == True:
         #print("Affinity Propagation RI:", rand_score(trueLabels, labels))
         print("Affinity Propagation ARI:", adjusted_rand_score(trueLabels, labels))
-        print("Affinity Propagation AMI:", adjusted_mutual_info_score(trueLabels, labels))
-        print("Affinity Propagation HS:", homogeneity_score(trueLabels, labels))
-        print("Affinity Propagation CS:", completeness_score(trueLabels, labels))
-        print("Affinity Propagation VM:", v_measure_score(trueLabels, labels))
-        print("Affinity Propagation FM:", fowlkes_mallows_score(trueLabels, labels))
+        #print("Affinity Propagation AMI:", adjusted_mutual_info_score(trueLabels, labels))
+        #print("Affinity Propagation HS:", homogeneity_score(trueLabels, labels))
+        #print("Affinity Propagation CS:", completeness_score(trueLabels, labels))
+        #print("Affinity Propagation VM:", v_measure_score(trueLabels, labels))
+        #print("Affinity Propagation FM:", fowlkes_mallows_score(trueLabels, labels))
         print("Affinity Propagation SC:", silhouette_score(points, labels, metric='euclidean'))
-        print("Affinity Propagation CH:", calinski_harabasz_score(points, labels))
-        print("Affinity Propagation DB:", davies_bouldin_score(points, labels))
+        #print("Affinity Propagation CH:", calinski_harabasz_score(points, labels))
+        #print("Affinity Propagation DB:", davies_bouldin_score(points, labels))
     end_time = time.time()
     print("total execution time: %s seconds" % (end_time - start_time))
 
@@ -90,14 +106,14 @@ def kmeans():
     plt.show()
     if qMetrics == True:
         print("kmeans ARI:", adjusted_rand_score(trueLabels, labels))
-        print("kmeans AMI:", adjusted_mutual_info_score(trueLabels, labels))
-        print("kmeans HS:", homogeneity_score(trueLabels, labels))
-        print("kmeans CS:", completeness_score(trueLabels, labels))
-        print("kmeans VM:", v_measure_score(trueLabels, labels))
-        print("kmeans FM:", fowlkes_mallows_score(trueLabels, labels))
+        #print("kmeans AMI:", adjusted_mutual_info_score(trueLabels, labels))
+        #print("kmeans HS:", homogeneity_score(trueLabels, labels))
+        #print("kmeans CS:", completeness_score(trueLabels, labels))
+        #print("kmeans VM:", v_measure_score(trueLabels, labels))
+        #print("kmeans FM:", fowlkes_mallows_score(trueLabels, labels))
         print("kmeans SC:", silhouette_score(points, labels, metric='euclidean'))
-        print("kmeans CH:", calinski_harabasz_score(points, labels))
-        print("kmeans DB:", davies_bouldin_score(points, labels))
+        #print("kmeans CH:", calinski_harabasz_score(points, labels))
+        #print("kmeans DB:", davies_bouldin_score(points, labels))
     end_time = time.time()
     print("total execution time: %s seconds" % (end_time - start_time))
 
@@ -143,14 +159,14 @@ def wardAC():
     plt.show()
     if qMetrics == True:
         print("Agglomerative Clustering ARI:", adjusted_rand_score(trueLabels, labels))
-        print("Agglomerative Clustering AMI:", adjusted_mutual_info_score(trueLabels, labels))
-        print("Agglomerative Clustering HS:", homogeneity_score(trueLabels, labels))
-        print("Agglomerative Clustering CS:", completeness_score(trueLabels, labels))
-        print("Agglomerative Clustering VM:", v_measure_score(trueLabels, labels))
-        print("Agglomerative Clustering FM:", fowlkes_mallows_score(trueLabels, labels))
+        #print("Agglomerative Clustering AMI:", adjusted_mutual_info_score(trueLabels, labels))
+        #print("Agglomerative Clustering HS:", homogeneity_score(trueLabels, labels))
+        #print("Agglomerative Clustering CS:", completeness_score(trueLabels, labels))
+        #print("Agglomerative Clustering VM:", v_measure_score(trueLabels, labels))
+        #print("Agglomerative Clustering FM:", fowlkes_mallows_score(trueLabels, labels))
         print("Agglomerative Clustering SC:", silhouette_score(points, labels, metric='euclidean'))
-        print("Agglomerative Clustering CH:", calinski_harabasz_score(points, labels))
-        print("Agglomerative Clustering DB:", davies_bouldin_score(points, labels))
+        #print("Agglomerative Clustering CH:", calinski_harabasz_score(points, labels))
+        #print("Agglomerative Clustering DB:", davies_bouldin_score(points, labels))
     end_time = time.time()
     print("total execution time: %s seconds" % (end_time - start_time))
 
@@ -285,11 +301,11 @@ def main():
     kmeans()
     #spectralClustering()
     wardAC()
-    birch()
-    meanShift()
-    gaussianMixture()
+    #birch()
+    #meanShift()
+    #gaussianMixture()
     affinityPropagation()
-    dbscan()
+    #dbscan()
           
 if __name__ == "__main__":
     main()

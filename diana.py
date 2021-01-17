@@ -115,7 +115,7 @@ def max_diameter(cluster_list):
 
 def diana():
     start_time = time.time()
-    num_clusters = 6
+    num_clusters = 2
     #currClusters = []
     current_clusters = ([all_elements])
     level = 1

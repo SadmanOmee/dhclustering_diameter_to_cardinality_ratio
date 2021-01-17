@@ -16,6 +16,7 @@ n = int(inputFile.readline())
 labels = [0] * n
 dupPoints = []
 qMetrics = True
+trueLabels = []
 
 for i in range(0, n):
     line = inputFile.readline()
@@ -29,8 +30,8 @@ for i in range(0, n):
     xyz = [i for i in line.split()]
     x = float(xyz[0])
     y = float(xyz[1])
-    #z = float(xyz[2])
-    #print(x, y)
+    z = float(xyz[2])
+    trueLabels.append(z)
     
     singlePoint = []
     singlePoint.append(x)
@@ -39,6 +40,19 @@ for i in range(0, n):
 #print(points)
 dupPoints = points[:]
 inputFile.close()
+
+
+
+'''labelInput = open("trueLabels.txt","r")
+totalLabels = int(labelInput.readline())
+for i in range(0, totalLabels):
+    line = labelInput.readline()
+    getLabel = int(line)
+    trueLabels.append(getLabel)
+labelInput.close()'''
+
+
+
 
 
 def euclidean(p1, p2):
@@ -103,14 +117,10 @@ def nearestNeighbor(point, points):
     nearestDist = 99999999.0
     totalPoints = len(points)
     for i in range(totalPoints):
-        #dist = math.floor(distance(point, points[i]))
         dist = distance(point, points[i])
         if dist < nearestDist:
             nearestDist = dist
             ind = i
-            '''if point == [17.85, 13.05]:
-                print(nearestDist, end = ' ')
-                print(points[i])'''
     return nearestDist, ind
 
 def cleanCluster(cluster):
@@ -257,7 +267,7 @@ def dhclustering(points):
     '''colorList = ['blue', 'red', 'green', 'darkorange', 'black', 'lime', 'turquoise', 'deeppink', \
                  'slategray', 'pink', 'peru', 'cyan', 'tan', 'yellow', 'khaki', 'crimson', \
                  'indigo', 'darkorchid', 'darkseagreen']'''
-    k = 6
+    k = 15
     ratios = []
     currClusters = []
     start_time = time.time()
@@ -323,19 +333,18 @@ def dhclustering(points):
                     labels[l] = i + 1
     #print(labels)
     #print(dupPoints)
-    pnt = np.array(dupPoints)
     if qMetrics == True:
-        points = np.array(points)
+        pnt = np.array(dupPoints)
         #print("Affinity Propagation RI:", rand_score(trueLabels, labels))
-        '''print("Affinity Propagation ARI:", adjusted_rand_score(trueLabels, labels))
-        print("Affinity Propagation AMI:", adjusted_mutual_info_score(trueLabels, labels))
-        print("Affinity Propagation HS:", homogeneity_score(trueLabels, labels))
-        print("Affinity Propagation CS:", completeness_score(trueLabels, labels))
-        print("Affinity Propagation VM:", v_measure_score(trueLabels, labels))
-        print("Affinity Propagation FM:", fowlkes_mallows_score(trueLabels, labels))'''
-        print("Affinity Propagation SC:", silhouette_score(pnt, labels, metric='euclidean'))
-        '''print("Affinity Propagation CH:", calinski_harabasz_score(dupPoints, labels))
-        print("Affinity Propagation DB:", davies_bouldin_score(points, labels))'''
+        print("Our algorithm ARI:", adjusted_rand_score(trueLabels, labels))
+        #print("Our algorithm AMI:", adjusted_mutual_info_score(trueLabels, labels))
+        #print("Our algorithm HS:", homogeneity_score(trueLabels, labels))
+        #print("Our algorithm CS:", completeness_score(trueLabels, labels))
+        #print("Our algorithm VM:", v_measure_score(trueLabels, labels))
+        #print("Our algorithm FM:", fowlkes_mallows_score(trueLabels, labels))
+        print("Our algorithm SC:", silhouette_score(pnt, labels, metric='euclidean'))
+        #print("Our algorithm CH:", calinski_harabasz_score(dupPoints, labels))
+        #print("Our algorithm DB:", davies_bouldin_score(points, labels))
     
     
     
