@@ -15,7 +15,7 @@ inputFile = open("input1.txt","r")
 n = int(inputFile.readline())
 labels = [0] * n
 dupPoints = []
-qMetrics = True
+qMetrics = 1 - True
 trueLabels = []
 
 for i in range(0, n):
@@ -30,8 +30,8 @@ for i in range(0, n):
     xyz = [i for i in line.split()]
     x = float(xyz[0])
     y = float(xyz[1])
-    z = float(xyz[2])
-    trueLabels.append(z)
+    #z = float(xyz[2])
+    #trueLabels.append(z)
     
     singlePoint = []
     singlePoint.append(x)
@@ -81,8 +81,8 @@ def mahalanobis(p1, p2):
     return dist
 
 def distance(p1, p2):
-    dist = euclidean(p1, p2)
-    #dist = manhattan(p1, p2)
+    #dist = euclidean(p1, p2)
+    dist = manhattan(p1, p2)
     #dist = chebyshev(p1, p2)
     #dist = cosineSimilarity(p1, p2)
     #dist = mahalanobis(p1, p2)
@@ -267,7 +267,7 @@ def dhclustering(points):
     '''colorList = ['blue', 'red', 'green', 'darkorange', 'black', 'lime', 'turquoise', 'deeppink', \
                  'slategray', 'pink', 'peru', 'cyan', 'tan', 'yellow', 'khaki', 'crimson', \
                  'indigo', 'darkorchid', 'darkseagreen']'''
-    k = 15
+    k = 3
     ratios = []
     currClusters = []
     start_time = time.time()
