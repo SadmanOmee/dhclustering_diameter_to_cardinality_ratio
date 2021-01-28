@@ -300,11 +300,11 @@ def dbscan():
 def main():
     kmeans()
     #spectralClustering()
-    wardAC()
+    #wardAC()
     #birch()
     #meanShift()
     #gaussianMixture()
-    affinityPropagation()
+    #affinityPropagation()
     #dbscan()
           
 if __name__ == "__main__":

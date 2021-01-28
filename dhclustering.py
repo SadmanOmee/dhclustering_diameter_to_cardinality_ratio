@@ -81,8 +81,8 @@ def mahalanobis(p1, p2):
     return dist
 
 def distance(p1, p2):
-    #dist = euclidean(p1, p2)
-    dist = manhattan(p1, p2)
+    dist = euclidean(p1, p2)
+    #dist = manhattan(p1, p2)
     #dist = chebyshev(p1, p2)
     #dist = cosineSimilarity(p1, p2)
     #dist = mahalanobis(p1, p2)
@@ -357,8 +357,7 @@ def dhclustering(points):
 
 
 def main():
-    dhclustering(points)       
-
+    dhclustering(points)
           
 if __name__ == "__main__":
     main()
