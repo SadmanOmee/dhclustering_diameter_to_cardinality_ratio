@@ -1,1 +1,1 @@
-# code_new_clustering_algorithm
+# A Divisive Hierarchical Clustering Algorithm to Find Clusters with Smaller Diameter to Cardinality Ratio
