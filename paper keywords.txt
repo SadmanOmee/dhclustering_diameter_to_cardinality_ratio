@@ -1,1 +1,0 @@
-Dissection Effect \and $k$-means \and Centroid \and Diameter \and Unsupervised Learning \and Divisive Hierarchical Clustering \and Greedy heuristic.
