@@ -107,7 +107,7 @@ plt.show()'''
 
 
 #----------big sc------------------------
-labels = ['A1', 'A2', 'A3', 'S1', 'S2', 't4.8k', 'Unbalance']
+'''labels = ['A1', 'A2', 'A3', 'S1', 'S2', 't4.8k', 'Unbalance']
 kMeans = [0.595, 0.5975, 0.5894, 0.7112, 0.6261, 0.4125, 0.4342]
 oae = [0.6441, 0.6247, 0.6498, 0.6534, 0.5892, 0.4713, 0.8386]
 oam = [0.5823, 0.5672, 0.5455, 0.6192, 0.5748, 0.4188, 0.8157]
@@ -133,7 +133,7 @@ plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
        ncol=2, mode="expand", borderaxespad=0.)
 
 plt.xlim(-0.5, 6.5)
-plt.show()
+plt.show()'''
 
 
 
@@ -148,7 +148,7 @@ plt.show()
 
 
 
-'''plotW = 10
+plotW = 10
 plotH = 5
 xK = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 #yK = [97.000, 94.000, 91.000, 89.067, 87.100, 86, 83.500, 81.033, 80.067, 79.950]
@@ -167,4 +167,4 @@ plt.plot(xW, yW, linestyle='--', marker='o', markerfacecolor='none', label='Ward
 plt.legend()
 plt.xlabel('Number of clusters', fontsize='large')
 plt.ylabel('Adjusted Rand Index', fontsize='large')
-plt.show()'''
+plt.show()

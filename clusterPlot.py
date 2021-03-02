@@ -48,8 +48,8 @@ cluster2file.close()
 
 plt.scatter(clust1x, clust1y, color="black")
 plt.scatter(clust2x, clust2y, color="black")
-#plt.xlim(3, 25)
-#plt.ylim(1, 20)
+plt.xlim(-4, 60)
+plt.ylim(-3, 50)
 plt.show()
 
 #plt.scatter(points[:, 0], points[:, 1], color="red")
@@ -62,8 +62,8 @@ plt.scatter(clust2x, clust2y, color="red", marker='x')
 #plt.scatter(26, 23, color="orange")
 #plt.scatter(30, 15, color="black")
 
-#plt.xlim(3, 25)
-#plt.ylim(1, 20)
+plt.xlim(-4, 60)
+plt.ylim(-3, 50)
 
 tcc = 0
 if tcc == 1:
@@ -161,9 +161,9 @@ for i in range (0, len(points)):
         rad2 = max(rad2, dist2)
 
 #plt.scatter(labels[:, 0], labels[:, 1], c = y)
-plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
-#plt.xlim(3, 20.5)
-#plt.ylim(9, 20)
+#plt.scatter(C[:, 0], C[:, 1], marker='*', c='#050505')
+plt.xlim(-4, 60)
+plt.ylim(-3, 50)
 plt.show()
 print("sse:", kmeans.inertia_)
 

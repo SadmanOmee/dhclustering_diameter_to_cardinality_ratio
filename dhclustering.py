@@ -261,9 +261,9 @@ def filtering(C_1, C_2):
 
 
 def dhclustering(points):
-    '''points_ = np.array(points)
+    points_ = np.array(points)
     plt.scatter(points_[:, 0], points_[:, 1], color="black")
-    plt.show()'''
+    plt.show()
     '''colorList = ['blue', 'red', 'green', 'darkorange', 'black', 'lime', 'turquoise', 'deeppink', \
                  'slategray', 'pink', 'peru', 'cyan', 'tan', 'yellow', 'khaki', 'crimson', \
                  'indigo', 'darkorchid', 'darkseagreen']'''
@@ -311,13 +311,20 @@ def dhclustering(points):
     
     end_time = time.time()
     print("total execution time: %s seconds" % (end_time - start_time))
-        
+    
+    
+    '''tempColor = ["blue", "red", "purple"]
+    tempMarker = ['^', 'x', 's']'''
+    plt.xlim(1, 23)
+    plt.ylim(-2.5, 2.5)
+    
     for i in range(len(currClusters)):
         cluster = np.array(currClusters[i])
         markerNo = str(i + 1)
         markerNo = '$' + markerNo + '$'
         #plt.scatter(cluster[:, 0], cluster[:, 1], color=colorList[i], marker=markerNo)
         plt.scatter(cluster[:, 0], cluster[:, 1], marker=markerNo)
+        #plt.scatter(cluster[:, 0], cluster[:, 1], color=tempColor[i], marker=tempMarker[i])
     plt.show()
     
     for i in range(len(currClusters)):
