@@ -315,8 +315,8 @@ def dhclustering(points):
     
     '''tempColor = ["blue", "red", "purple"]
     tempMarker = ['^', 'x', 's']'''
-    plt.xlim(1, 23)
-    plt.ylim(-2.5, 2.5)
+    #plt.xlim(1, 23)
+    #plt.ylim(-2.5, 2.5)
     
     for i in range(len(currClusters)):
         cluster = np.array(currClusters[i])
