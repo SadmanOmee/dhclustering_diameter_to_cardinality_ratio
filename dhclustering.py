@@ -221,8 +221,8 @@ def mergeByGreedyHeuristics(C_1, C_2, C_temp):
     #ratio1 = calculateRatio(C_1) + calculateRatio(C_2_star)
     #ratio2 = calculateRatio(C_2) + calculateRatio(C_1_star)
     
-    ratio1 = calculateRatio(C_2_star)
-    ratio2 = calculateRatio(C_1_star)
+    ratio1 = calculateRatio2(C_2_star)
+    ratio2 = calculateRatio2(C_1_star)
     
     if ratio1 <= ratio2:
         C_2 = C_2_star[:]
@@ -267,7 +267,7 @@ def dhclustering(points):
     '''colorList = ['blue', 'red', 'green', 'darkorange', 'black', 'lime', 'turquoise', 'deeppink', \
                  'slategray', 'pink', 'peru', 'cyan', 'tan', 'yellow', 'khaki', 'crimson', \
                  'indigo', 'darkorchid', 'darkseagreen']'''
-    k = 3
+    k = 6
     ratios = []
     currClusters = []
     start_time = time.time()
@@ -285,9 +285,9 @@ def dhclustering(points):
         currClusters.append(C_1)
         currClusters.append(C_2)
         
-        ratio1 = calculateRatio(C_1)
+        ratio1 = calculateRatio2(C_1)
         ratios.append(ratio1)
-        ratio2 = calculateRatio(C_2)
+        ratio2 = calculateRatio2(C_2)
         ratios.append(ratio2)
         
         maxRatio = -1
